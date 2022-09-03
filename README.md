@@ -3,7 +3,9 @@
 ## Pre requisites
 
 - Node Install: [Bundled](https://nodejs.org/en/download/), [Homebrew](https://formulae.brew.sh/formula/node)
-- [`yarn` package manager](https://classic.yarnpkg.com/en/docs/install/)
+- [ODBC Binaries](https://www.npmjs.com/package/odbc)
+  - Setup [Guide](https://exploratory.io/note/exploratory/How-to-set-up-ODBC-in-Mac-unixodbc-lQz2Fnp7)
+  - [Postgres ODBC Driver](https://formulae.brew.sh/formula/psqlodbc)
 
 ### VS Code Extensions
 
@@ -21,21 +23,25 @@ _You can also just type @recommended in the extensions search bar_
 Install the necessary packages
 
 ```
-yarn install
+npm install
 ```
 
 Start the app
 
 ```
-yarn start
+npm run start
 ```
+
+Adding more modules
+
+See documentation [here](https://electron-react-boilerplate.js.org/docs/adding-dependencies)
 
 ## Packaging for Production
 
 To package apps for the local platform:
 
 ```
-yarn run package
+npm run package
 ```
 
 ## Linting
@@ -44,10 +50,10 @@ yarn run package
 
 <br>
 
-- `yarn run lint` - runs ESLint and reports all linting errors without fixing them
-- `yarn run lint:fix` - runs ESLint and reports all linting errors, attempting to fix any auto-fixable ones
-- `yarn run format` - runs Prettier and automatically formats the entire codebase
-- `yarn run format:check` - runs Prettier and reports formatting errors without fixing them
+- `npm run lint` - runs ESLint and reports all linting errors without fixing them
+- `npm run lint:fix` - runs ESLint and reports all linting errors, attempting to fix any auto-fixable ones
+- `npm run format` - runs Prettier and automatically formats the entire codebase
+- `npm run format:check` - runs Prettier and reports formatting errors without fixing them
 
 ## Docs
 
