@@ -32,6 +32,12 @@ Start the app
 npm run start
 ```
 
+Executing a single file
+
+```
+NODE_ENV=development npx ts-node filepath
+```
+
 Adding more modules
 
 See documentation [here](https://electron-react-boilerplate.js.org/docs/adding-dependencies)

@@ -14,7 +14,7 @@ export default class Procedures {
 
   port: number;
 
-  public async ProceduresToDatabaseMap(
+  public async getProceduresForDB(
     databases: string[]
   ): Promise<Map<string, string[]>> {
     const res = new Map<string, string[]>();
@@ -81,11 +81,13 @@ export default class Procedures {
   constructor() {
     // TODO get address from user
     this.address =
-      process.env.NODE_ENV === 'development' ? 'localhost' : 'asdf';
+      process.env.NODE_ENV === 'development'
+        ? 'localhost'
+        : 'remote connection';
     this.port = 5432;
   }
 }
 
 const p = new Procedures();
-p.ProceduresToDatabaseMap(['React']);
+p.getProceduresForDB(['React']);
 p.getDatabases();
