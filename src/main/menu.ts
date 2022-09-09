@@ -54,17 +54,15 @@ export default class MenuBuilder {
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'Electron',
+      label: 'DB Tester',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About DBTester',
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
-        { label: 'Services', submenu: [] },
-        { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide DBTester',
           accelerator: 'Command+H',
           selector: 'hide:',
         },
@@ -82,6 +80,15 @@ export default class MenuBuilder {
             app.quit();
           },
         },
+      ],
+    };
+    const subMenuFile: DarwinMenuItemConstructorOptions = {
+      label: 'File',
+      submenu: [
+        { label: 'New Connection', accelerator: 'Command+N', selector: '' },
+        { label: 'New Local DB', accelerator: 'Command+L', selector: '' },
+        { type: 'separator' },
+        { label: 'View History', accelerator: 'Command+H', selector: '' },
       ],
     };
     const subMenuEdit: DarwinMenuItemConstructorOptions = {
@@ -189,7 +196,14 @@ export default class MenuBuilder {
         ? subMenuViewDev
         : subMenuViewProd;
 
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+    return [
+      subMenuAbout,
+      subMenuFile,
+      subMenuEdit,
+      subMenuView,
+      subMenuWindow,
+      subMenuHelp,
+    ];
   }
 
   buildDefaultTemplate() {
