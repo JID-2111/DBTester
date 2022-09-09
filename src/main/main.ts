@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import Procedures from '../db/Procedures';
 
 class AppUpdater {
   constructor() {
@@ -29,6 +30,14 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+ipcMain.handle('procedures:listProcedures', () => {
+  return new Procedures().getProceduresForDB(['React']);
+});
+
+ipcMain.handle('procedures:listDatabases', () => {
+  return new Procedures().getDatabases();
 });
 
 if (process.env.NODE_ENV === 'production') {
