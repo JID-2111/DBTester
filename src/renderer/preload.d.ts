@@ -16,6 +16,7 @@ declare global {
       ipcRenderer: {
         fetchProcedures(): Promise<Map<string, string[]>>;
         fetchDatabases(): Promise<string[]>;
+        fetchContent(procedure: string): Promise<string>;
       };
     };
   }

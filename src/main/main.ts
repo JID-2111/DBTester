@@ -40,6 +40,10 @@ ipcMain.handle('procedures:listDatabases', () => {
   return new Procedures().getDatabases();
 });
 
+ipcMain.handle('procedures:getProcedure', async (_event, ...args) => {
+  return new Procedures().fetchContent('React', args[0]);
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();

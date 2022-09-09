@@ -5,6 +5,10 @@ type DBProcedure = {
   routine_name: string;
 };
 
+type ProcedureContent = {
+  prosrc: string;
+};
+
 type DBQuery = {
   datname: string;
 };
@@ -46,6 +50,7 @@ export default class Procedures {
     const result = await client.query(
       `select datname from pg_catalog.pg_database where datistemplate = false`
     );
+    client.end();
     return Promise.all(
       result.rows.map((row: DBQuery) => {
         return row.datname;
@@ -71,6 +76,7 @@ export default class Procedures {
     const result = await client.query(
       `SELECT routine_catalog, routine_name FROM information_schema.routines WHERE routine_type = 'PROCEDURE'`
     );
+    client.end();
     return Promise.all(
       result.rows.map((row: DBProcedure) => {
         return row.routine_name;
@@ -78,12 +84,35 @@ export default class Procedures {
     );
   }
 
+  public async fetchContent(
+    database: string,
+    procedure: string
+  ): Promise<string[]> {
+    const client = await new Client({
+      host: this.address,
+      port: this.port,
+      password: 'asdf',
+      user: 'kpmg',
+      database,
+    });
+    client.connect((err: any) => {
+      if (err) {
+        console.error('connection error', err.stack);
+      } else {
+        console.log('connected');
+      }
+    });
+    const result = await client.query(
+      `SELECT prosrc FROM pg_proc WHERE proname = '${procedure}'`
+    );
+    client.end();
+    return result.rows[0].prosrc;
+  }
+
   constructor() {
     // TODO get address from user
     this.address =
-      process.env.NODE_ENV === 'development'
-        ? 'localhost'
-        : 'remote connection';
+      process.env.NODE_ENV === 'development' ? 'localhost' : 'localhost';
     this.port = 5432;
   }
 }
