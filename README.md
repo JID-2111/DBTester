@@ -68,3 +68,10 @@ See boilerplate [docs and guides here](https://electron-react-boilerplate.js.org
 ## License
 
 MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
+
+# Links
+
+- Electron
+  - Reload Script [docs](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts)
+  - IPC Renderer [Documentation](https://www.electronjs.org/docs/latest/api/ipc-renderer)
+  - IPC two way usage [docs](https://www.electronjs.org/docs/latest/tutorial/ipc#pattern-2-renderer-to-main-two-way)

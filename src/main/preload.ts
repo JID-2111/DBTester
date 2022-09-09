@@ -19,3 +19,10 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 });
+
+contextBridge.exposeInMainWorld('procedures', {
+  ipcRenderer: {
+    fetchProcedures: () => ipcRenderer.invoke('procedures:listProcedures'),
+    fetchDatabases: () => ipcRenderer.invoke('procedures:listDatabases'),
+  },
+});
