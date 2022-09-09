@@ -12,8 +12,7 @@ const Execute = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const procs = new Procedures();
-      const newProcs = await procs.getProceduresForDB(['React']);
+      const newProcs = await window.procedures.ipcRenderer.fetchProcedures();
       setProcedures(newProcs.get('React'));
     };
 
