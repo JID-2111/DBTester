@@ -9,11 +9,11 @@ const ProcedureDropdown = ({ procedures }: IProcedureDropdownProps) => {
   const defaultVal = 'View Stored Procedures';
   const [value, setValue] = useState<string>(defaultVal);
   return (
-    <Dropdown>
+    <Dropdown className="dropdown">
       <Dropdown.Toggle variant="primary">{value}</Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {procedures.map((procedure: any) => {
+        {procedures.map((procedure: string) => {
           return (
             <Dropdown.Item onClick={() => setValue(procedure)}>
               {procedure}

@@ -117,6 +117,7 @@
     "electron-updater": "^5.2.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
+    "react-bootstrap-icons": "^1.8.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0"
   },
@@ -189,8 +190,8 @@
     "webpack-merge": "^5.8.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "DBTester",
+    "appId": "org.erb.DBTester",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

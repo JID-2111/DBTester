@@ -1,0 +1,13 @@
+body {
+  position: relative;
+  color: black;
+  background: white;
+  font-family: sans-serif;
+  overflow-y: hidden;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
