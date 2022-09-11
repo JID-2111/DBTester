@@ -5,9 +5,9 @@ type DBProcedure = {
   routine_name: string;
 };
 
-type ProcedureContent = {
-  prosrc: string;
-};
+// type ProcedureContent = {
+//   prosrc: string;
+// };
 
 type DBQuery = {
   datname: string;
