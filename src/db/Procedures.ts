@@ -46,6 +46,7 @@ export default class Procedures {
     const result = await client.query(
       `select datname from pg_catalog.pg_database where datistemplate = false`
     );
+    client.end();
     return Promise.all(
       result.rows.map((row: DBQuery) => {
         return row.datname;
@@ -71,6 +72,7 @@ export default class Procedures {
     const result = await client.query(
       `SELECT routine_catalog, routine_name FROM information_schema.routines WHERE routine_type = 'PROCEDURE'`
     );
+    client.end();
     return Promise.all(
       result.rows.map((row: DBProcedure) => {
         return row.routine_name;
@@ -81,9 +83,7 @@ export default class Procedures {
   constructor() {
     // TODO get address from user
     this.address =
-      process.env.NODE_ENV === 'development'
-        ? 'localhost'
-        : 'remote connection';
+      process.env.NODE_ENV === 'development' ? 'localhost' : 'localhost';
     this.port = 5432;
   }
 }
