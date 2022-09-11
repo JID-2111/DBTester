@@ -1,5 +1,5 @@
 import { Dropdown } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const ProcedureDropdown = () => {
   const defaultVal = 'View Stored Procedures';
