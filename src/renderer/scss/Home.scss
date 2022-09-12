@@ -1,0 +1,31 @@
+.launch-wrapper {
+  width: 100vw;
+  height: auto;
+}
+
+h2 {
+  display: inline-block;
+}
+
+h1 {
+  margin: 5px;
+}
+
+.icon {
+  margin: 5px;
+}
+
+.launch-button {
+  margin: 5px;
+  transition: none;
+  width: calc(100vw - 10px);
+}
+
+.launch-button:hover {
+  transform: none;
+}
+
+.execute-button {
+  margin: 5px;
+  position: relative;
+}
