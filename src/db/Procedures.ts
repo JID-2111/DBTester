@@ -36,13 +36,7 @@ export default class Procedures {
       user: 'kpmg',
       database,
     });
-    client.connect((err: any) => {
-      if (err) {
-        console.error('connection error', err.stack);
-      } else {
-        console.log('connected');
-      }
-    });
+    client.connect();
     const result = await client.query(
       `select datname from pg_catalog.pg_database where datistemplate = false`
     );
@@ -62,13 +56,7 @@ export default class Procedures {
       user: 'kpmg',
       database,
     });
-    client.connect((err: any) => {
-      if (err) {
-        console.error('connection error', err.stack);
-      } else {
-        console.log('connected');
-      }
-    });
+    client.connect();
     const result = await client.query(
       `SELECT routine_catalog, routine_name FROM information_schema.routines WHERE routine_type = 'PROCEDURE'`
     );
@@ -78,6 +66,25 @@ export default class Procedures {
         return row.routine_name;
       })
     );
+  }
+
+  public async fetchContent(
+    database: string,
+    procedure: string
+  ): Promise<string[]> {
+    const client = await new Client({
+      host: this.address,
+      port: this.port,
+      password: 'asdf',
+      user: 'kpmg',
+      database,
+    });
+    client.connect();
+    const result = await client.query(
+      `SELECT prosrc FROM pg_proc WHERE proname = '${procedure}'`
+    );
+    client.end();
+    return result.rows[0].prosrc;
   }
 
   constructor() {
