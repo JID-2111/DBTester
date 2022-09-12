@@ -87,7 +87,3 @@ export default class Procedures {
     this.port = 5432;
   }
 }
-
-const p = new Procedures();
-p.getProceduresForDB(['React']);
-p.getDatabases();

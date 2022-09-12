@@ -1,19 +1,16 @@
-import Procedures from 'db/Procedures';
 import { useEffect, useState } from 'react';
 import './App.css';
 import ProcedureDropdown from './ProcedureDropdown';
 
 const Home = () => {
   const proceduresDefault = ['test1', 'test2', 'alexiscool'];
-  const [procedures, setProcedures] = useState<any[]>();
+  const [procedures, setProcedures] = useState<string[]>();
 
   useEffect(() => {
     const fetch = async () => {
-      const procs = new Procedures();
-      const newProcs = await procs.getProceduresForDB(['React']);
+      const newProcs = await window.procedures.ipcRenderer.fetchProcedures();
       setProcedures(newProcs.get('React'));
     };
-
     fetch();
   }, []);
 
