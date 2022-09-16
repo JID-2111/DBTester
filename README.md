@@ -14,6 +14,7 @@ Licence under MIT © [Electron React Boilerplate](https://github.com/electron-re
  * Added a button to display all stored procedures from a local database
  
 ### Bug Fixes
+ * None
 ### Known Issues
  * Pressing the connect button infinitley establishes a connection with the Postgres database
 
