@@ -1,3 +1,24 @@
+# Stored Procedure Unit Tester
+
+An appplication to unit test stores procedures among databases
+
+## License
+
+MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
+
+# Release Notes
+
+## Version 0.1.0
+
+### New Features
+ * Added support for connecting to a local Postres database
+ * Added a user interface for connecting to a local database
+ * Added a button to display all stored procedures from a local database
+ 
+### Bug Fixes
+### Known Issues
+ * Pressing the connect button infinitley establishes a connection with the Postgres database
+
 # 🚀 Developing
 
 ## Pre requisites
@@ -65,9 +86,6 @@ npm run package
 
 See boilerplate [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation)
 
-## License
-
-MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
 
 # Links
 
