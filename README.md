@@ -2,9 +2,7 @@
 
 An appplication to unit test stores procedures among databases
 
-## License
-
-MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
+Licence under MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
 
 # Release Notes
 
