@@ -1,29 +1,40 @@
+import { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { useState } from 'react';
 
-const ProcedureDropdown = () => {
+interface IProcedureDropdownProps {
+  setCode: (code: string) => void;
+}
+
+const ProcedureDropdown = ({ setCode }: IProcedureDropdownProps) => {
   const defaultVal = 'View Stored Procedures';
-  const [value, setValue] = useState<string>(defaultVal);
-
   const proceduresDefault = ['test1', 'test2', 'alexiscool'];
+
+  const [value, setValue] = useState<string>(defaultVal);
+  const [fetch, setFetch] = useState<boolean>(false);
   const [procedures, setProcedures] = useState<string[]>();
 
-  // useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchProcs = async () => {
+      const newProcs = await window.procedures.ipcRenderer.fetchProcedures();
+      setProcedures(newProcs.get('React'));
+    };
+    fetchProcs();
+  }, [fetch]);
 
-  const fetch = async () => {
-    const newProcs = await window.procedures.ipcRenderer.fetchProcedures();
-    setProcedures(newProcs.get('React'));
+  const handleClick = async (procedure: string) => {
+    setValue(procedure);
+    const test = await window.procedures.ipcRenderer.fetchContent(procedure);
+    setCode(test);
   };
-  fetch();
 
   return (
     <Dropdown className="dropdown">
       <Dropdown.Toggle variant="primary">{value}</Dropdown.Toggle>
 
-      <Dropdown.Menu onClick={() => fetch()}>
+      <Dropdown.Menu onClick={() => setFetch(true)}>
         {(procedures || proceduresDefault).map((procedure: string) => {
           return (
-            <Dropdown.Item onClick={() => setValue(procedure)}>
+            <Dropdown.Item onClick={() => handleClick(procedure)}>
               {procedure}
             </Dropdown.Item>
           );
