@@ -18,7 +18,7 @@ export class ConnectionModel {
 
   lastUsed: Date;
 
-  constructor(entity: ConnectionEntity) {
+  constructor(entity?: ConnectionEntity) {
     Object.assign(this, entity);
   }
 }
