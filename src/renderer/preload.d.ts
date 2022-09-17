@@ -22,6 +22,7 @@ declare global {
     };
     connections: {
       ipcRenderer: {
+        fetch(): Promise<ConnectionModel[]>;
         create(model: ConnectionModel): Promise<ConnectionModel>;
         select(id: number): null;
       };

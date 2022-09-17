@@ -47,6 +47,10 @@ ipcMain.handle('procedures:getProcedure', async (_event, ...args) => {
   return new Procedures().fetchContent('React', args[0]);
 });
 
+ipcMain.handle('connections:fetch', () => {
+  return new ConnectionService().fetch();
+});
+
 ipcMain.handle('connections:create', (_event, ...args) => {
   return new ConnectionService().create(args[0]);
 });
