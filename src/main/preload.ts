@@ -32,6 +32,7 @@ contextBridge.exposeInMainWorld('procedures', {
 
 contextBridge.exposeInMainWorld('connections', {
   ipcRenderer: {
+    fetch: () => ipcRenderer.invoke('connections:fetch'),
     create: (model: ConnectionModel) =>
       ipcRenderer.invoke('connections:create', model),
     select: (id: number) => ipcRenderer.invoke('connections:select', id),

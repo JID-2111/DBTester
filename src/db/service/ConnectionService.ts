@@ -10,7 +10,7 @@ export default class ConnectionService {
     this.repository = AppDataSource.getRepository(ConnectionEntity);
   }
 
-  public async findAll(): Promise<ConnectionModel[]> {
+  public async fetch(): Promise<ConnectionModel[]> {
     const entities = await this.repository.find();
     return entities as ConnectionModel[];
   }
