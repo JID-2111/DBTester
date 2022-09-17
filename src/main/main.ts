@@ -12,9 +12,12 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import AppDataSource from '../data-source';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import Procedures from '../db/Procedures';
+import 'reflect-metadata';
+import ConnectionService from '../db/service/ConnectionService';
 
 class AppUpdater {
   constructor() {
@@ -42,6 +45,14 @@ ipcMain.handle('procedures:listDatabases', () => {
 
 ipcMain.handle('procedures:getProcedure', async (_event, ...args) => {
   return new Procedures().fetchContent('React', args[0]);
+});
+
+ipcMain.handle('connections:create', (_event, ...args) => {
+  return new ConnectionService().create(args[0]);
+});
+
+ipcMain.handle('connections:select', (_event, ...args) => {
+  return new ConnectionService().select(args[0]);
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -140,7 +151,8 @@ app.on('window-all-closed', () => {
 
 app
   .whenReady()
-  .then(() => {
+  .then(async () => {
+    await AppDataSource.initialize();
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

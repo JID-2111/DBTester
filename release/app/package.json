@@ -15,6 +15,9 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
   "dependencies": {
-    "pg": "^8.8.0"
+    "pg": "^8.8.0",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.1.1",
+    "typeorm": "^0.3.9"
   }
 }
