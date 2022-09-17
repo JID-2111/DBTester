@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "incremental": true,
     "target": "es2021",
     "module": "commonjs",
@@ -22,5 +25,6 @@
     "allowJs": true,
     "outDir": "release/app/dist"
   },
-  "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
+  "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"],
+  "include": ["src/**/*"]
 }

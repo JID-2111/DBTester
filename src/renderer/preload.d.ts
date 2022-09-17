@@ -1,4 +1,5 @@
 import { Channels } from 'main/preload';
+import { ConnectionModel } from '../db/Models';
 
 declare global {
   interface Window {
@@ -17,6 +18,12 @@ declare global {
         fetchProcedures(): Promise<Map<string, string[]>>;
         fetchDatabases(): Promise<string[]>;
         fetchContent(procedure: string): Promise<string>;
+      };
+    };
+    connections: {
+      ipcRenderer: {
+        create(model: ConnectionModel): Promise<ConnectionModel>;
+        select(id: number): null;
       };
     };
   }

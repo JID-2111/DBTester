@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { ConnectionModel } from '../db/Models';
 
 export type Channels = 'ipc-example';
 
@@ -26,5 +27,13 @@ contextBridge.exposeInMainWorld('procedures', {
     fetchDatabases: () => ipcRenderer.invoke('procedures:listDatabases'),
     fetchContent: (procedure: string) =>
       ipcRenderer.invoke('procedures:getProcedure', procedure),
+  },
+});
+
+contextBridge.exposeInMainWorld('connections', {
+  ipcRenderer: {
+    create: (model: ConnectionModel) =>
+      ipcRenderer.invoke('connections:create', model),
+    select: (id: number) => ipcRenderer.invoke('connections:select', id),
   },
 });
