@@ -9,14 +9,19 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 ## Version 0.1.0
 
 ### New Features
- * Added support for connecting to a local Postres database
- * Added a user interface for connecting to a local database
- * Added a button to display all stored procedures from a local database
- 
+
+- Added support for connecting to a local Postres database
+- Added a user interface for connecting to a local database
+- Added a button to display all stored procedures from a local database
+
 ### Bug Fixes
- * None
+
+- None
+
 ### Known Issues
- * Pressing the connect button infinitley establishes a connection with the Postgres database
+
+- Pressing the connect button infinitley establishes a connection with the Postgres database
+- Connection configuration is a hardcoded set of values
 
 # 🚀 Developing
 
@@ -84,7 +89,6 @@ npm run package
 ## Docs
 
 See boilerplate [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation)
-
 
 # Links
 
