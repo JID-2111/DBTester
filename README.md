@@ -1,6 +1,6 @@
 # Stored Procedure Unit Tester
 
-An appplication to unit test stores procedures among databases
+An application to unit test stored procedures inside databases
 
 Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
@@ -10,9 +10,9 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ### New Features
 
-- Added support for connecting to a local Postres database
+- Added support for connecting to a local Postgres database
 - Added a user interface for connecting to a local database
-- Added a button to display all stored procedures from a local database
+- Added a dropdown to display all stored procedures from a local database
 
 ### Bug Fixes
 
@@ -20,7 +20,7 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ### Known Issues
 
-- Pressing the connect button infinitley establishes a connection with the Postgres database
+- Pressing the connect button infinitely establishes a connection with the Postgres database
 - Connection configuration is a hardcoded set of values
 
 # 🚀 Developing
