@@ -4,7 +4,7 @@ import {
   Column,
   CreateDateColumn,
 } from 'typeorm';
-import { ConnectionModel } from '../Models';
+import { ConnectionModelType } from '../Models';
 
 @Entity({ name: 'Connection' })
 class ConnectionEntity {
@@ -32,7 +32,7 @@ class ConnectionEntity {
   @Column('datetime')
   lastUsed: Date;
 
-  constructor(model?: ConnectionModel) {
+  constructor(model?: ConnectionModelType) {
     Object.assign(this, model);
   }
 }

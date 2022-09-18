@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import AppDataSource from '../../data-source';
 import ConnectionEntity from '../entity/ConnectionEntity';
-import { ConnectionModel } from '../Models';
+import { ConnectionModel, ConnectionModelType } from '../Models';
 
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
@@ -15,16 +15,28 @@ export default class ConnectionService {
     return entities as ConnectionModel[];
   }
 
-  public async create(model: ConnectionModel) {
+  public async create(model: ConnectionModelType): Promise<ConnectionModel> {
+    model.lastUsed = new Date();
     const entity = await this.repository.save(new ConnectionEntity(model));
-    this.select(entity.id);
+    return this.select(entity.id);
   }
 
-  public async select(id: number) {
+  public async select(id: number): Promise<ConnectionEntity> {
     const entity = await this.repository.findOneBy({ id });
-    if (entity === null) return;
-    entity.lastUsed = new Date();
-    this.repository.save(entity);
+    if (entity !== null) {
+      entity.lastUsed = new Date();
+      return this.repository.save(entity);
+    }
+    return new ConnectionEntity();
     // TODO Set react context
+  }
+
+  public async update(model: ConnectionModelType): Promise<void> {
+    const entity = await this.repository.findOneBy({ id: model.id });
+    if (entity !== null) {
+      Object.assign(entity, model);
+      entity.lastUsed = new Date();
+      await this.repository.save(entity);
+    }
   }
 }

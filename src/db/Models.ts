@@ -1,5 +1,21 @@
 /* eslint-disable import/no-cycle */
-import ConnectionEntity from './entity/ConnectionEntity';
+export type ConnectionModelType = {
+  id: number;
+
+  nickname: string;
+
+  address: string;
+
+  port: number;
+
+  username: string;
+
+  password: string;
+
+  createdDate: Date;
+
+  lastUsed: Date;
+};
 
 export class ConnectionModel {
   id: number;
@@ -18,7 +34,7 @@ export class ConnectionModel {
 
   lastUsed: Date;
 
-  constructor(entity?: ConnectionEntity) {
+  constructor(entity?: ConnectionModelType) {
     Object.assign(this, entity);
   }
 }
