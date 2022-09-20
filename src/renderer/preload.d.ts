@@ -25,6 +25,7 @@ declare global {
         fetch(): Promise<ConnectionModel[]>;
         create(model: ConnectionModel): Promise<ConnectionModel>;
         select(id: number): null;
+        delete(id: number): Promise<null>;
       };
     };
   }

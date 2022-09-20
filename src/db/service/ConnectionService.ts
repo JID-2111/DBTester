@@ -27,4 +27,11 @@ export default class ConnectionService {
     this.repository.save(entity);
     // TODO Set react context
   }
+
+  public async delete(id: number) {
+    const entity = await this.repository.findOneBy({ id });
+    // TODO add logging
+    if (!entity) return;
+    await this.repository.remove(entity);
+  }
 }

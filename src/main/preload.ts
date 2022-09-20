@@ -36,5 +36,6 @@ contextBridge.exposeInMainWorld('connections', {
     create: (model: ConnectionModel) =>
       ipcRenderer.invoke('connections:create', model),
     select: (id: number) => ipcRenderer.invoke('connections:select', id),
+    delete: (id: number) => ipcRenderer.invoke('connections:delete', id),
   },
 });
