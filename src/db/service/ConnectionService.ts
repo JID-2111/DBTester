@@ -37,7 +37,7 @@ export default class ConnectionService {
     if (!entity) return;
     await this.repository.remove(entity);
   }
-  
+
   public async update(model: ConnectionModelType): Promise<void> {
     const entity = await this.repository.findOneBy({ id: model.id });
     if (entity !== null) {
