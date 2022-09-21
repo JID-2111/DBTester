@@ -12,11 +12,11 @@ import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import AppDataSource from '../data-source';
-import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
 import 'reflect-metadata';
 import './ipc';
+import AppDataSource from '../data-source';
+import { resolveHtmlPath } from './util';
+import MenuBuilder from './menu';
 
 class AppUpdater {
   constructor() {

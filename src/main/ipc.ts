@@ -31,3 +31,7 @@ ipcMain.handle('connections:create', (_event, ...args) => {
 ipcMain.handle('connections:select', (_event, ...args) => {
   return new ConnectionService().select(args[0]);
 });
+
+ipcMain.handle('connections:update', (_event, ...args) => {
+  return new ConnectionService().update(args[0]);
+});

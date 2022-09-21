@@ -1,5 +1,6 @@
+import ConnectionEntity from 'db/entity/ConnectionEntity';
 import { Channels } from 'main/preload';
-import { ConnectionModel } from '../db/Models';
+import { ConnectionModel, ConnectionModelType } from '../db/Models';
 
 declare global {
   interface Window {
@@ -23,8 +24,9 @@ declare global {
     connections: {
       ipcRenderer: {
         fetch(): Promise<ConnectionModel[]>;
-        create(model: ConnectionModel): Promise<ConnectionModel>;
-        select(id: number): null;
+        create(model: ConnectionModelType): Promise<ConnectionModel>;
+        select(id: number): Promise<ConnectionEntity>;
+        update(model: ConnectionModelType): Promise<void>;
       };
     };
   }

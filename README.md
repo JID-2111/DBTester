@@ -75,3 +75,13 @@ MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplat
   - Reload Script [docs](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts)
   - IPC Renderer [Documentation](https://www.electronjs.org/docs/latest/api/ipc-renderer)
   - IPC two way usage [docs](https://www.electronjs.org/docs/latest/tutorial/ipc#pattern-2-renderer-to-main-two-way)
+
+## IPC Renderer
+
+In order to make sure your backend function can be used by the frontend, change these files:
+
+```
+src/main/ipc.ts
+src/main/preload.ts
+src/renderer/preload.d.ts
+```
