@@ -1,9 +1,3 @@
----
-name: Pull Request
-about: Your are pushing code to the feature branch
-labels: 'pr'
----
-
 # Description
 
 Include a summary of the changes and the related issue.
