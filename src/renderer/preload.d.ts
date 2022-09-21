@@ -27,6 +27,7 @@ declare global {
         create(model: ConnectionModelType): Promise<ConnectionModel>;
         select(id: number): Promise<ConnectionEntity>;
         update(model: ConnectionModelType): Promise<void>;
+        delete(id: number): Promise<void>;
       };
     };
   }
