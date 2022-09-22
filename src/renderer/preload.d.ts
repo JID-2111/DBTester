@@ -5,8 +5,7 @@ import { ConnectionModel, ConnectionModelType } from '../db/Models';
 
 declare global {
   interface Window {
-    // eslint-disable-next-line prettier/prettier
-    log: LogFunctions,
+    log: LogFunctions;
     electron: {
       ipcRenderer: {
         sendMessage(channel: Channels, args: unknown[]): void;

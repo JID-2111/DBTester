@@ -9,7 +9,7 @@ module.exports = {
     'no-console': 'off',
     'class-methods-use-this': 'off',
     'max-classes-per-file': 'off',
-
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     semi: ['warn', 'always'],
   },
   parserOptions: {

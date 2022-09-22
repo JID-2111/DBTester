@@ -24,10 +24,7 @@ class AppUpdater {
     log.transports.file.resolvePath = () =>
       path.join(getDataPath(), 'logs/main.log');
     log.transports.file.level = 'info';
-    log.transports.console.format = (
-      message: LogMessage,
-      _data: any[] | undefined
-    ) => {
+    log.transports.console.format = (message: LogMessage, _data: unknown) => {
       const str = `[${message.date.toUTCString()}] ${`[${message.level}]`.padEnd(
         9,
         ' '
