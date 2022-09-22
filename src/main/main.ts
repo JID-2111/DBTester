@@ -24,6 +24,23 @@ class AppUpdater {
     log.transports.file.resolvePath = () =>
       path.join(getDataPath(), 'logs/main.log');
     log.transports.file.level = 'info';
+    log.transports.console.format = (
+      message: LogMessage,
+      _data: any[] | undefined
+    ) => {
+      const str = `[${message.date.toUTCString()}] ${`[${message.level}]`.padEnd(
+        9,
+        ' '
+      )} ${message.data}`;
+      if (message.level === 'error') return chalk.bgRed(str);
+      if (message.level === 'warn') return chalk.red(str);
+      if (message.level === 'info') return chalk.cyan(str);
+      if (message.level === 'debug') return chalk.green(str);
+      if (message.level === 'verbose') return chalk.bgBlack(str);
+      return chalk.white(str);
+    };
+    log.transports.console.useStyles = true;
+
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
   }
