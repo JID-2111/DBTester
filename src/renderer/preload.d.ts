@@ -1,9 +1,12 @@
 import ConnectionEntity from 'db/entity/ConnectionEntity';
+import { LogFunctions } from 'electron-log';
 import { Channels } from 'main/preload';
 import { ConnectionModel, ConnectionModelType } from '../db/Models';
 
 declare global {
   interface Window {
+    // eslint-disable-next-line prettier/prettier
+    log: LogFunctions,
     electron: {
       ipcRenderer: {
         sendMessage(channel: Channels, args: unknown[]): void;
