@@ -1,7 +1,7 @@
 import '../scss/RecentConnections.scss';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import { ConnectionModel } from 'db/Models';
+import { ConnectionModel } from '../../db/Models';
 
 const m = new ConnectionModel();
 m.id = 1;
@@ -22,7 +22,7 @@ const RecentConnections = () => {
         <table className="table">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>ID</th>
               <th>Type of Connection</th>
               <th>Address</th>
               <th>User</th>
