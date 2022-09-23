@@ -1,7 +1,19 @@
 import '../scss/RecentConnections.scss';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { ConnectionModel } from 'db/Models';
 
+const m = new ConnectionModel();
+m.id = 1;
+m.nickname = 'Connection';
+m.address = '123.352.64.7';
+m.username = 'User1';
+const n = new ConnectionModel();
+n.id = 2;
+n.nickname = 'Connection2';
+n.address = '123.352.64.8';
+n.username = 'User2';
+const models = [m, n];
 const RecentConnections = () => {
   return (
     <div className="RecentWrapper">
@@ -17,36 +29,20 @@ const RecentConnections = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <Link to="/Execute">
-                <button className="buttonSelect" type="button">
-                  <td className="LinkTD">Connection1</td>
-                </button>
-              </Link>
-              <td>PostgreSQL</td>
-              <td>123.234.32.4</td>
-              <td>User1</td>
-            </tr>
-            <tr>
-              <Link to="/Execute">
-                <button className="buttonSelect" type="button">
-                  <td className="LinkTD">Connection2</td>
-                </button>
-              </Link>
-              <td>MySQL</td>
-              <td>123.234.32.17</td>
-              <td>User2</td>
-            </tr>
-            <tr>
-              <Link to="/Execute">
-                <button className="buttonSelect" type="button">
-                  <td className="LinkTD">Connection3</td>
-                </button>
-              </Link>
-              <td>Oracle</td>
-              <td>456.789.18.13</td>
-              <td>User3</td>
-            </tr>
+            {models.map((value) => {
+              return (
+                <tr>
+                  <Link to="/Execute">
+                    <button type="button" className="buttonSelect">
+                      <td className="LinkTD">{value.id}</td>
+                    </button>
+                  </Link>
+                  <td>{value.nickname}</td>
+                  <td>{value.address}</td>
+                  <td>{value.username}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
