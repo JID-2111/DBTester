@@ -15,7 +15,7 @@ const Home = () => {
             <h2>New Connection</h2>
           </Button>
         </Link>
-        <Link to="/">
+        <Link to="/RecentConnection">
           <Button variant="secondary" className="launch-button">
             <Link45deg className="icon" height="2em" width="2em" />
             <h2>Connect to Existing</h2>
