@@ -1,3 +1,5 @@
+import log from 'electron-log';
+
 const { Client } = require('pg');
 
 type DBProcedure = {
@@ -63,6 +65,7 @@ export default class Procedures {
     client.end();
     return Promise.all(
       result.rows.map((row: DBProcedure) => {
+        log.verbose(row.routine_name);
         return row.routine_name;
       })
     );
