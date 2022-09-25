@@ -11,6 +11,24 @@ type DBQuery = {
   datname: string;
 };
 
+type DBParameter = {
+  pronamespace: string;
+  proname: string;
+  args_def: string;
+  arg: string;
+};
+
+enum Direction {
+  IN = 'IN',
+  OUT = 'OUT',
+  INOUT = 'INOUT',
+}
+type Parameter = {
+  direction: Direction;
+  name: string;
+  type: string;
+};
+
 export default class Procedures {
   address: string;
 
@@ -88,6 +106,52 @@ export default class Procedures {
     );
     client.end();
     return result.rows[0].prosrc;
+  }
+
+  public async triggerProdedure(
+    database: string,
+    procedure: string,
+    parameters: string[]
+  ) {
+    const client = await new Client({
+      host: this.address,
+      port: this.port,
+      password: 'asdf',
+      user: 'kpmg',
+      database,
+    });
+    client.connect();
+    const query = await client.query(
+      `CALL ${procedure}(${parameters.join(',')})`
+    );
+    client.end();
+    return query.rows[0];
+  }
+
+  public async getProcedureParameters(
+    database: string,
+    procedure: string
+  ): Promise<Parameter[]> {
+    const client = await new Client({
+      host: this.address,
+      port: this.port,
+      password: 'asdf',
+      user: 'kpmg',
+      database,
+    });
+    client.connect();
+    const query = await client.query(
+      `SELECT pronamespace::regnamespace, proname, pg_get_function_arguments(oid) AS args_def, UNNEST(string_to_array(pg_get_function_identity_arguments(oid), ',' )) AS arg FROM pg_proc where proname='${procedure}'`
+    );
+    client.end();
+    return query.rows.map((row: DBParameter): Parameter => {
+      const parts = row.arg.trim().split(' ');
+      return {
+        direction: <Direction>parts[0],
+        name: parts[1],
+        type: parts[2],
+      };
+    });
   }
 
   constructor() {
