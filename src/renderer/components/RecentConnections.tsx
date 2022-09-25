@@ -1,6 +1,6 @@
 import '../scss/RecentConnections.scss';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import { ConnectionModel } from '../../db/Models';
 
 const m = new ConnectionModel();
@@ -19,7 +19,7 @@ const RecentConnections = () => {
     <div className="RecentWrapper">
       <h1 className="Header">Recent Connections</h1>
       <div className="TDiv">
-        <table className="table">
+        <Table className="table">
           <thead>
             <tr>
               <th>ID</th>
@@ -31,12 +31,14 @@ const RecentConnections = () => {
           <tbody>
             {models.map((value) => {
               return (
-                <tr>
-                  <Link to="/Execute">
-                    <button type="button" className="buttonSelect">
-                      <td className="LinkTD">{value.id}</td>
-                    </button>
-                  </Link>
+                <tr key={value.id}>
+                  <td className="LinkTD">
+                    <Link to="/Execute">
+                      <button className="buttonSelect" type="button">
+                        {value.id}
+                      </button>
+                    </Link>
+                  </td>
                   <td>{value.nickname}</td>
                   <td>{value.address}</td>
                   <td>{value.username}</td>
@@ -44,7 +46,7 @@ const RecentConnections = () => {
               );
             })}
           </tbody>
-        </table>
+        </Table>
       </div>
       <div className="toHome">
         <Link to="/" className="link">
