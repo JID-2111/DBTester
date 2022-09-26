@@ -9,7 +9,7 @@ const Home = () => {
     <div>
       <h1>DB Tester</h1>
       <div className="launch-wrapper">
-        <Link to="/">
+        <Link to="/newconnection">
           <Button variant="secondary" className="launch-button">
             <Plus className="icon" height="2em" width="2em" />
             <h2>New Connection</h2>
