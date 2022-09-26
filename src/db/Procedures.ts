@@ -23,7 +23,7 @@ enum Direction {
   OUT = 'OUT',
   INOUT = 'INOUT',
 }
-type Parameter = {
+type ProcedureParameter = {
   direction: Direction;
   name: string;
   type: string;
@@ -131,7 +131,7 @@ export default class Procedures {
   public async getProcedureParameters(
     database: string,
     procedure: string
-  ): Promise<Parameter[]> {
+  ): Promise<ProcedureParameter[]> {
     const client = await new Client({
       host: this.address,
       port: this.port,
@@ -144,7 +144,7 @@ export default class Procedures {
       `SELECT pronamespace::regnamespace, proname, pg_get_function_arguments(oid) AS args_def, UNNEST(string_to_array(pg_get_function_identity_arguments(oid), ',' )) AS arg FROM pg_proc where proname='${procedure}'`
     );
     client.end();
-    return query.rows.map((row: DBParameter): Parameter => {
+    return query.rows.map((row: DBParameter): ProcedureParameter => {
       const parts = row.arg.trim().split(' ');
       return {
         direction: <Direction>parts[0],
