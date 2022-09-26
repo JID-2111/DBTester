@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
+import { ConnectionModel } from '../../db/Models';
 
 interface IProcedureDropdownProps {
   setCode: (code: string) => void;
@@ -15,6 +16,13 @@ const ProcedureDropdown = ({ setCode }: IProcedureDropdownProps) => {
 
   useEffect(() => {
     const fetchProcs = async () => {
+      const model = new ConnectionModel();
+      model.nickname = 'something_dumb';
+      model.username = 'kpmg';
+      model.password = 'asdf';
+      model.address = 'localhost';
+      model.port = 5432;
+      await window.connections.ipcRenderer.create(model);
       const newProcs = await window.procedures.ipcRenderer.fetchProcedures();
       setProcedures(newProcs.get('React'));
     };

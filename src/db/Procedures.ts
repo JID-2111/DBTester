@@ -1,4 +1,4 @@
-const { Client } = require('pg');
+import PgClient from './Client';
 
 type DBProcedure = {
   routine_catalog: string;
@@ -10,17 +10,13 @@ type DBQuery = {
 };
 
 export default class Procedures {
-  address: string;
-
-  port: number;
-
   public async getProceduresForDB(
     databases: string[]
   ): Promise<Map<string, string[]>> {
     const res = new Map<string, string[]>();
     await Promise.all(
       databases.map(async (database) => {
-        const procedures = await this.fetchProcedures(database);
+        const procedures = await this.fetchProcedures();
         res.set(database, procedures);
       })
     );
@@ -28,14 +24,7 @@ export default class Procedures {
   }
 
   public async getDatabases() {
-    const database = 'React';
-    const client = await new Client({
-      host: this.address,
-      port: this.port,
-      password: 'asdf',
-      user: 'kpmg',
-      database,
-    });
+    const client = await PgClient.newClient();
     client.connect();
     const result = await client.query(
       `select datname from pg_catalog.pg_database where datistemplate = false`
@@ -48,14 +37,8 @@ export default class Procedures {
     );
   }
 
-  public async fetchProcedures(database: string): Promise<string[]> {
-    const client = await new Client({
-      host: this.address,
-      port: this.port,
-      password: 'asdf',
-      user: 'kpmg',
-      database,
-    });
+  public async fetchProcedures(): Promise<string[]> {
+    const client = await PgClient.newClient();
     client.connect();
     const result = await client.query(
       `SELECT routine_catalog, routine_name FROM information_schema.routines WHERE routine_type = 'PROCEDURE'`
@@ -68,29 +51,13 @@ export default class Procedures {
     );
   }
 
-  public async fetchContent(
-    database: string,
-    procedure: string
-  ): Promise<string[]> {
-    const client = await new Client({
-      host: this.address,
-      port: this.port,
-      password: 'asdf',
-      user: 'kpmg',
-      database,
-    });
+  public async fetchContent(procedure: string): Promise<string[]> {
+    const client = await PgClient.newClient();
     client.connect();
     const result = await client.query(
       `SELECT prosrc FROM pg_proc WHERE proname = '${procedure}'`
     );
     client.end();
     return result.rows[0].prosrc;
-  }
-
-  constructor() {
-    // TODO get address from user
-    this.address =
-      process.env.NODE_ENV === 'development' ? 'localhost' : 'localhost';
-    this.port = 5432;
   }
 }

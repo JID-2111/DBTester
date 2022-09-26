@@ -2,6 +2,7 @@ import { Repository } from 'typeorm';
 import AppDataSource from '../../data-source';
 import ConnectionEntity from '../entity/ConnectionEntity';
 import { ConnectionModel, ConnectionModelType } from '../Models';
+import PgClient from '../Client';
 
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
@@ -25,6 +26,7 @@ export default class ConnectionService {
     const entity = await this.repository.findOneBy({ id });
     if (entity !== null) {
       entity.lastUsed = new Date();
+      PgClient.model = entity;
       return this.repository.save(entity);
     }
     return new ConnectionEntity();
