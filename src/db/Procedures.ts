@@ -108,7 +108,7 @@ export default class Procedures {
     return result.rows[0].prosrc;
   }
 
-  public async triggerProdedure(
+  public async triggerProcedure(
     database: string,
     procedure: string,
     parameters: string[]
