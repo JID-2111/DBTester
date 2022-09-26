@@ -11,16 +11,33 @@
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
+import log, { LogMessage } from 'electron-log';
 import 'reflect-metadata';
 import './ipc';
+import chalk from 'chalk';
 import AppDataSource from '../data-source';
-import { resolveHtmlPath } from './util';
+import { resolveHtmlPath, getDataPath } from './util';
 import MenuBuilder from './menu';
 
 class AppUpdater {
   constructor() {
+    log.transports.file.resolvePath = () =>
+      path.join(getDataPath(), 'logs/main.log');
     log.transports.file.level = 'info';
+    log.transports.console.format = (message: LogMessage, _data: unknown) => {
+      const str = `[${message.date.toUTCString()}] ${`[${message.level}]`.padEnd(
+        9,
+        ' '
+      )} ${message.data}`;
+      if (message.level === 'error') return chalk.bgRed(str);
+      if (message.level === 'warn') return chalk.red(str);
+      if (message.level === 'info') return chalk.cyan(str);
+      if (message.level === 'debug') return chalk.green(str);
+      if (message.level === 'verbose') return chalk.bgBlack(str);
+      return chalk.white(str);
+    };
+    log.transports.console.useStyles = true;
+
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
   }
@@ -30,6 +47,7 @@ let mainWindow: BrowserWindow | null = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
+  log.transports.console.level = 'info';
   sourceMapSupport.install();
 }
 
@@ -37,6 +55,7 @@ const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDebug) {
+  log.transports.console.level = 'debug';
   require('electron-debug')();
 }
 

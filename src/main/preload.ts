@@ -1,6 +1,10 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { ConnectionModelType } from '../db/Models';
 
+const log = require('electron-log');
+
+window.log = log.functions;
+
 export type Channels = 'ipc-example';
 
 contextBridge.exposeInMainWorld('electron', {

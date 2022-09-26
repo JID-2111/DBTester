@@ -1,3 +1,4 @@
+import log from 'electron-log';
 import PgClient from './Client';
 
 type DBProcedure = {
@@ -46,6 +47,7 @@ export default class Procedures {
     client.end();
     return Promise.all(
       result.rows.map((row: DBProcedure) => {
+        log.verbose(row.routine_name);
         return row.routine_name;
       })
     );
