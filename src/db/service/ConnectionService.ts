@@ -1,4 +1,7 @@
 import { Repository } from 'typeorm';
+import { change } from '../redux/ServerConnections/ServerConnection';
+import { store } from '../redux/store';
+import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
 import ConnectionEntity from '../entity/ConnectionEntity';
 import { ConnectionModel, ConnectionModelType } from '../Models';
@@ -25,6 +28,7 @@ export default class ConnectionService {
     const entity = await this.repository.findOneBy({ id });
     if (entity !== null) {
       entity.lastUsed = new Date();
+      store.dispatch(change(new PgClient(entity)));
       return this.repository.save(entity);
     }
     return new ConnectionEntity();

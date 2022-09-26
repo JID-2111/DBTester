@@ -8,4 +8,5 @@ export default interface ServerConnection {
   fetchProceduresQuery(): Promise<string[]>;
 
   fetchContentQuery(procedure: string): Promise<string[]>;
+  // eslint-disable-next-line prettier/prettier, semi
 }

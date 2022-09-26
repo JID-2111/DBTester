@@ -1,13 +1,11 @@
 import { ConnectionModel } from './Models';
-import PgClient from './PgClient';
+import { store } from './redux/store';
 
 const model = new ConnectionModel();
 model.nickname = 'something_dumb';
 model.username = 'kpmg';
 model.password = 'asdf';
 model.address = 'localhost';
-
-const pgClient = new PgClient(model); // TODO use react context
 
 export default class Procedures {
   public async getProceduresForDB(
@@ -24,14 +22,16 @@ export default class Procedures {
   }
 
   public async getDatabases() {
-    return pgClient.getDatabasesQuery();
+    return store.getState().connection.serverConnection.getDatabasesQuery();
   }
 
   public async fetchProcedures(): Promise<string[]> {
-    return pgClient.fetchProceduresQuery();
+    return store.getState().connection.serverConnection.fetchProceduresQuery();
   }
 
   public async fetchContent(procedure: string): Promise<string[]> {
-    return pgClient.fetchContentQuery(procedure);
+    return store
+      .getState()
+      .connection.serverConnection.fetchContentQuery(procedure);
   }
 }
