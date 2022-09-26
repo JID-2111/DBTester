@@ -32,7 +32,6 @@ export default class ConnectionService {
       return this.repository.save(entity);
     }
     return new ConnectionEntity();
-    // TODO Set react context
   }
 
   public async delete(id: number) {
