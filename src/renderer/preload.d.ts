@@ -30,6 +30,7 @@ declare global {
         select(id: number): Promise<ConnectionEntity>;
         update(model: ConnectionModelType): Promise<void>;
         delete(id: number): Promise<void>;
+        disconnect(): Promise<void>;
       };
     };
   }
