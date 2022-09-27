@@ -1,4 +1,3 @@
-import { DBParameter } from './PgClient';
 import { store } from './redux/store';
 
 export enum Direction {
