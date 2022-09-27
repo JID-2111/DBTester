@@ -6,27 +6,32 @@ import '../scss/Home.scss';
 
 const Home = () => {
   return (
-    <div>
-      <h1>DB Tester</h1>
-      <div className="launch-wrapper">
-        <Link to="/">
-          <Button variant="secondary" className="launch-button">
-            <Plus className="icon" height="2em" width="2em" />
-            <h2>New Connection</h2>
-          </Button>
-        </Link>
-        <Link to="/">
-          <Button variant="secondary" className="launch-button">
-            <Link45deg className="icon" height="2em" width="2em" />
-            <h2>Connect to Existing</h2>
-          </Button>
-        </Link>
-        <Link to="/">
-          <Button variant="secondary" className="launch-button">
-            <Archive className="icon" height="2em" width="2em" />
-            <h2>View History</h2>
-          </Button>
-        </Link>
+    <div className="home">
+      <h1>Welcome to DB Tester</h1>
+      <div className="menu-wrapper">
+        <div className="recent-wrapper">
+          <h2>recent</h2>
+        </div>
+        <div className="launch-wrapper">
+          <Link to="/">
+            <Button variant="secondary" className="launch-button">
+              <Plus className="icon" height="2em" width="2em" />
+              <h2>New Connection</h2>
+            </Button>
+          </Link>
+          <Link to="/">
+            <Button variant="secondary" className="launch-button">
+              <Link45deg className="icon" height="2em" width="2em" />
+              <h2>Connect to Existing</h2>
+            </Button>
+          </Link>
+          <Link to="/">
+            <Button variant="secondary" className="launch-button">
+              <Archive className="icon" height="2em" width="2em" />
+              <h2>View History</h2>
+            </Button>
+          </Link>
+        </div>
       </div>
       <Link to="/execute">
         <Button className="execute-button">Execute</Button>

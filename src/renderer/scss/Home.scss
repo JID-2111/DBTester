@@ -1,6 +1,30 @@
-.launch-wrapper {
-  width: 100vw;
-  height: auto;
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .menu-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: auto;
+    padding: 1em;
+
+    .recent-wrapper {
+      flex-direction: column;
+      width: 50vw;
+      background-color: #696969;
+      h2 {
+        display: flex;
+        justify-content: left;
+      }
+    }
+    .launch-wrapper {
+      flex-direction: column;
+      width: 50vw;
+    }
+  }
 }
 
 h2 {
@@ -18,7 +42,7 @@ h1 {
 .launch-button {
   margin: 5px;
   transition: none;
-  width: calc(100vw - 10px);
+  width: calc(50vw - 10px);
 }
 
 .launch-button:hover {
