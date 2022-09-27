@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import { ProcedureParameter } from './Procedures';
 
 export default interface ServerConnection {
   pool: Pool;
@@ -8,5 +9,14 @@ export default interface ServerConnection {
   fetchProceduresQuery(): Promise<string[]>;
 
   fetchContentQuery(procedure: string): Promise<string[]>;
+
+  fetchProcedureParametersQuery(
+    procedure: string
+  ): Promise<ProcedureParameter[]>;
+
+  callProcedureQuery(
+    procedure: string,
+    parameters: string[]
+  ): Promise<string[]>;
   // eslint-disable-next-line prettier/prettier, semi
 }

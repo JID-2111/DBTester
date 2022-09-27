@@ -2,6 +2,7 @@ import { Pool } from 'pg';
 import log from 'electron-log';
 import { ConnectionModelType } from './Models';
 import ServerConnectionInterface from './ServerConnection';
+import { ProcedureParameter, Direction } from './Procedures';
 
 type DBQuery = {
   datname: string;
@@ -10,6 +11,13 @@ type DBQuery = {
 type DBProcedure = {
   routine_catalog: string;
   routine_name: string;
+};
+
+export type DBParameter = {
+  pronamespace: string;
+  proname: string;
+  args_def: string;
+  arg: string;
 };
 
 export default class PgClient implements ServerConnectionInterface {
@@ -65,5 +73,32 @@ export default class PgClient implements ServerConnectionInterface {
     );
     client.release();
     return result.rows[0].prosrc;
+  }
+
+  public async fetchProcedureParametersQuery(
+    procedure: string
+  ): Promise<ProcedureParameter[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `SELECT pronamespace::regnamespace, proname, pg_get_function_arguments(oid) AS args_def, UNNEST(string_to_array(pg_get_function_identity_arguments(oid), ',' )) AS arg FROM pg_proc where proname='${procedure}'`
+    );
+    client.release();
+    return result.rows.map((row: DBParameter) => {
+      const parts = row.arg.trim().split(' ');
+      return {
+        direction: <Direction>parts[0],
+        name: parts[1],
+        type: parts[2],
+      };
+    });
+  }
+
+  public async callProcedureQuery(procedure: string, parameters: string[]) {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `CALL ${procedure}(${parameters.join(',')})`
+    );
+    client.release();
+    return result.rows;
   }
 }

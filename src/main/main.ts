@@ -28,12 +28,12 @@ class AppUpdater {
       const str = `[${message.date.toUTCString()}] ${`[${message.level}]`.padEnd(
         9,
         ' '
-      )} ${message.data}`;
-      if (message.level === 'error') return chalk.bgRed(str);
-      if (message.level === 'warn') return chalk.red(str);
-      if (message.level === 'info') return chalk.cyan(str);
-      if (message.level === 'debug') return chalk.green(str);
-      if (message.level === 'verbose') return chalk.bgBlack(str);
+      )} `;
+      if (message.level === 'error') return chalk.bgRed(str) + message.data;
+      if (message.level === 'warn') return chalk.red(str) + message.data;
+      if (message.level === 'info') return chalk.cyan(str) + message.data;
+      if (message.level === 'debug') return chalk.green(str) + message.data;
+      if (message.level === 'verbose') return chalk.bgBlack(str) + message.data;
       return chalk.white(str);
     };
     log.transports.console.useStyles = true;
