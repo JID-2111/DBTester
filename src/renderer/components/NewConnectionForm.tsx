@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 
 export interface ConnectionString {
+  nickname: string;
   address: string;
   port: string;
   username: string;
@@ -10,6 +11,7 @@ export interface ConnectionString {
 }
 
 const NewConnectionForm = () => {
+  const [nickname, setNickname] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [port, setPort] = useState<string>('');
   const [username, setUsername] = useState<string>('');
@@ -17,6 +19,7 @@ const NewConnectionForm = () => {
   const [remember, setRemember] = useState<boolean>(false);
 
   const clearState = () => {
+    setNickname('');
     setAddress('');
     setPort('');
     setUsername('');
@@ -27,6 +30,7 @@ const NewConnectionForm = () => {
     event.preventDefault();
 
     const connection: ConnectionString = {
+      nickname,
       address,
       port,
       username,
@@ -40,6 +44,15 @@ const NewConnectionForm = () => {
     <div>
       <div className="d-flex justify-content-center">
         <Form className="new-connection-form" onSubmit={(e) => handleSubmit(e)}>
+          <Form.Group className="mb-3" controlId="connectionNickname">
+            <Form.Label>Nickname</Form.Label>
+            <Form.Control
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              type="address"
+              placeholder="Database Nickname"
+            />
+          </Form.Group>
           <Form.Group className="mb-3" controlId="connectionAddress">
             <Form.Label>Address</Form.Label>
             <Form.Control
