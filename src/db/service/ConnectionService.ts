@@ -3,8 +3,9 @@ import { change } from '../redux/ServerConnections/ServerConnection';
 import { store } from '../redux/store';
 import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
-import ConnectionEntity from '../entity/ConnectionEntity';
 import { ConnectionModel, ConnectionModelType } from '../Models';
+import ConnectionEntity from '../entity/ConnectionEntity';
+import DBProvider from '../entity/enum';
 
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
@@ -15,20 +16,23 @@ export default class ConnectionService {
 
   public async fetch(): Promise<ConnectionModel[]> {
     const entities = await this.repository.find();
-    return entities as ConnectionModel[];
+    return entities.map((entity) => {
+      return new ConnectionModel(entity);
+    });
   }
 
-  public async create(model: ConnectionModelType): Promise<ConnectionModel> {
+  public async create(model: ConnectionModelType): Promise<ConnectionEntity> {
     model.lastUsed = new Date();
     const entity = await this.repository.save(new ConnectionEntity(model));
     return this.select(entity.id);
+    // return entity;
   }
 
   public async select(id: number): Promise<ConnectionEntity> {
     const entity = await this.repository.findOneBy({ id });
     if (entity !== null) {
       entity.lastUsed = new Date();
-      store.dispatch(change(new PgClient(entity)));
+      store.dispatch(change(new PgClient(new ConnectionModel(entity))));
       return this.repository.save(entity);
     }
     return new ConnectionEntity();
@@ -49,4 +53,40 @@ export default class ConnectionService {
       await this.repository.save(entity);
     }
   }
+
+  public async test() {
+    await AppDataSource.initialize();
+    const service = new ConnectionService();
+
+    const manual = new ConnectionModel({
+      id: 1,
+      nickname: 'manual',
+      type: DBProvider.PostgreSQL,
+      connectionConfig: {
+        config: 'manual',
+        address: 'asdf',
+        port: 123,
+        password: 'test',
+        username: 'asdf',
+      },
+    });
+    console.log('Created manual', manual);
+    await service.create(manual);
+    const cs = new ConnectionModel({
+      id: 2,
+      nickname: 'CS',
+      type: DBProvider.PostgreSQL,
+      connectionConfig: {
+        config: 'string',
+        connectionString: 'connectstring',
+      },
+    });
+    console.log('Created connection string', cs);
+    await service.create(cs);
+
+    console.log('Created entries:');
+    console.log(await service.fetch());
+  }
 }
+
+// new ConnectionService().test();

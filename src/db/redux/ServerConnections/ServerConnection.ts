@@ -1,14 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import DBProvider from '../../entity/enum';
 import { ConnectionModel } from '../../Models';
 import PgClient from '../../PgClient';
 import ServerConnection from '../../ServerConnection';
 import { RootState } from '../store';
 
-const model = new ConnectionModel();
-model.nickname = 'something_dumb';
-model.username = 'kpmg';
-model.password = 'asdf';
-model.address = 'localhost';
+const model = new ConnectionModel({
+  type: DBProvider.PostgreSQL,
+  nickname: 'something_dumb',
+  connectionConfig: {
+    config: 'manual',
+    username: 'kpmg',
+    password: 'asdf',
+    address: 'localhost',
+    port: 5432,
+  },
+});
 
 export interface ServerConnectionState {
   serverConnection: ServerConnection;

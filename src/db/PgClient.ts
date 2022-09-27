@@ -14,13 +14,19 @@ type DBProcedure = {
 
 export default class PgClient implements ServerConnectionInterface {
   constructor(model: ConnectionModelType) {
-    this.pool = new Pool({
-      host: model.address,
-      port: model.port,
-      password: model.password,
-      user: model.username,
-      database: 'React',
-    });
+    if (model.connectionConfig.config === 'manual') {
+      this.pool = new Pool({
+        host: model.connectionConfig.address,
+        port: model.connectionConfig.port,
+        password: model.connectionConfig.password,
+        user: model.connectionConfig.username,
+        database: 'React',
+      });
+    } else {
+      this.pool = new Pool({
+        connectionString: model.connectionConfig.connectionString,
+      });
+    }
   }
 
   pool: Pool;
