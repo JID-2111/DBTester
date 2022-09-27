@@ -1,11 +1,4 @@
-import { ConnectionModel } from './Models';
 import { store } from './redux/store';
-
-const model = new ConnectionModel();
-model.nickname = 'something_dumb';
-model.username = 'kpmg';
-model.password = 'asdf';
-model.address = 'localhost';
 
 export default class Procedures {
   public async getProceduresForDB(
