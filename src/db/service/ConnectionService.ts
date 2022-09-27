@@ -1,7 +1,10 @@
 import { Repository } from 'typeorm';
+import { change } from '../redux/ServerConnections/ServerConnection';
+import { store } from '../redux/store';
+import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
-import ConnectionEntity from '../entity/ConnectionEntity';
 import { ConnectionModel, ConnectionModelType } from '../Models';
+import ConnectionEntity from '../entity/ConnectionEntity';
 
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
@@ -12,10 +15,12 @@ export default class ConnectionService {
 
   public async fetch(): Promise<ConnectionModel[]> {
     const entities = await this.repository.find();
-    return entities as ConnectionModel[];
+    return entities.map((entity) => {
+      return new ConnectionModel(entity);
+    });
   }
 
-  public async create(model: ConnectionModelType): Promise<ConnectionModel> {
+  public async create(model: ConnectionModelType): Promise<ConnectionEntity> {
     model.lastUsed = new Date();
     const entity = await this.repository.save(new ConnectionEntity(model));
     return this.select(entity.id);
@@ -25,10 +30,10 @@ export default class ConnectionService {
     const entity = await this.repository.findOneBy({ id });
     if (entity !== null) {
       entity.lastUsed = new Date();
+      store.dispatch(change(new PgClient(new ConnectionModel(entity))));
       return this.repository.save(entity);
     }
     return new ConnectionEntity();
-    // TODO Set react context
   }
 
   public async delete(id: number) {

@@ -17,7 +17,7 @@ ipcMain.handle('procedures:listDatabases', () => {
 });
 
 ipcMain.handle('procedures:getProcedure', async (_event, ...args) => {
-  return new Procedures().fetchContent('React', args[0]);
+  return new Procedures().fetchContent(args[0]);
 });
 
 ipcMain.handle('connections:fetch', () => {
