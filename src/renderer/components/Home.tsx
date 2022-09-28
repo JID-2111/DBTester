@@ -10,7 +10,7 @@ const Home = () => {
       <h1>Welcome to DB Tester</h1>
       <div className="menu-wrapper">
         <div className="recent-wrapper">
-          <h2>recent</h2>
+          <h2> </h2>
         </div>
         <div className="launch-wrapper">
           <Link to="/">

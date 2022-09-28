@@ -3,25 +3,30 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #d6d6d6;
 
   .menu-wrapper {
     display: flex;
     flex-direction: row;
     justify-content: center;
     height: auto;
+    border-top: #000000 solid 3px;
 
     .recent-wrapper {
       flex-direction: column;
       width: 50vw;
-      background-color: #696969;
+      background-color: #808080;
+
       h2 {
         display: flex;
         justify-content: left;
+        color: #b8b8b8;
       }
     }
     .launch-wrapper {
       flex-direction: column;
       width: 50vw;
+      background-color: #ffffff;
     }
   }
 }
@@ -41,6 +46,9 @@ h1 {
 .launch-button {
   margin: 5px;
   transition: none;
+  stroke: none;
+  color: #000000;
+  background-color: #00000000;
   width: calc(50vw - 10px);
 }
 
@@ -49,6 +57,7 @@ h1 {
 }
 
 .execute-button {
-  margin: 5px;
-  position: relative;
+  margin: 1vw;
+  position: absolute;
+  right: 5%;
 }
