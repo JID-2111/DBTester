@@ -2,17 +2,30 @@ import '../scss/RecentConnections.scss';
 import { Link } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 import { ConnectionModel } from '../../db/Models';
+import DBProvider from '../../db/entity/enum';
 
-const m = new ConnectionModel();
-m.id = 1;
-m.nickname = 'Connection';
-m.address = '123.352.64.7';
-m.username = 'User1';
-const n = new ConnectionModel();
-n.id = 2;
-n.nickname = 'Connection2';
-n.address = '123.352.64.8';
-n.username = 'User2';
+const m = new ConnectionModel({
+  nickname: 'Connectio2',
+  type: DBProvider.PostgreSQL,
+  connectionConfig: {
+    config: 'manual',
+    address: '123.352.64.7222',
+    port: 123,
+    username: 'purdell',
+    password: 'supersecret',
+  },
+});
+const n = new ConnectionModel({
+  nickname: 'Connection',
+  type: DBProvider.PostgreSQL,
+  connectionConfig: {
+    config: 'manual',
+    address: '123.352.64.7',
+    port: 123,
+    username: 'purdell',
+    password: 'supersecret',
+  },
+});
 const models = [m, n];
 const RecentConnections = () => {
   return (
@@ -40,8 +53,8 @@ const RecentConnections = () => {
                     </Link>
                   </td>
                   <td>{value.nickname}</td>
-                  <td>{value.address}</td>
-                  <td>{value.username}</td>
+                  {/* <td>{value.address}</td>
+                  <td>{value.username}</td> */}
                 </tr>
               );
             })}
