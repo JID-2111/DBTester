@@ -2,6 +2,11 @@
 import { URL } from 'url';
 import path from 'path';
 import { app } from 'electron';
+import {
+  ConnectionStringParser,
+  IConnectionStringParameters,
+} from 'connection-string-parser';
+import { ConnectionModel } from '../db/Models';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -15,4 +20,19 @@ export function resolveHtmlPath(htmlFileName: string) {
 
 export function getDataPath() {
   return process.env.NODE_ENV === 'development' ? '.' : app.getPath('userData');
+}
+
+export function parseConnectionString(
+  model: ConnectionModel
+): IConnectionStringParameters | null {
+  const connectionStringParser = new ConnectionStringParser({
+    scheme: model.type.toLocaleLowerCase(),
+    hosts: [],
+  });
+
+  if (model.connectionConfig.config === 'string')
+    return connectionStringParser.parse(
+      model.connectionConfig.connectionString
+    );
+  return null;
 }
