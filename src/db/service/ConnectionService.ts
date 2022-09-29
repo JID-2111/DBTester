@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm';
-import { change } from '../redux/ServerConnections/ServerConnection';
+import log from 'electron-log';
+import { clear, change } from '../redux/ServerConnections/ServerConnection';
 import { store } from '../redux/store';
 import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
@@ -36,11 +37,20 @@ export default class ConnectionService {
     return new ConnectionEntity();
   }
 
-  public async delete(id: number) {
+  public async delete(id: number): Promise<void> {
     const entity = await this.repository.findOneBy({ id });
     // TODO add logging
     if (!entity) return;
     await this.repository.remove(entity);
+  }
+
+  public async disconnect(): Promise<void> {
+    store
+      .getState()
+      .connection.serverConnection.pool.end()
+      .then(() => log.info('Curr Connection Pool Ended'))
+      .catch(() => log.error('Couldnt end Pool'));
+    store.dispatch(clear());
   }
 
   public async update(model: ConnectionModelType): Promise<void> {
