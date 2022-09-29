@@ -1,8 +1,8 @@
 import { ConnectionModelType } from 'db/Models';
-import DBProvider from 'db/entity/enum';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, Modal } from 'react-bootstrap';
+import DBProvider from '../../db/entity/enum';
 
 interface INewConnectionForm {
   nickname: string;
