@@ -18,11 +18,13 @@ const model = new ConnectionModel({
 });
 
 export interface ServerConnectionState {
-  serverConnection: ServerInterface;
+  serverConnection: ServerConnection;
+  valid: boolean;
 }
 
 const initialState: ServerConnectionState = {
   serverConnection: new PgClient(model), // TODO maybe change this later
+  valid: process.env.NODE_ENV !== 'production', // TODO change this to false later
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -32,11 +34,15 @@ export const serverConnectionSlice = createSlice({
   reducers: {
     change: (state, action: PayloadAction<ServerInterface>) => {
       state.serverConnection = action.payload;
+      state.valid = true;
+    },
+    clear: (state) => {
+      state.valid = false;
     },
   },
 });
 
-export const { change } = serverConnectionSlice.actions;
+export const { change, clear } = serverConnectionSlice.actions;
 
 export const selectServerConnection = (state: RootState) =>
   state.connection.serverConnection;
