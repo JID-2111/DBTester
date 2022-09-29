@@ -1,3 +1,4 @@
+import { IConnectionStringParameters } from 'connection-string-parser';
 import { LogFunctions } from 'electron-log';
 import { Channels } from 'main/preload';
 import ConnectionEntity from '../db/entity/ConnectionEntity';
@@ -14,6 +15,11 @@ declare global {
           func: (...args: unknown[]) => void
         ): (() => void) | undefined;
         once(channel: string, func: (...args: unknown[]) => void): void;
+      };
+    };
+    util: {
+      ipcRenderer: {
+        parse(connection: string): Promise<IConnectionStringParameters | null>;
       };
     };
     procedures: {
