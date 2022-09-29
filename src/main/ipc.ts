@@ -47,3 +47,7 @@ ipcMain.handle('connections:update', (_event, ...args) => {
 ipcMain.handle('connections:switch', (_event, ...args) => {
   return new ConnectionService().switch(args[0]);
 });
+
+ipcMain.handle('connections:verify', (_event) => {
+  return new ConnectionService().verify();
+});

@@ -46,5 +46,6 @@ contextBridge.exposeInMainWorld('connections', {
       ipcRenderer.invoke('connections:update', model),
     switch: (database: string) =>
       ipcRenderer.invoke('connections:switch', database),
+    verify: () => ipcRenderer.invoke('connections:verify'),
   },
 });
