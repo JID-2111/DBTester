@@ -1,6 +1,10 @@
 import { Repository } from 'typeorm';
 import log from 'electron-log';
-import { clear, change } from '../redux/ServerConnections/ServerConnection';
+import {
+  clear,
+  change,
+  setDB,
+} from '../redux/ServerConnections/ServerConnection';
 import { store } from '../redux/store';
 import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
@@ -31,7 +35,7 @@ export default class ConnectionService {
     const entity = await this.repository.findOneBy({ id });
     if (entity !== null) {
       entity.lastUsed = new Date();
-      store.dispatch(change(new PgClient(new ConnectionModel(entity))));
+      store.dispatch(change(new PgClient(new ConnectionModel(entity)))); // TODO instantiate based on model.type
       return this.repository.save(entity);
     }
     return new ConnectionEntity();
@@ -60,5 +64,14 @@ export default class ConnectionService {
       entity.lastUsed = new Date();
       await this.repository.save(entity);
     }
+  }
+
+  public async switch(database: string): Promise<boolean> {
+    store.dispatch(setDB(database)); // TODO instantiate based on model.type
+    if (!(await store.getState().connection.serverConnection.verify())) {
+      store.dispatch(clear());
+      return false;
+    }
+    return true;
   }
 }
