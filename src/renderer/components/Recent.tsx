@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
+import { ConnectionModel } from 'db/Models';
 
 const RecentList = () => {
-  const defaultValue = ['No Recent Connections'];
-  const [recent, setRecent] = useState<string[]>(defaultValue);
+  const [recent, setRecent] = useState<ConnectionModel[]>();
 
   useEffect(() => {
     const fetchRecent = async () => {
-      const newRecent = await window.procedures.ipcRenderer.fetchDatabases();
+      const newRecent = await window.connections.ipcRenderer.fetch();
       setRecent(newRecent);
     };
     fetchRecent();
@@ -14,8 +14,8 @@ const RecentList = () => {
 
   return (
     <div className="recent-list">
-      {recent.map((connection) => (
-        <div className="recent-item">{connection}</div>
+      {recent?.map((connection: ConnectionModel) => (
+        <div className="recent-item">{connection.nickname}</div>
       ))}
     </div>
   );
