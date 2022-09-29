@@ -43,3 +43,7 @@ ipcMain.handle('connections:disconnect', (_event) => {
 ipcMain.handle('connections:update', (_event, ...args) => {
   return new ConnectionService().update(args[0]);
 });
+
+ipcMain.handle('connections:switch', (_event, ...args) => {
+  return new ConnectionService().switch(args[0]);
+});
