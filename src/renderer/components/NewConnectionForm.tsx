@@ -255,7 +255,7 @@ const NewConnectionForm = () => {
                 value={form.connectionString}
                 onChange={(e) => setField('connectionString', e.target.value)}
                 type="text"
-                placeholder="Ex: postgresql://username:password@address:port"
+                placeholder="Ex: postgresql://username:password@address:port/db"
                 isInvalid={!!errors.connectionString}
                 as="textarea"
                 rows={3}
