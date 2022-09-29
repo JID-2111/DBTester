@@ -3,32 +3,38 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #d6d6d6;
+  background-color: #acacac;
 
   .menu-wrapper {
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: center;
-    height: auto;
-    border-top: #000000 solid 3px;
+    width: 100vw;
 
     .recent-wrapper {
       flex-direction: column;
-      width: 50vw;
-      background-color: #808080;
+      width: 40vw;
+      height: 100vh;
+      background-color: #616161;
 
       .recent-list {
         display: flex;
         flex-direction: column;
         justify-content: left;
         color: #b8b8b8;
-        background-color: #9b9b9b;
+        background-color: #ffffff13;
       }
     }
     .launch-wrapper {
+      display: flex;
       flex-direction: column;
-      width: 50vw;
-      background-color: #ffffff;
+      align-items: center;
+      width: 60vw;
+
+      h1 {
+        padding-bottom: 10vh;
+      }
     }
   }
 }
@@ -62,4 +68,5 @@ h1 {
   margin: 1vw;
   position: absolute;
   right: 5%;
+  bottom: 5%;
 }
