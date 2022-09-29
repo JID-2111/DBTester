@@ -39,10 +39,16 @@ export const serverConnectionSlice = createSlice({
     clear: (state) => {
       state.valid = false;
     },
+    setDB: (state, action: PayloadAction<string>) => {
+      state.serverConnection = new PgClient(
+        state.serverConnection.model,
+        action.payload
+      ) as ServerInterface;
+    },
   },
 });
 
-export const { change, clear } = serverConnectionSlice.actions;
+export const { change, clear, setDB } = serverConnectionSlice.actions;
 
 export const selectServerConnection = (state: RootState) =>
   state.connection.serverConnection;

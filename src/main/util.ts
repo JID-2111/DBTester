@@ -2,6 +2,8 @@
 import { URL } from 'url';
 import path from 'path';
 import { app } from 'electron';
+import log, { LogMessage } from 'electron-log';
+import chalk from 'chalk';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -15,4 +17,25 @@ export function resolveHtmlPath(htmlFileName: string) {
 
 export function getDataPath() {
   return process.env.NODE_ENV === 'development' ? '.' : app.getPath('userData');
+}
+
+export function setLog() {
+  log.transports.file.resolvePath = () =>
+    path.join(getDataPath(), 'logs/main.log');
+  log.transports.file.level =
+    process.env.NODE_ENV === 'production' ? 'info' : 'debug';
+  log.transports.console.level = 'debug';
+  log.transports.console.format = (message: LogMessage, _data: unknown) => {
+    const str = `[${message.date.toUTCString()}] ${`[${message.level}]`.padEnd(
+      9,
+      ' '
+    )} `;
+    if (message.level === 'error') return chalk.bgRed(str) + message.data;
+    if (message.level === 'warn') return chalk.red(str) + message.data;
+    if (message.level === 'info') return chalk.cyan(str) + message.data;
+    if (message.level === 'debug') return chalk.green(str) + message.data;
+    if (message.level === 'verbose') return chalk.bgBlack(str) + message.data;
+    return chalk.white(str);
+  };
+  log.transports.console.useStyles = true;
 }
