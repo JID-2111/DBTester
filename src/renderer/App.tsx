@@ -13,7 +13,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/execute" element={<Execute />} />
-        <Route path="newconnection" element={<NewConnections />} />
+        <Route path="/newconnection" element={<NewConnections />} />
         <Route path="/RecentConnection" element={<RecentConnections />} />
       </Routes>
     </Router>
