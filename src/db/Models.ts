@@ -15,7 +15,7 @@ export type ConnectionModelType = {
   lastUsed?: Date;
 };
 
-type ManualConnectionConfig = {
+export type ManualConnectionConfig = {
   config: 'manual';
 
   address: string;
@@ -27,7 +27,7 @@ type ManualConnectionConfig = {
   password: string;
 };
 
-type ConnectionString = {
+export type ConnectionString = {
   config: 'string';
 
   connectionString: string;
