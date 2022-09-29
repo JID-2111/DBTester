@@ -68,10 +68,17 @@ export default class ConnectionService {
 
   public async switch(database: string): Promise<boolean> {
     store.dispatch(setDB(database)); // TODO instantiate based on model.type
-    if (!(await store.getState().connection.serverConnection.verify())) {
+    if (!(await this.verify())) {
       store.dispatch(clear());
       return false;
     }
     return true;
+  }
+
+  public async verify(): Promise<boolean> {
+    // Check if the current connection is marked valid and works
+    return store.getState().connection.valid
+      ? store.getState().connection.serverConnection.verify()
+      : false;
   }
 }
