@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 import { ProcedureParameter } from './Procedures';
 
-export default interface ServerConnection {
+export default interface ServerInterface {
   pool: Pool;
 
   getDatabasesQuery(): Promise<unknown>;

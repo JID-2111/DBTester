@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import DBProvider from '../../entity/enum';
 import { ConnectionModel } from '../../Models';
 import PgClient from '../../PgClient';
-import ServerConnection from '../../ServerConnection';
+import ServerInterface from '../../ServerInterface';
 import { RootState } from '../store';
 
 const model = new ConnectionModel({
@@ -18,7 +18,7 @@ const model = new ConnectionModel({
 });
 
 export interface ServerConnectionState {
-  serverConnection: ServerConnection;
+  serverConnection: ServerInterface;
 }
 
 const initialState: ServerConnectionState = {
@@ -30,7 +30,7 @@ export const serverConnectionSlice = createSlice({
   name: 'serverConnection',
   initialState,
   reducers: {
-    change: (state, action: PayloadAction<ServerConnection>) => {
+    change: (state, action: PayloadAction<ServerInterface>) => {
       state.serverConnection = action.payload;
     },
   },
