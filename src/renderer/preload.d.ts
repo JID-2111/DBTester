@@ -1,6 +1,6 @@
-import ConnectionEntity from 'db/entity/ConnectionEntity';
 import { LogFunctions } from 'electron-log';
 import { Channels } from 'main/preload';
+import ConnectionEntity from '../db/entity/ConnectionEntity';
 import { ConnectionModel, ConnectionModelType } from '../db/Models';
 
 declare global {
@@ -30,6 +30,7 @@ declare global {
         select(id: number): Promise<ConnectionEntity>;
         update(model: ConnectionModelType): Promise<void>;
         delete(id: number): Promise<void>;
+        disconnect(): Promise<void>;
       };
     };
   }
