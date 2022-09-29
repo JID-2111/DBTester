@@ -1,6 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { Archive, Link45deg, Plus } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
+import RecentList from './Recent';
 
 import '../scss/Home.scss';
 
@@ -10,7 +11,7 @@ const Home = () => {
       <h1>Welcome to DB Tester</h1>
       <div className="menu-wrapper">
         <div className="recent-wrapper">
-          <h2> </h2>
+          <RecentList />
         </div>
         <div className="launch-wrapper">
           <Link to="/">
