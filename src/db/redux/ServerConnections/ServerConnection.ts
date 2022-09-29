@@ -17,7 +17,7 @@ export interface ServerConnectionState {
 
 const initialState: ServerConnectionState = {
   serverConnection: new PgClient(model), // TODO maybe change this later
-  valid: true, // TODO change this to false later
+  valid: process.env.NODE_ENV !== 'production', // TODO change this to false later
 };
 
 // eslint-disable-next-line import/prefer-default-export
