@@ -19,6 +19,7 @@
 
       .recent-list {
         display: flex;
+        flex-direction: column;
         justify-content: left;
         color: #b8b8b8;
         background-color: #9b9b9b;

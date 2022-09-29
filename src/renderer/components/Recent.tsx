@@ -14,9 +14,9 @@ const RecentList = () => {
 
   return (
     <div className="recent-list">
-      {recent.map((connection: string) => {
-        return <p>{connection}</p>;
-      })}
+      {recent.map((connection) => (
+        <div className="recent-item">{connection}</div>
+      ))}
     </div>
   );
 };
