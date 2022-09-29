@@ -143,10 +143,13 @@ const NewConnectionForm = () => {
       // creates the server connection in sqlite and connects to it
       await window.connections.ipcRenderer.create(connection);
 
-      // check if server exists by attempting to fetch procedures - might be a better way to do this
-      await window.procedures.ipcRenderer.fetchProcedures();
-
-      // show alert modal if error
+      // verify if server connection was established
+      const verified = await window.connections.ipcRenderer.verify();
+      if (!verified) {
+        setAlert(true);
+        return;
+      }
+      // show alert modal if unexpected error
     } catch (e) {
       setAlert(true);
       return;

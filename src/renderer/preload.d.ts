@@ -33,6 +33,7 @@ declare global {
         disconnect(): Promise<void>;
         switch(database: string): Promise<boolean>;
         preload(): Promise<boolean>;
+        verify(): Promise<boolean>;
       };
     };
   }
