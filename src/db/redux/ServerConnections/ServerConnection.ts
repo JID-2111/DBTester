@@ -18,7 +18,7 @@ const model = new ConnectionModel({
 });
 
 export interface ServerConnectionState {
-  serverConnection: ServerConnection;
+  serverConnection: ServerInterface;
   valid: boolean;
 }
 
