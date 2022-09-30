@@ -20,7 +20,7 @@ const Execute = () => {
       <div className="execute-wrapper">
         <p className="procedure-code">{code}</p>
       </div>
-      <div className="execute-footer">
+      <div className="home-btn-footer">
         <Link to="/">
           <Button className="home-button">Home</Button>
           <Button onClick={() => handleClick()} className="disconnect-button">

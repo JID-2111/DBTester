@@ -34,6 +34,7 @@ declare global {
         switch(database: string): Promise<boolean>;
         verify(): Promise<boolean>;
         preload(): Promise<boolean>;
+        verify(): Promise<boolean>;
       };
     };
   }
