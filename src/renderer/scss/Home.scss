@@ -23,6 +23,22 @@
         flex-direction: column;
         color: #b8b8b8;
         background-color: #ffffff13;
+        padding: 10px 30px;
+
+
+        .recent-item {
+          cursor: pointer;
+          width: 100%;
+          padding: 5px 0px;
+
+          .recent-item-info {
+            font-size: 12px;
+            color: #464545;
+          }
+          & span {
+            display: block;
+          }
+        }
       }
     }
     .launch-wrapper {
@@ -46,6 +62,8 @@
 
 h2 {
   display: inline-block;
+  vertical-align: middle;
+  margin-bottom: 0;
 }
 
 h1 {
@@ -54,6 +72,7 @@ h1 {
 
 .icon {
   margin: 5px;
+  vertical-align: middle;
 }
 
 .launch-button {

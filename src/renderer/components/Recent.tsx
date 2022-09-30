@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { ConnectionModel } from 'db/Models';
-import { List } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router-dom';
+import { Button, Modal } from 'react-bootstrap';
 
 const RecentList = () => {
+  const navigate = useNavigate();
+
   const [recent, setRecent] = useState<ConnectionModel[]>();
+  const [alert, setAlert] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchRecent = async () => {
@@ -13,15 +17,64 @@ const RecentList = () => {
     fetchRecent();
   }, []);
 
+  const handleClick = async (id: number) => {
+    try {
+      await window.connections.ipcRenderer.select(id);
+    } catch (e) {
+      setAlert(true);
+      return;
+    }
+
+    navigate('/execute');
+  };
+
+  const showAlert = () => {
+    return (
+      <Modal show={alert} onHide={() => setAlert(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Could not connect to the server. Please check your configuration
+          details.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setAlert(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
   return (
-    <div className="recent-list">
-      {recent?.map((connection: ConnectionModel) => (
-        <div className="recent-item">
-          <>{connection.nickname}</>
-          <List className="edit-icon" />
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="recent-list">
+        {recent?.map((connection: ConnectionModel) => {
+          const { connectionConfig } = connection;
+
+          let connectionString = '';
+          if (connectionConfig.config === 'manual') {
+            connectionString =
+              `${connection.type}://${connectionConfig.username}:` +
+              `asdf` +
+              `@${connectionConfig.address}:${connectionConfig.port}`;
+          } else if (connectionConfig.config === 'string') {
+            connectionString = connectionConfig.connectionString;
+          }
+          return (
+            <div
+              className="recent-item"
+              onClick={() => handleClick(connection.id)}
+            >
+              <span>{connection.nickname}</span>
+              <span className="recent-item-info">{connectionString}</span>
+            </div>
+          );
+        })}
+      </div>
+      {alert && showAlert()}
+    </>
   );
 };
 
