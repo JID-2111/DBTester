@@ -6,7 +6,7 @@ import {
   ConnectionStringParser,
   IConnectionStringParameters,
 } from 'connection-string-parser';
-import { ConnectionModel } from '../db/Models';
+import { ConnectionModelType } from '../db/Models';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -23,7 +23,7 @@ export function getDataPath() {
 }
 
 export function parseConnectionString(
-  model: ConnectionModel
+  model: ConnectionModelType
 ): IConnectionStringParameters | null {
   const connectionStringParser = new ConnectionStringParser({
     scheme: model.type.toLocaleLowerCase(),
