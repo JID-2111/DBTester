@@ -32,7 +32,6 @@ declare global {
         delete(id: number): Promise<void>;
         disconnect(): Promise<void>;
         switch(database: string): Promise<boolean>;
-        verify(): Promise<boolean>;
         preload(): Promise<boolean>;
         verify(): Promise<boolean>;
       };
