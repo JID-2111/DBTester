@@ -11,7 +11,6 @@ import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
 import { ConnectionModel, ConnectionModelType } from '../Models';
 import ConnectionEntity from '../entity/ConnectionEntity';
-import DBProvider from '../entity/enum';
 
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
@@ -98,21 +97,4 @@ export default class ConnectionService {
       ? store.getState().connection.serverConnection.verify()
       : false;
   }
-
-  public async test() {
-    // await AppDataSource.initialize();
-    const model = new ConnectionModel();
-    model.connectionConfig = {
-      config: 'manual',
-      username: 'kpmg',
-      password: 'asdf',
-      address: 'localhost',
-      port: 1024,
-    };
-    model.nickname = 'something_stupid';
-    model.type = DBProvider.PostgreSQL;
-    this.create(model);
-  }
 }
-
-// new ConnectionService().test();
