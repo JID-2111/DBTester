@@ -6,7 +6,6 @@ import { ConnectionModel } from '../../db/Models';
 
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModel[]>([]);
-  const [list, setList] = useState<ConnectionModel[]>(connect);
   useEffect(() => {
     const getConnections = async () => {
       const connections = await window.connections.ipcRenderer.fetch();
@@ -18,16 +17,14 @@ const RecentConnections = () => {
     const index = connect.findIndex(
       (connection) => connection.id === ConnectionID
     );
-    await window.connections.ipcRenderer.delete(index);
-    const newList = [...list];
+    window.connections.ipcRenderer.delete(index);
+    const newList = [...connect];
     newList.splice(index, 1);
-    setList(newList);
     setConnect(newList);
   };
   while (connect.length > 5) {
     connect.shift();
   }
-  console.log(connect);
   return (
     <div className="RecentWrapper">
       <h1 className="Header">Recent Connections</h1>
