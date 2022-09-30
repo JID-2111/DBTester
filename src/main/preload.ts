@@ -25,6 +25,13 @@ contextBridge.exposeInMainWorld('electron', {
   },
 });
 
+contextBridge.exposeInMainWorld('util', {
+  ipcRenderer: {
+    parse: (connection: ConnectionModelType) =>
+      ipcRenderer.invoke('util:parse', connection),
+  },
+});
+
 contextBridge.exposeInMainWorld('procedures', {
   ipcRenderer: {
     fetchProcedures: () => ipcRenderer.invoke('procedures:listProcedures'),
