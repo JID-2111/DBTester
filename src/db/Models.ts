@@ -1,8 +1,22 @@
-/* eslint-disable import/no-cycle */
+import ConnectionEntity from './entity/ConnectionEntity';
+import DBProvider from './entity/enum';
+
 export type ConnectionModelType = {
-  id: number;
+  id?: number;
 
   nickname: string;
+
+  type: DBProvider;
+
+  connectionConfig: ManualConnectionConfig | ConnectionString;
+
+  createdDate?: Date;
+
+  lastUsed?: Date;
+};
+
+export type ManualConnectionConfig = {
+  config: 'manual';
 
   address: string;
 
@@ -11,10 +25,12 @@ export type ConnectionModelType = {
   username: string;
 
   password: string;
+};
 
-  createdDate: Date;
+export type ConnectionString = {
+  config: 'string';
 
-  lastUsed: Date;
+  connectionString: string;
 };
 
 export class ConnectionModel {
@@ -22,20 +38,47 @@ export class ConnectionModel {
 
   nickname: string;
 
-  address: string;
+  type: DBProvider;
 
-  port: number;
-
-  username: string;
-
-  password: string;
+  connectionConfig: ManualConnectionConfig | ConnectionString;
 
   createdDate: Date;
 
   lastUsed: Date;
 
-  constructor(entity?: ConnectionModelType) {
-    Object.assign(this, entity);
+  constructor(model?: ConnectionModelType | ConnectionEntity) {
+    if (model === undefined) return;
+    if ('connectionConfig' in model) {
+      Object.assign(this, model);
+    } else {
+      const { nickname, id, createdDate, lastUsed, type } = model;
+      Object.assign(this, {
+        nickname,
+        id,
+        createdDate,
+        lastUsed,
+        type,
+      });
+      this.nickname = model.nickname;
+      this.id = model.id;
+      this.createdDate = model.createdDate;
+      this.lastUsed = model.lastUsed;
+      if (model.connectionString !== null) {
+        this.connectionConfig = {
+          config: 'string',
+          connectionString: model.connectionString,
+        };
+      } else {
+        const { username, password, address, port } = model;
+        this.connectionConfig = {
+          config: 'manual',
+          username,
+          password,
+          address,
+          port,
+        };
+      }
+    }
   }
 }
 

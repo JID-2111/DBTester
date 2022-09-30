@@ -25,6 +25,13 @@ contextBridge.exposeInMainWorld('electron', {
   },
 });
 
+contextBridge.exposeInMainWorld('util', {
+  ipcRenderer: {
+    parse: (connection: ConnectionModelType) =>
+      ipcRenderer.invoke('util:parse', connection),
+  },
+});
+
 contextBridge.exposeInMainWorld('procedures', {
   ipcRenderer: {
     fetchProcedures: () => ipcRenderer.invoke('procedures:listProcedures'),
@@ -41,7 +48,11 @@ contextBridge.exposeInMainWorld('connections', {
       ipcRenderer.invoke('connections:create', model),
     select: (id: number) => ipcRenderer.invoke('connections:select', id),
     delete: (id: number) => ipcRenderer.invoke('connections:delete', id),
+    disconnect: () => ipcRenderer.invoke('connections:disconnect'),
     update: (model: ConnectionModelType) =>
       ipcRenderer.invoke('connections:update', model),
+    switch: (database: string) =>
+      ipcRenderer.invoke('connections:switch', database),
+    verify: () => ipcRenderer.invoke('connections:verify'),
   },
 });

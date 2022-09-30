@@ -33,8 +33,9 @@ const ProcedureDropdown = ({ setCode }: IProcedureDropdownProps) => {
 
       <Dropdown.Menu onClick={() => setFetch(true)}>
         {(procedures || proceduresDefault).map((procedure: string) => {
+          const procKey = `procedure-${procedure}`;
           return (
-            <Dropdown.Item onClick={() => handleClick(procedure)}>
+            <Dropdown.Item key={procKey} onClick={() => handleClick(procedure)}>
               {procedure}
             </Dropdown.Item>
           );

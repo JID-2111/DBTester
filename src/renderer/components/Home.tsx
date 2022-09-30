@@ -14,13 +14,13 @@ const Home = () => {
         </div>
         <div className="launch-wrapper">
           <h1>Welcome to DB Tester</h1>
-          <Link to="/">
+          <Link to="/newconnection">
             <Button variant="link" className="launch-button">
               <Plus className="icon" height="2em" width="2em" />
               <h2>New Connection</h2>
             </Button>
           </Link>
-          <Link to="/">
+          <Link to="/RecentConnection">
             <Button variant="link" className="launch-button">
               <Link45deg className="icon" height="2em" width="2em" />
               <h2>Connect to Existing</h2>
@@ -33,9 +33,6 @@ const Home = () => {
             </Button>
           </Link>
         </div>
-        <Link to="/execute">
-          <Button className="execute-button">Execute</Button>
-        </Link>
       </div>
     </div>
   );

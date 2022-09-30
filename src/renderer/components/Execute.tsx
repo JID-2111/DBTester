@@ -8,6 +8,11 @@ import '../scss/Execute.scss';
 
 const Execute = () => {
   const [code, setCode] = useState<string>('');
+
+  const handleClick = async () => {
+    await window.connections.ipcRenderer.disconnect();
+  };
+
   return (
     <div>
       <h1>Execute Stored Procedures</h1>
@@ -15,9 +20,12 @@ const Execute = () => {
       <div className="execute-wrapper">
         <p className="procedure-code">{code}</p>
       </div>
-      <div className="execute-footer">
+      <div className="home-btn-footer">
         <Link to="/">
           <Button className="home-button">Home</Button>
+          <Button onClick={() => handleClick()} className="disconnect-button">
+            Disconnect
+          </Button>
         </Link>
       </div>
     </div>
