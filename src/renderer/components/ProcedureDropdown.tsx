@@ -21,11 +21,8 @@ const ProcedureDropdown = ({ setCode }: IProcedureDropdownProps) => {
         type: DBProvider.PostgreSQL,
         nickname: 'something_dumb',
         connectionConfig: {
-          config: 'manual',
-          username: 'kpmg',
-          password: 'asdf',
-          address: 'localhost',
-          port: 5432,
+          config: 'string',
+          connectionString: 'postgresql://kpmg:asdf@localhost:5432/React',
         },
       });
       await window.connections.ipcRenderer.create(model);
