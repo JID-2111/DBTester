@@ -11,33 +11,16 @@
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import log, { LogMessage } from 'electron-log';
+import log from 'electron-log';
 import 'reflect-metadata';
 import './ipc';
-import chalk from 'chalk';
 import AppDataSource from '../data-source';
-import { resolveHtmlPath, getDataPath } from './util';
+import { resolveHtmlPath, setLog } from './util';
 import MenuBuilder from './menu';
 
 class AppUpdater {
   constructor() {
-    log.transports.file.resolvePath = () =>
-      path.join(getDataPath(), 'logs/main.log');
-    log.transports.file.level = 'info';
-    log.transports.console.format = (message: LogMessage, _data: unknown) => {
-      const str = `[${message.date.toUTCString()}] ${`[${message.level}]`.padEnd(
-        9,
-        ' '
-      )} `;
-      if (message.level === 'error') return chalk.bgRed(str) + message.data;
-      if (message.level === 'warn') return chalk.red(str) + message.data;
-      if (message.level === 'info') return chalk.cyan(str) + message.data;
-      if (message.level === 'debug') return chalk.green(str) + message.data;
-      if (message.level === 'verbose') return chalk.bgBlack(str) + message.data;
-      return chalk.white(str);
-    };
-    log.transports.console.useStyles = true;
-
+    setLog();
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
   }

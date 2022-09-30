@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 import log from 'electron-log';
 import { ConnectionModelType } from './Models';
-import ServerConnectionInterface from './ServerConnection';
+import ServerInterface from './ServerInterface';
 import { ProcedureParameter, Direction } from './Procedures';
 
 type DBQuery = {
@@ -20,15 +20,16 @@ export type DBParameter = {
   arg: string;
 };
 
-export default class PgClient implements ServerConnectionInterface {
-  constructor(model: ConnectionModelType) {
+export default class PgClient implements ServerInterface {
+  constructor(model: ConnectionModelType, database?: string) {
+    this.model = model;
     if (model.connectionConfig.config === 'manual') {
       this.pool = new Pool({
         host: model.connectionConfig.address,
         port: model.connectionConfig.port,
         password: model.connectionConfig.password,
         user: model.connectionConfig.username,
-        database: 'React',
+        database: database ?? 'React',
       });
     } else {
       this.pool = new Pool({
@@ -38,6 +39,20 @@ export default class PgClient implements ServerConnectionInterface {
   }
 
   pool: Pool;
+
+  model: ConnectionModelType;
+
+  public async verify(): Promise<boolean> {
+    let client;
+    try {
+      client = await this.pool.connect();
+    } catch {
+      log.warn('Error connecting to database');
+      return false;
+    }
+    client.release();
+    return true;
+  }
 
   public async getDatabasesQuery(): Promise<unknown> {
     const client = await this.pool.connect();
@@ -60,7 +75,7 @@ export default class PgClient implements ServerConnectionInterface {
     client.release();
     return Promise.all(
       result.rows.map((row: DBProcedure) => {
-        log.verbose(row.routine_name);
+        log.silly(row.routine_name);
         return row.routine_name;
       })
     );

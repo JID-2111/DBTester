@@ -1,8 +1,13 @@
 import { Pool } from 'pg';
+import { ConnectionModelType } from './Models';
 import { ProcedureParameter } from './Procedures';
 
-export default interface ServerConnection {
+export default interface ServerInterface {
   pool: Pool;
+
+  model: ConnectionModelType;
+
+  verify(): Promise<boolean>;
 
   getDatabasesQuery(): Promise<unknown>;
 

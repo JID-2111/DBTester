@@ -41,6 +41,18 @@ ipcMain.handle('connections:delete', (_event, ...args) => {
   return new ConnectionService().delete(args[0]);
 });
 
+ipcMain.handle('connections:disconnect', (_event) => {
+  return new ConnectionService().disconnect();
+});
+
 ipcMain.handle('connections:update', (_event, ...args) => {
   return new ConnectionService().update(args[0]);
+});
+
+ipcMain.handle('connections:switch', (_event, ...args) => {
+  return new ConnectionService().switch(args[0]);
+});
+
+ipcMain.handle('connections:verify', (_event) => {
+  return new ConnectionService().verify();
 });

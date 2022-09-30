@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { ConnectionModel } from '../../db/Models';
-import DBProvider from '../../db/entity/enum';
 
 interface IProcedureDropdownProps {
   setCode: (code: string) => void;
@@ -17,18 +15,6 @@ const ProcedureDropdown = ({ setCode }: IProcedureDropdownProps) => {
 
   useEffect(() => {
     const fetchProcs = async () => {
-      const model = new ConnectionModel({
-        type: DBProvider.PostgreSQL,
-        nickname: 'something_dumb',
-        connectionConfig: {
-          config: 'manual',
-          username: 'kpmg',
-          password: 'asdf',
-          address: 'localhost',
-          port: 5432,
-        },
-      });
-      await window.connections.ipcRenderer.create(model);
       const newProcs = await window.procedures.ipcRenderer.fetchProcedures();
       setProcedures(newProcs.get('React'));
     };
@@ -47,8 +33,9 @@ const ProcedureDropdown = ({ setCode }: IProcedureDropdownProps) => {
 
       <Dropdown.Menu onClick={() => setFetch(true)}>
         {(procedures || proceduresDefault).map((procedure: string) => {
+          const procKey = `procedure- + ${procedure}`;
           return (
-            <Dropdown.Item onClick={() => handleClick(procedure)}>
+            <Dropdown.Item key={procKey} onClick={() => handleClick(procedure)}>
               {procedure}
             </Dropdown.Item>
           );
