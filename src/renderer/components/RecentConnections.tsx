@@ -26,7 +26,6 @@ const RecentConnections = () => {
             <tr>
               <th>Nick Name</th>
               <th>Database Type</th>
-              <th>Connection type</th>
               <th>Address</th>
               <th>Port</th>
               <th>User Name</th>
@@ -45,7 +44,6 @@ const RecentConnections = () => {
                       </Link>
                     </td>
                     <td>{value.type}</td>
-                    <td>{value.connectionConfig.config}</td>
                     <td>{value.connectionConfig.address}</td>
                     <td>{value.connectionConfig.port}</td>
                     <td>{value.connectionConfig.username}</td>
