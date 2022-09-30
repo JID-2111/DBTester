@@ -6,6 +6,7 @@ import { ConnectionModel } from '../../db/Models';
 
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModel[]>([]);
+  const [list, setList] = useState<ConnectionModel[]>(connect);
   useEffect(() => {
     const getConnections = async () => {
       const connections = await window.connections.ipcRenderer.fetch();
@@ -13,10 +14,20 @@ const RecentConnections = () => {
     };
     getConnections();
   }, []);
-
+  const handledelete = async (ConnectionID: number) => {
+    const index = connect.findIndex(
+      (connection) => connection.id === ConnectionID
+    );
+    await window.connections.ipcRenderer.delete(index);
+    const newList = [...list];
+    newList.splice(index, 1);
+    setList(newList);
+    setConnect(newList);
+  };
   while (connect.length > 5) {
     connect.shift();
   }
+  console.log(connect);
   return (
     <div className="RecentWrapper">
       <h1 className="Header">Recent Connections</h1>
@@ -29,6 +40,7 @@ const RecentConnections = () => {
               <th>Address</th>
               <th>Port</th>
               <th>User Name</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +59,15 @@ const RecentConnections = () => {
                     <td>{value.connectionConfig.address}</td>
                     <td>{value.connectionConfig.port}</td>
                     <td>{value.connectionConfig.username}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="deleteButton"
+                        onClick={() => handledelete(value.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 );
               }
