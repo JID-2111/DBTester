@@ -1,10 +1,26 @@
 import { Button } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 import { Archive, Link45deg, Plus } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 
 import '../scss/Home.scss';
 
 const Home = () => {
+  const [verify, setVerify] = useState<boolean>(false);
+
+  useEffect(() => {
+    const v = async () => {
+      const currConnected = await window.connections.ipcRenderer.verify();
+      setVerify(currConnected);
+    };
+    v();
+  });
+
+  const handleClick = async () => {
+    await window.connections.ipcRenderer.disconnect();
+    setVerify(false);
+  };
+
   return (
     <div>
       <h1>DB Tester</h1>
@@ -27,10 +43,17 @@ const Home = () => {
             <h2>View History</h2>
           </Button>
         </Link>
+        {verify && (
+          <div>
+            <Link to="/execute">
+              <Button className="execute-button">Execute</Button>
+            </Link>
+            <Button onClick={() => handleClick()} className="disconnect-button">
+              Disconnect
+            </Button>
+          </div>
+        )}
       </div>
-      <Link to="/execute">
-        <Button className="execute-button">Execute</Button>
-      </Link>
     </div>
   );
 };
