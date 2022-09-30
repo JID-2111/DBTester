@@ -27,7 +27,8 @@ contextBridge.exposeInMainWorld('electron', {
 
 contextBridge.exposeInMainWorld('util', {
   ipcRenderer: {
-    parse: (connection: string) => ipcRenderer.invoke('util:parse', connection),
+    parse: (connection: ConnectionModelType) =>
+      ipcRenderer.invoke('util:parse', connection),
   },
 });
 

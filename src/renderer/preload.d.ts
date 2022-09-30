@@ -19,7 +19,9 @@ declare global {
     };
     util: {
       ipcRenderer: {
-        parse(connection: string): Promise<IConnectionStringParameters | null>;
+        parse(
+          connection: ConnectionModelType
+        ): Promise<IConnectionStringParameters | null>;
       };
     };
     procedures: {
