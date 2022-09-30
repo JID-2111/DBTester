@@ -16,11 +16,6 @@ const Home = () => {
     v();
   });
 
-  const handleClick = async () => {
-    await window.connections.ipcRenderer.disconnect();
-    setVerify(false);
-  };
-
   return (
     <div>
       <h1>DB Tester</h1>
@@ -48,9 +43,6 @@ const Home = () => {
             <Link to="/execute">
               <Button className="execute-button">Execute</Button>
             </Link>
-            <Button onClick={() => handleClick()} className="disconnect-button">
-              Disconnect
-            </Button>
           </div>
         )}
       </div>
