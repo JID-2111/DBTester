@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm';
 import log from 'electron-log';
+import { safeStorage } from 'electron';
 import {
   clear,
   change,
@@ -10,6 +11,7 @@ import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
 import { ConnectionModel, ConnectionModelType } from '../Models';
 import ConnectionEntity from '../entity/ConnectionEntity';
+import DBProvider from '../entity/enum';
 
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
@@ -27,6 +29,15 @@ export default class ConnectionService {
 
   public async create(model: ConnectionModelType): Promise<ConnectionEntity> {
     model.lastUsed = new Date();
+    if (model.connectionConfig.config === 'manual') {
+      if (safeStorage.isEncryptionAvailable()) {
+        model.connectionConfig.password = safeStorage
+          .encryptString(model.connectionConfig.password)
+          .toString('base64');
+      } else {
+        throw new Error('Error Encrypting Password');
+      }
+    }
     const entity = await this.repository.save(new ConnectionEntity(model));
     return this.select(entity.id);
   }
@@ -35,7 +46,13 @@ export default class ConnectionService {
     const entity = await this.repository.findOneBy({ id });
     if (entity !== null) {
       entity.lastUsed = new Date();
-      store.dispatch(change(new PgClient(new ConnectionModel(entity)))); // TODO instantiate based on model.type
+      const model = new ConnectionModel(entity);
+      if (model.connectionConfig.config === 'manual') {
+        model.connectionConfig.password = safeStorage.decryptString(
+          Buffer.from(model.connectionConfig.password, 'base64')
+        );
+      }
+      store.dispatch(change(new PgClient(model))); // TODO instantiate based on model.type
       return this.repository.save(entity);
     }
     return new ConnectionEntity();
@@ -81,4 +98,21 @@ export default class ConnectionService {
       ? store.getState().connection.serverConnection.verify()
       : false;
   }
+
+  public async test() {
+    // await AppDataSource.initialize();
+    const model = new ConnectionModel();
+    model.connectionConfig = {
+      config: 'manual',
+      username: 'kpmg',
+      password: 'asdf',
+      address: 'localhost',
+      port: 1024,
+    };
+    model.nickname = 'something_stupid';
+    model.type = DBProvider.PostgreSQL;
+    this.create(model);
+  }
 }
+
+// new ConnectionService().test();
