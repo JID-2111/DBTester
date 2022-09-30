@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ConnectionModel } from 'db/Models';
+import { List } from 'react-bootstrap-icons';
 
 const RecentList = () => {
   const [recent, setRecent] = useState<ConnectionModel[]>();
@@ -15,7 +16,10 @@ const RecentList = () => {
   return (
     <div className="recent-list">
       {recent?.map((connection: ConnectionModel) => (
-        <div className="recent-item">{connection.nickname}</div>
+        <div className="recent-item">
+          <>{connection.nickname}</>
+          <List className="edit-icon" />
+        </div>
       ))}
     </div>
   );

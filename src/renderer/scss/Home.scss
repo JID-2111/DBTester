@@ -21,7 +21,6 @@
       .recent-list {
         display: flex;
         flex-direction: column;
-        justify-content: left;
         color: #b8b8b8;
         background-color: #ffffff13;
       }
@@ -31,6 +30,12 @@
       flex-direction: column;
       align-items: center;
       width: 60vw;
+
+      .edit-icon {
+        position: relative;
+        align-items: right;
+        vertical-align: right;
+      }
 
       h1 {
         padding-bottom: 10vh;
