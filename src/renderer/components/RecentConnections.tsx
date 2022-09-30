@@ -17,7 +17,7 @@ const RecentConnections = () => {
     const index = connect.findIndex(
       (connection) => connection.id === ConnectionID
     );
-    window.connections.ipcRenderer.delete(index);
+    window.connections.ipcRenderer.delete(ConnectionID);
     const newList = [...connect];
     newList.splice(index, 1);
     setConnect(newList);
