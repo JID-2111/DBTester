@@ -18,6 +18,10 @@ const Execute = () => {
     setCode('');
   };
 
+  const handleClick = async () => {
+    await window.connections.ipcRenderer.disconnect();
+  };
+
   return (
     <div>
       <h1>Execute Stored Procedures</h1>
@@ -39,7 +43,10 @@ const Execute = () => {
       </div>
       <div className="home-btn-footer">
         <Link to="/">
-          <Button className="home-btn">Home</Button>
+          <Button className="home-button">Home</Button>
+          <Button onClick={() => handleClick()} className="disconnect-button">
+            Disconnect
+          </Button>
         </Link>
       </div>
     </div>

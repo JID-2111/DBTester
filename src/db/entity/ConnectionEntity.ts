@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
 } from 'typeorm';
+import { parseConnectionString } from '../../main/util';
 import { ConnectionModelType } from '../Models';
 import DBProvider from './enum';
 
@@ -54,7 +55,18 @@ class ConnectionEntity {
         port,
       });
     } else {
-      this.connectionString = model.connectionConfig.connectionString;
+      const fields = parseConnectionString(model);
+      if (fields === undefined || fields === null) return;
+      const { username, password } = fields;
+      if (fields?.hosts.length > 0) {
+        Object.assign(this, {
+          config: 'manual',
+          username,
+          password,
+          address: fields?.hosts[0].host,
+          port: fields?.hosts[0].port,
+        });
+      }
     }
     const { nickname, id, createdDate, lastUsed, type } = model;
     Object.assign(this, {

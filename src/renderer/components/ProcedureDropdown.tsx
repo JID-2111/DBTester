@@ -63,7 +63,7 @@ const ProcedureDropdown = ({
 
         <Dropdown.Menu>
           {(procedures || proceduresDefault).map((procedure: string) => {
-            const procKey = `procedure- + ${procedure}`;
+            const procKey = `procedure-${procedure}`;
             return (
               <Dropdown.Item
                 key={procKey}

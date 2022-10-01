@@ -28,9 +28,6 @@ const Home = () => {
           </Button>
         </Link>
       </div>
-      <Link to="/execute">
-        <Button className="execute-button">Execute</Button>
-      </Link>
     </div>
   );
 };
