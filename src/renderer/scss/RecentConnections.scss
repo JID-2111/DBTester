@@ -37,10 +37,11 @@ td {
   border: none;
 }
 
+.deleteButton,
 .buttonSelect {
-  border: none;
+  border: 5px;
+  border-radius: 5px;
   margin: 0;
-  background: none;
 }
 
 .buttonSelect:hover {
