@@ -48,6 +48,12 @@ td {
   background-color: lightgreen;
 }
 
+.deleteButton {
+  border: 5px;
+  border-radius: 5px;
+  background-color: white;
+}
+
 .deleteButton:hover {
   background-color: rgb(247, 68, 68);
 }

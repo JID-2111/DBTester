@@ -2,6 +2,8 @@ import '../scss/RecentConnections.scss';
 import { Link } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ConnectionModel } from '../../db/Models';
 
 const RecentConnections = () => {
@@ -17,6 +19,9 @@ const RecentConnections = () => {
     await window.connections.ipcRenderer.delete(ConnectionID);
     const connections = await window.connections.ipcRenderer.fetch();
     setConnect(connections);
+  };
+  const handleSelect = async (ConnectionID: number) => {
+    await window.connections.ipcRenderer.select(ConnectionID);
   };
   while (connect.length > 5) {
     connect.shift();
@@ -43,7 +48,11 @@ const RecentConnections = () => {
                   <tr key={value.id}>
                     <td className="LinkTD">
                       <Link to="/Execute">
-                        <button className="buttonSelect" type="button">
+                        <button
+                          className="buttonSelect"
+                          type="button"
+                          onClick={() => handleSelect(value.id)}
+                        >
                           {value.nickname}
                         </button>
                       </Link>
@@ -53,12 +62,11 @@ const RecentConnections = () => {
                     <td>{value.connectionConfig.port}</td>
                     <td>{value.connectionConfig.username}</td>
                     <td>
-                      <button
-                        type="button"
-                        className="deleteButton"
-                        onClick={() => handledelete(value.id)}
-                      >
-                        Delete
+                      <button type="button" className="deleteButton">
+                        <FontAwesomeIcon
+                          icon={faTrashAlt}
+                          onClick={() => handledelete(value.id)}
+                        />
                       </button>
                     </td>
                   </tr>
