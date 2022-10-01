@@ -13,7 +13,11 @@ const RecentConnections = () => {
     };
     getConnections();
   }, []);
-
+  const handledelete = async (ConnectionID: number) => {
+    await window.connections.ipcRenderer.delete(ConnectionID);
+    const connections = await window.connections.ipcRenderer.fetch();
+    setConnect(connections);
+  };
   while (connect.length > 5) {
     connect.shift();
   }
@@ -29,6 +33,7 @@ const RecentConnections = () => {
               <th>Address</th>
               <th>Port</th>
               <th>User Name</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +52,15 @@ const RecentConnections = () => {
                     <td>{value.connectionConfig.address}</td>
                     <td>{value.connectionConfig.port}</td>
                     <td>{value.connectionConfig.username}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="deleteButton"
+                        onClick={() => handledelete(value.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 );
               }
