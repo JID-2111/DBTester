@@ -14,13 +14,9 @@ const RecentConnections = () => {
     getConnections();
   }, []);
   const handledelete = async (ConnectionID: number) => {
-    const index = connect.findIndex(
-      (connection) => connection.id === ConnectionID
-    );
-    window.connections.ipcRenderer.delete(ConnectionID);
-    const newList = [...connect];
-    newList.splice(index, 1);
-    setConnect(newList);
+    await window.connections.ipcRenderer.delete(ConnectionID);
+    const connections = await window.connections.ipcRenderer.fetch();
+    setConnect(connections);
   };
   while (connect.length > 5) {
     connect.shift();
