@@ -37,14 +37,19 @@ td {
   border: none;
 }
 
+.deleteButton,
 .buttonSelect {
-  border: none;
+  border: 5px;
+  border-radius: 5px;
   margin: 0;
-  background: none;
 }
 
 .buttonSelect:hover {
   background-color: lightgreen;
+}
+
+.deleteButton:hover {
+  background-color: rgb(247, 68, 68);
 }
 
 .toHome {
