@@ -2,6 +2,8 @@ import '../scss/RecentConnections.scss';
 import { Link } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ConnectionModel } from '../../db/Models';
 
 const RecentConnections = () => {
@@ -60,12 +62,11 @@ const RecentConnections = () => {
                     <td>{value.connectionConfig.port}</td>
                     <td>{value.connectionConfig.username}</td>
                     <td>
-                      <button
-                        type="button"
-                        className="deleteButton"
-                        onClick={() => handledelete(value.id)}
-                      >
-                        Delete
+                      <button type="button" className="deleteButton">
+                        <FontAwesomeIcon
+                          icon={faTrashAlt}
+                          onClick={() => handledelete(value.id)}
+                        />
                       </button>
                     </td>
                   </tr>
