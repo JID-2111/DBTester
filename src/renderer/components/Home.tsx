@@ -1,5 +1,5 @@
 import { Button } from 'react-bootstrap';
-import { Archive, Link45deg, Plus } from 'react-bootstrap-icons';
+import { Archive, BarChartFill, Link45deg, Plus } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import RecentList from './Recent';
 
@@ -13,23 +13,24 @@ const Home = () => {
           <RecentList />
         </div>
         <div className="launch-wrapper">
+          <BarChartFill className="logo" height="5em" width="5em" />
           <h1>Welcome to DB Tester</h1>
           <Link to="/newconnection">
             <Button variant="link" className="launch-button">
               <Plus className="icon" height="2em" width="2em" />
-              <h2>New Connection</h2>
+              <h4>New Connection</h4>
             </Button>
           </Link>
           <Link to="/RecentConnection">
             <Button variant="link" className="launch-button">
               <Link45deg className="icon" height="2em" width="2em" />
-              <h2>Connect to Existing</h2>
+              <h4>Connect to Existing</h4>
             </Button>
           </Link>
           <Link to="/">
             <Button variant="link" className="launch-button">
               <Archive className="icon" height="2em" width="2em" />
-              <h2>View History</h2>
+              <h4>View History</h4>
             </Button>
           </Link>
         </div>

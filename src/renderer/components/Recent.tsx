@@ -63,15 +63,17 @@ const RecentList = () => {
             connectionString = connectionConfig.connectionString;
           }
           return (
-            // TODO fix
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-            <div
-              className="recent-item"
-              onClick={() => handleClick(connection.id)}
-            >
-              <span>{connection.nickname}</span>
-              <span className="recent-item-info">{connectionString}</span>
-            </div>
+            <>
+              <button
+                className="recent-item"
+                type="button"
+                onClick={() => handleClick(connection.id)}
+              >
+                <span>{connection.nickname}</span>
+                <span className="recent-item-info">{connectionString}</span>
+              </button>
+              <hr />
+            </>
           );
         })}
       </div>

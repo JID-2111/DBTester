@@ -3,7 +3,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #acacac;
+  background-color: var(--persian-green);
+  color: var(--snow);
 
   .menu-wrapper {
     display: flex;
@@ -16,29 +17,38 @@
       flex-direction: column;
       width: 40vw;
       height: 100vh;
-      background-color: #616161;
+      background-color: var(--jet);
 
       .recent-list {
         display: flex;
         flex-direction: column;
-        color: #b8b8b8;
-        background-color: #ffffff13;
         padding: 10px 30px;
-
+        overflow: hidden;
 
         .recent-item {
           cursor: pointer;
+          transition: none;
+          stroke: none;
+          text-align: left;
+          background-color: inherit;
+          color: inherit;
+          border: none;
           width: 100%;
           padding: 5px 0px;
 
           .recent-item-info {
             font-size: 12px;
-            color: #464545;
+            color: var(--sand);
+            overflow: hidden;
           }
           & span {
             display: block;
           }
         }
+      }
+
+      hr {
+        margin: 5px 0px;
       }
     }
     .launch-wrapper {
@@ -60,10 +70,11 @@
   }
 }
 
-h2 {
+h4 {
   display: inline-block;
   vertical-align: middle;
   margin-bottom: 0;
+  font-weight: 400;
 }
 
 h1 {
@@ -75,13 +86,18 @@ h1 {
   vertical-align: middle;
 }
 
+.logo {
+  margin-bottom: 20px;
+}
+
 .launch-button {
   margin: 5px;
   transition: none;
   stroke: none;
-  color: #000000;
+  color: var(--snow);
   background-color: #00000000;
   width: calc(50vw - 10px);
+  box-shadow: none;
 }
 
 .launch-button:hover {
