@@ -53,9 +53,10 @@ const EditForm = ({ config, setConnect }: IEditProps) => {
 
   return (
     <>
-      <button type="button" className="edit-button">
-        <PencilSquare onClick={handleShow} />
+      <button className="edit-button" type="button" onClick={handleShow}>
+        <PencilSquare />
       </button>
+
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Connection</Modal.Title>
