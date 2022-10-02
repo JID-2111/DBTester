@@ -35,10 +35,28 @@ const EditForm = ({ config }: IEditProps) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  useEffect(() => {
+    if (config.connectionConfig.config === 'manual') {
+      setForm({
+        ...form,
+        address: config.connectionConfig.address,
+        port: config.connectionConfig.port,
+        username: config.connectionConfig.username,
+        password: config.connectionConfig.password,
+      });
+    } else {
+      setForm({
+        ...form,
+        connectionString: config.connectionConfig.connectionString,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let connectionConfig: ManualConnectionConfig | ConnectionString;
-    if (form.connectionString) {
+    if (form.connectionString !== undefined && form.connectionString !== '') {
       connectionConfig = {
         config: 'string',
         connectionString: form.connectionString,
