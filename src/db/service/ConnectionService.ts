@@ -28,16 +28,15 @@ export default class ConnectionService {
 
   public async create(model: ConnectionModelType): Promise<ConnectionEntity> {
     model.lastUsed = new Date();
-    if (model.connectionConfig.config === 'manual') {
-      if (safeStorage.isEncryptionAvailable()) {
-        model.connectionConfig.password = safeStorage
-          .encryptString(model.connectionConfig.password)
-          .toString('base64');
-      } else {
-        throw new Error('Error Encrypting Password');
-      }
+    const parsedEntity = new ConnectionEntity(model);
+    if (safeStorage.isEncryptionAvailable()) {
+      parsedEntity.password = safeStorage
+        .encryptString(parsedEntity.password)
+        .toString('base64');
+    } else {
+      throw new Error('Error Encrypting Password');
     }
-    const entity = await this.repository.save(new ConnectionEntity(model));
+    const entity = await this.repository.save(parsedEntity);
     return this.select(entity.id);
   }
 
