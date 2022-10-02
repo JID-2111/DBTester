@@ -26,13 +26,16 @@ interface IEditFields {
 }
 
 const EditForm = ({ config }: IEditProps) => {
-  const [form, setForm] = useState<IEditFields>({
+  const defaultForm: IEditFields = {
     nickname: config.nickname,
     type: config.type,
-  });
-
+  };
+  const [form, setForm] = useState<IEditFields>(defaultForm);
   const [show, setShow] = useState<boolean>(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setForm(defaultForm);
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   useEffect(() => {
@@ -56,18 +59,18 @@ const EditForm = ({ config }: IEditProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let connectionConfig: ManualConnectionConfig | ConnectionString;
-    if (form.connectionString !== undefined && form.connectionString !== '') {
-      connectionConfig = {
-        config: 'string',
-        connectionString: form.connectionString,
-      };
-    } else {
+    if (form.connectionString === undefined) {
       connectionConfig = {
         config: 'manual',
         address: form.address!,
         port: form.port!,
         username: form.username!,
         password: form.password!,
+      };
+    } else {
+      connectionConfig = {
+        config: 'string',
+        connectionString: form.connectionString!,
       };
     }
     const newConfig: ConnectionModelType = {
@@ -77,7 +80,8 @@ const EditForm = ({ config }: IEditProps) => {
       connectionConfig,
       createdDate: config.createdDate,
     };
-    await window.connections.ipcRenderer.update(newConfig);
+    await window.connections.ipcRenderer.create(newConfig);
+    window.location.reload();
     handleClose();
   };
 
@@ -137,7 +141,7 @@ const EditForm = ({ config }: IEditProps) => {
             <Form.Group controlId="port">
               <Form.Label>Port</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 placeholder="Enter Port"
                 value={form.port}
                 onChange={(e) => setField('port', e.target.value)}
