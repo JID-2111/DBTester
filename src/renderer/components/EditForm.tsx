@@ -1,6 +1,13 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { ConnectionModel, ConnectionModelType } from '../../db/Models';
+import {
+  ConnectionModel,
+  ConnectionModelType,
+  ConnectionString,
+  ManualConnectionConfig,
+} from '../../db/Models';
 import DBProvider from '../../db/entity/enum';
 import '../scss/RecentConnections.scss';
 
@@ -12,7 +19,7 @@ interface IEditFields {
   nickname: string;
   type: DBProvider;
   address?: string;
-  port?: string;
+  port?: number;
   username?: string;
   password?: string;
   connectionString?: string;
@@ -30,22 +37,27 @@ const EditForm = ({ config }: IEditProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    let connectionConfig: ManualConnectionConfig | ConnectionString;
+    if (form.connectionString) {
+      connectionConfig = {
+        config: 'string',
+        connectionString: form.connectionString,
+      };
+    } else {
+      connectionConfig = {
+        config: 'manual',
+        address: form.address!,
+        port: form.port!,
+        username: form.username!,
+        password: form.password!,
+      };
+    }
     const newConfig: ConnectionModelType = {
       id: config.id,
       nickname: form.nickname,
       type: form.type,
-      connectionConfig: {
-        config: 'manual',
-        address: form.address,
-        port: form.port,
-        username: form.username,
-        password: form.password,
-      } || {
-        config: 'connectionString',
-        connectionString: form.connectionString,
-      },
+      connectionConfig,
       createdDate: config.createdDate,
-      updatedDate: new Date(),
     };
     await window.connections.ipcRenderer.update(newConfig);
     handleClose();
