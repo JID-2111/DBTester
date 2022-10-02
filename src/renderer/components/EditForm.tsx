@@ -14,7 +14,7 @@ const EditForm = ({ config }: IEditProps) => {
   return (
     <div>
       <Button
-        variant="link"
+        variant="primary"
         className="EditButton"
         onClick={() => setShow(true)}
       />
@@ -23,11 +23,9 @@ const EditForm = ({ config }: IEditProps) => {
           <div>
             <h1>Edit Connection</h1>
           </div>
-          {React.cloneElement(<NewConnectionForm />, {
-            defaultForm: { ...form },
-          })}
+          {React.cloneElement(<NewConnectionForm />, {})}
           <Button
-            variant="link"
+            variant="primary"
             className="EditButton"
             onClick={() => setShow(false)}
           />
