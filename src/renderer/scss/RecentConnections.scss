@@ -1,22 +1,20 @@
-h1 {
-  text-align: center;
-  margin: auto;
+@use './utils/colors.scss';
+
+.recent-wrapper {
+  background-color: colors.$snow;
+  color: colors.$jet;
+  width: 90vw;
+  height: auto;
+  overflow: hidden;
 }
 
-.RecentWrapper {
-  display: grid;
-  grid-template-rows: repeat(3, 1fr);
-  grid-column: span;
-}
-
-.TDiv {
-  margin: auto;
-}
 .table {
   text-align: center;
+  width: 80%;
 }
+
 thead {
-  background-color: lightgrey;
+  background-color: colors.$sand;
 }
 
 th {
@@ -32,9 +30,6 @@ tr {
 
 td {
   border: 3px solid;
-}
-.LinkTD {
-  border: none;
 }
 
 .deleteButton,
@@ -56,14 +51,4 @@ td {
 
 .deleteButton:hover {
   background-color: rgb(247, 68, 68);
-}
-
-.toHome {
-  justify-self: end;
-}
-
-.HomeButton {
-  margin: 5px;
-  margin-right: 10vw;
-  justify-self: end;
 }

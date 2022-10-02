@@ -1,10 +1,12 @@
+@use './utils/colors.scss';
+
 .home {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--persian-green);
-  color: var(--snow);
+  background-color: colors.$persian-green;
+  color: colors.$snow;
 
   .menu-wrapper {
     display: flex;
@@ -17,7 +19,7 @@
       flex-direction: column;
       width: 40vw;
       height: 100vh;
-      background-color: var(--jet);
+      background-color: colors.$jet;
 
       .recent-list {
         display: flex;
@@ -25,20 +27,23 @@
         padding: 10px 30px;
         overflow: hidden;
 
+        hr {
+          color: colors.$snow;
+        }
         .recent-item {
           cursor: pointer;
           transition: none;
           stroke: none;
           text-align: left;
           background-color: inherit;
-          color: inherit;
+          color: colors.$snow;
           border: none;
           width: 100%;
           padding: 5px 0px;
 
           .recent-item-info {
             font-size: 12px;
-            color: var(--sand);
+            color: colors.$sand;
             overflow: hidden;
           }
           & span {
@@ -77,10 +82,6 @@ h4 {
   font-weight: 400;
 }
 
-h1 {
-  margin: 5px;
-}
-
 .icon {
   margin: 5px;
   vertical-align: middle;
@@ -94,7 +95,7 @@ h1 {
   margin: 5px;
   transition: none;
   stroke: none;
-  color: var(--snow);
+  color: colors.$snow;
   background-color: #00000000;
   width: calc(50vw - 10px);
   box-shadow: none;
@@ -102,11 +103,5 @@ h1 {
 
 .launch-button:hover {
   transform: none;
-}
-
-.execute-button {
-  margin: 1vw;
-  position: absolute;
-  right: 5%;
-  bottom: 5%;
+  color: colors.$jet;
 }

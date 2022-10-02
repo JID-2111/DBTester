@@ -163,7 +163,7 @@ const NewConnectionForm = () => {
   return (
     <div>
       <div className="d-flex justify-content-center">
-        <Form className="new-connection-form" onSubmit={(e) => handleSubmit(e)}>
+        <Form className="new-conn-form" onSubmit={(e) => handleSubmit(e)}>
           <Form.Group className="mb-2" controlId="connectionNickname">
             <Form.Label className="form-label-sm">Nickname</Form.Label>
             <Form.Control

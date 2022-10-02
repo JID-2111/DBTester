@@ -6,15 +6,17 @@ import '../scss/NewConnection.scss';
 
 const NewConnections = () => {
   return (
-    <>
-      <h1> Create New Connection</h1>
-      <NewConnectionForm />
-      <div className="home-btn-footer">
-        <Link to="/">
-          <Button className="home-btn">Home</Button>
-        </Link>
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="new-conn-wrapper">
+        <h1 className="new-conn-header"> Create New Connection</h1>
+        <NewConnectionForm />
+        <div className="home-btn-footer">
+          <Link to="/">
+            <Button className="home-btn">Home</Button>
+          </Link>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

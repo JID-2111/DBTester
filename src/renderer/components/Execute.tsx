@@ -23,31 +23,32 @@ const Execute = () => {
   };
 
   return (
-    <div>
-      <h1>Execute Stored Procedures</h1>
-      <div>
-        <h6>Selected Database</h6>
-        <DBDropdown activeDb={activeDb} updateDb={updateDb} />
-      </div>
-      <div>
-        <h6>Selected Procedure</h6>
-        <ProcedureDropdown
-          activeDb={activeDb}
-          activeProcedure={activeProcedure}
-          setActiveProcedure={setActiveProcedure}
-          setCode={setCode}
-        />
-      </div>
+    <div className="d-flex justify-content-center align-items-center">
       <div className="execute-wrapper">
-        <p className="procedure-code">{code}</p>
-      </div>
-      <div className="home-btn-footer">
-        <Link to="/">
-          <Button className="home-button">Home</Button>
-          <Button onClick={() => handleClick()} className="disconnect-button">
-            Disconnect
-          </Button>
-        </Link>
+        <h1>Execute Stored Procedures</h1>
+        <div>
+          <h6>Selected Database</h6>
+          <DBDropdown activeDb={activeDb} updateDb={updateDb} />
+        </div>
+        <div>
+          <h6>Selected Procedure</h6>
+          <ProcedureDropdown
+            activeDb={activeDb}
+            activeProcedure={activeProcedure}
+            setActiveProcedure={setActiveProcedure}
+            setCode={setCode}
+          />
+        </div>
+        <div className="code-wrapper">
+          <p className="procedure-code">{code}</p>
+        </div>
+        <div className="home-btn-footer">
+          <Link to="/">
+            <Button onClick={() => handleClick()} className="home-btn">
+              Disconnect
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
