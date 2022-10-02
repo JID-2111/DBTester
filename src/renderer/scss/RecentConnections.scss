@@ -67,3 +67,17 @@ td {
 .edit-submit-btn {
   margin: 10px 0px;
 }
+
+.edit-button {
+  background-color: inherit;
+  border: 5px;
+  border-radius: 5px;
+}
+
+.edit-button:hover {
+  background-color: lightgreen;
+}
+
+.edit-submit-btn {
+  margin: 10px 0px;
+}
