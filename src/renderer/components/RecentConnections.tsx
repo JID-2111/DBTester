@@ -1,19 +1,19 @@
 import { Link } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { Trash } from 'react-bootstrap-icons';
 import { ConnectionModel } from '../../db/Models';
+import EditForm from './EditForm';
 
 import '../scss/RecentConnections.scss';
 
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModel[]>([]);
+  const getConnections = async () => {
+    const connections = await window.connections.ipcRenderer.fetch();
+    setConnect(connections);
+  };
   useEffect(() => {
-    const getConnections = async () => {
-      const connections = await window.connections.ipcRenderer.fetch();
-      setConnect(connections);
-    };
     getConnections();
   }, []);
   const handledelete = async (ConnectionID: number) => {
@@ -40,7 +40,7 @@ const RecentConnections = () => {
                 <th>Address</th>
                 <th>Port</th>
                 <th>User Name</th>
-                <th>Delete</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -64,11 +64,13 @@ const RecentConnections = () => {
                       <td>{value.connectionConfig.port}</td>
                       <td>{value.connectionConfig.username}</td>
                       <td>
-                        <button type="button" className="deleteButton">
-                          <FontAwesomeIcon
-                            icon={faTrashAlt}
-                            onClick={() => handledelete(value.id)}
-                          />
+                        <EditForm config={value} setConnect={getConnections} />
+                        <button
+                          type="button"
+                          className="deleteButton"
+                          onClick={() => handledelete(value.id)}
+                        >
+                          <Trash />
                         </button>
                       </td>
                     </tr>

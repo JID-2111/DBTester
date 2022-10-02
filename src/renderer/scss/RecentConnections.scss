@@ -33,7 +33,6 @@ td {
   border: 3px solid;
 }
 
-.deleteButton,
 .buttonSelect {
   border: 5px;
   border-radius: 5px;
@@ -52,4 +51,18 @@ td {
 
 .deleteButton:hover {
   background-color: rgb(247, 68, 68);
+}
+
+.edit-button {
+  background-color: inherit;
+  border: 5px;
+  border-radius: 5px;
+}
+
+.edit-button:hover {
+  background-color: lightgreen;
+}
+
+.edit-submit-btn {
+  margin: 10px 0px;
 }
