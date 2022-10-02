@@ -3,35 +3,24 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
-import {
-  ConnectionModel,
-  ConnectionModelType,
-  ConnectionString,
-  ManualConnectionConfig,
-} from '../../db/Models';
+import { ConnectionModel } from '../../db/Models';
 import DBProvider from '../../db/entity/enum';
 import '../scss/RecentConnections.scss';
 
 interface IEditProps {
   config: ConnectionModel;
+  setConnect: () => void;
 }
 
 interface IEditFields {
   nickname: string;
-  type: DBProvider;
-  address?: string;
-  port?: number;
-  username?: string;
-  password?: string;
-  connectionString?: string;
 }
 
-const EditForm = ({ config }: IEditProps) => {
-  const defaultForm: IEditFields = {
+const EditForm = ({ config, setConnect }: IEditProps) => {
+  const [form, setForm] = useState<IEditFields>({
     nickname: config.nickname,
-    type: config.type,
-  };
-  const [form, setForm] = useState<IEditFields>(defaultForm);
+  });
+
   const [show, setShow] = useState<boolean>(false);
   const handleClose = () => {
     setShow(false);
@@ -39,49 +28,17 @@ const EditForm = ({ config }: IEditProps) => {
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    if (config.connectionConfig.config === 'manual') {
-      setForm({
-        ...form,
-        address: config.connectionConfig.address,
-        port: config.connectionConfig.port,
-        username: config.connectionConfig.username,
-        password: config.connectionConfig.password,
-      });
-    } else {
-      setForm({
-        ...form,
-        connectionString: config.connectionConfig.connectionString,
-      });
-    }
+    setForm({
+      ...form,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let connectionConfig: ManualConnectionConfig | ConnectionString;
-    if (form.connectionString === undefined) {
-      connectionConfig = {
-        config: 'manual',
-        address: form.address!,
-        port: form.port!,
-        username: form.username!,
-        password: form.password!,
-      };
-    } else {
-      connectionConfig = {
-        config: 'string',
-        connectionString: form.connectionString!,
-      };
-    }
-    const newConfig: ConnectionModelType = {
-      id: config.id,
-      nickname: form.nickname,
-      type: form.type,
-      connectionConfig,
-      createdDate: config.createdDate,
-    };
-    await window.connections.ipcRenderer.create(newConfig);
-    window.location.reload();
+    config.nickname = form.nickname;
+    await window.connections.ipcRenderer.update(config);
+    setConnect();
     handleClose();
   };
 
@@ -114,67 +71,6 @@ const EditForm = ({ config }: IEditProps) => {
                 placeholder="Enter Nickname"
                 value={form.nickname}
                 onChange={(e) => setField('nickname', e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="type">
-              <Form.Label>Database Type</Form.Label>
-              <Form.Control
-                as="select"
-                value={form.type}
-                onChange={(e) => setField('type', e.target.value as DBProvider)}
-              >
-                <option value={DBProvider.PostgreSQL}>PostgreSQL</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="address">
-              <Form.Label>Address</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Address"
-                value={form.address}
-                onChange={(e) => setField('address', e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="port">
-              <Form.Label>Port</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter Port"
-                value={form.port}
-                onChange={(e) => setField('port', e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="username">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Username"
-                value={form.username}
-                onChange={(e) => setField('username', e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter Password"
-                value={form.password}
-                onChange={(e) => setField('password', e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="connectionString">
-              <Form.Label>Connection String</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Connection String"
-                value={form.connectionString}
-                onChange={(e) => setField('connectionString', e.target.value)}
               />
             </Form.Group>
 
