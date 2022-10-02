@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { ConnectionModel } from '../../db/Models';
+import { PencilSquare } from 'react-bootstrap-icons';
 import DBProvider from '../../db/entity/enum';
 import '../scss/RecentConnections.scss';
 
@@ -19,9 +20,12 @@ const EditForm = ({ config, setConnect }: IEditProps) => {
   const [form, setForm] = useState<IEditFields>({
     nickname: config.nickname,
   });
-
+  
   const [show, setShow] = useState<boolean>(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setForm(defaultForm);
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   useEffect(() => {
@@ -52,7 +56,7 @@ const EditForm = ({ config, setConnect }: IEditProps) => {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Edit
+        <PencilSquare />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -70,7 +74,7 @@ const EditForm = ({ config, setConnect }: IEditProps) => {
                 onChange={(e) => setField('nickname', e.target.value)}
               />
             </Form.Group>
-
+            
             <Button variant="primary" type="submit">
               Submit
             </Button>
