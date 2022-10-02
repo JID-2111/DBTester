@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { PencilSquare } from 'react-bootstrap-icons';
 import {
   ConnectionModel,
   ConnectionModelType,
@@ -98,7 +99,7 @@ const EditForm = ({ config }: IEditProps) => {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Edit
+        <PencilSquare />
       </Button>
 
       <Modal show={show} onHide={handleClose}>

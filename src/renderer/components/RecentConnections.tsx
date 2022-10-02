@@ -39,6 +39,7 @@ const RecentConnections = () => {
               <th>Address</th>
               <th>Port</th>
               <th>User Name</th>
+              <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
