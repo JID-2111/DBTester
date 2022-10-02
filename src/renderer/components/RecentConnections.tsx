@@ -9,11 +9,11 @@ import EditForm from './EditForm';
 
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModel[]>([]);
-  const getConnections = async () => {
-    const connections = await window.connections.ipcRenderer.fetch();
-    setConnect(connections);
-  };
   useEffect(() => {
+    const getConnections = async () => {
+      const connections = await window.connections.ipcRenderer.fetch();
+      setConnect(connections);
+    };
     getConnections();
   }, []);
   const handledelete = async (ConnectionID: number) => {
@@ -64,7 +64,7 @@ const RecentConnections = () => {
                     <td>{value.connectionConfig.port}</td>
                     <td>{value.connectionConfig.username}</td>
                     <td>
-                      <EditForm config={value} setConnect={getConnections} />
+                      <EditForm config={value} />
                     </td>
                     <td>
                       <button type="button" className="deleteButton">
