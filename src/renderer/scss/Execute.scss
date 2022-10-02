@@ -1,5 +1,5 @@
 .execute-wrapper {
-  height: 80vh;
+  height: 60vh;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -7,10 +7,15 @@
   vertical-align: middle;
 }
 
-.dropdown {
+.dropdown button {
   margin: 5px;
+  min-width: 5em;
 }
 
 .procedure-code {
   white-space: break-spaces;
+}
+
+h6 {
+  margin: 5px;
 }
