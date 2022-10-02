@@ -1,10 +1,11 @@
-import '../scss/RecentConnections.scss';
 import { Link } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { Trash } from 'react-bootstrap-icons';
 import { ConnectionModel } from '../../db/Models';
 import EditForm from './EditForm';
+
+import '../scss/RecentConnections.scss';
 
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModel[]>([]);
@@ -27,62 +28,64 @@ const RecentConnections = () => {
     connect.shift();
   }
   return (
-    <div className="RecentWrapper">
-      <h1 className="Header">Recent Connections</h1>
-      <div className="TDiv">
-        <Table className="table">
-          <thead>
-            <tr>
-              <th>Nick Name</th>
-              <th>Database Type</th>
-              <th>Address</th>
-              <th>Port</th>
-              <th>User Name</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {connect.map((value) => {
-              if (value.connectionConfig.config === 'manual') {
-                return (
-                  <tr key={value.id}>
-                    <td className="LinkTD">
-                      <Link to="/Execute">
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="recent-wrapper">
+        <h1>Recent Connections</h1>
+        <div className="d-flex justify-content-center">
+          <Table className="table">
+            <thead>
+              <tr>
+                <th>Nick Name</th>
+                <th>Database Type</th>
+                <th>Address</th>
+                <th>Port</th>
+                <th>User Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {connect.map((value) => {
+                if (value.connectionConfig.config === 'manual') {
+                  return (
+                    <tr key={value.id}>
+                      <td>
+                        <Link to="/Execute">
+                          <button
+                            className="buttonSelect"
+                            type="button"
+                            onClick={() => handleSelect(value.id)}
+                          >
+                            {value.nickname}
+                          </button>
+                        </Link>
+                      </td>
+                      <td>{value.type}</td>
+                      <td>{value.connectionConfig.address}</td>
+                      <td>{value.connectionConfig.port}</td>
+                      <td>{value.connectionConfig.username}</td>
+                      <td>
+                        <EditForm config={value} setConnect={getConnections} />
                         <button
-                          className="buttonSelect"
                           type="button"
-                          onClick={() => handleSelect(value.id)}
+                          className="deleteButton"
+                          onClick={() => handledelete(value.id)}
                         >
-                          {value.nickname}
+                          <Trash />
                         </button>
-                      </Link>
-                    </td>
-                    <td>{value.type}</td>
-                    <td>{value.connectionConfig.address}</td>
-                    <td>{value.connectionConfig.port}</td>
-                    <td>{value.connectionConfig.username}</td>
-                    <td>
-                      <EditForm config={value} setConnect={getConnections} />
-                      <button
-                        type="button"
-                        className="deleteButton"
-                        onClick={() => handledelete(value.id)}
-                      >
-                        <Trash />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              }
-              return null;
-            })}
-          </tbody>
-        </Table>
-      </div>
-      <div className="toHome">
-        <Link to="/" className="link">
-          <Button className="HomeButton">Home</Button>
-        </Link>
+                      </td>
+                    </tr>
+                  );
+                }
+                return null;
+              })}
+            </tbody>
+          </Table>
+        </div>
+        <div className="home-btn-footer">
+          <Link to="/" className="link">
+            <Button className="home-btn">Home</Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import './scss/App.scss';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './scss/App.scss';
+
 import Execute from './components/Execute';
 import Home from './components/Home';
 import NewConnections from './components/NewConnections';
