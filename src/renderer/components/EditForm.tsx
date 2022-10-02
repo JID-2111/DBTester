@@ -34,7 +34,6 @@ const EditForm = ({ config }: IEditProps) => {
   const [form, setForm] = useState<IEditFields>(defaultForm);
   const [show, setShow] = useState<boolean>(false);
   const handleClose = () => {
-    setForm(defaultForm);
     setShow(false);
   };
   const handleShow = () => setShow(true);
