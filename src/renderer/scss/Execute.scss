@@ -1,6 +1,16 @@
+@use './utils/colors.scss';
+
 .execute-wrapper {
-  height: 60vh;
-  width: 100vw;
+  background-color: colors.$snow;
+  color: colors.$jet;
+  width: 90vw;
+  height: auto;
+  border-radius: 0.375em;
+}
+
+.code-wrapper {
+  height: auto;
+  min-height: 40vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,6 +19,7 @@
 
 .dropdown button {
   margin: 5px;
+  margin-left: 10vw;
   min-width: 5em;
 }
 
@@ -17,5 +28,5 @@
 }
 
 h6 {
-  margin: 5px;
+  margin-left: 10vw;
 }
