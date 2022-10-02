@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { ConnectionModel } from '../../db/Models';
 import '../scss/RecentConnections.scss';
@@ -10,19 +10,30 @@ interface IEditProps {
 
 const EditForm = ({ config }: IEditProps) => {
   const form = useState<ConnectionModel>(config);
-  useEffect(() => {});
+  const [show, setShow] = useState<boolean>(false);
   return (
-    <>
-      <div className="EditForm">
-        <h1>Edit Connection</h1>
-      </div>
-      {React.cloneElement(<NewConnectionForm />, {
-        defaultForm: { ...form },
-      })}
-      <div className="home-btn-footer">
-        <Button className="home-btn">Home</Button>
-      </div>
-    </>
+    <div>
+      <Button
+        variant="link"
+        className="EditButton"
+        onClick={() => setShow(true)}
+      />
+      {show && (
+        <div className="overlay position-absolute">
+          <div>
+            <h1>Edit Connection</h1>
+          </div>
+          {React.cloneElement(<NewConnectionForm />, {
+            defaultForm: { ...form },
+          })}
+          <Button
+            variant="link"
+            className="EditButton"
+            onClick={() => setShow(false)}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { ConnectionModel } from '../../db/Models';
+import EditForm from './EditForm';
 
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModel[]>([]);
@@ -47,6 +48,9 @@ const RecentConnections = () => {
                     <td>{value.connectionConfig.address}</td>
                     <td>{value.connectionConfig.port}</td>
                     <td>{value.connectionConfig.username}</td>
+                    <td>
+                      <EditForm config={value} />
+                    </td>
                   </tr>
                 );
               }
