@@ -1,30 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import DBProvider from '../../entity/enum';
-import { ConnectionModel } from '../../Models';
-import PgClient from '../../PgClient';
-import ServerInterface from '../../ServerInterface';
+import { ConnectionModel, ConnectionModelType } from '../../Models';
 import { RootState } from '../store';
 
-const model = new ConnectionModel({
-  type: DBProvider.PostgreSQL,
-  nickname: 'something_dumb',
-  connectionConfig: {
-    config: 'manual',
-    username: 'kpmg',
-    password: 'asdf',
-    address: 'localhost',
-    port: 5432,
-  },
-});
-
 export interface ServerConnectionState {
-  serverConnection: ServerInterface;
-  valid: boolean;
+  serverConnectionModel: ConnectionModelType;
+  database: string;
 }
 
 const initialState: ServerConnectionState = {
-  serverConnection: new PgClient(model), // TODO maybe change this later
-  valid: process.env.NODE_ENV !== 'production', // TODO change this to false later
+  serverConnectionModel: new ConnectionModel(), // TODO maybe change this later
+  database: '',
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -32,19 +17,15 @@ export const serverConnectionSlice = createSlice({
   name: 'serverConnection',
   initialState,
   reducers: {
-    change: (state, action: PayloadAction<ServerInterface>) => {
-      state.serverConnection = action.payload;
-      state.valid = true;
+    change: (state, action: PayloadAction<ConnectionModelType>) => {
+      state.serverConnectionModel = action.payload;
     },
     clear: (state) => {
-      state.valid = false;
+      state.serverConnectionModel = new ConnectionModel();
+      state.database = '';
     },
     setDB: (state, action: PayloadAction<string>) => {
-      state.valid = true;
-      state.serverConnection = new PgClient(
-        state.serverConnection.model,
-        action.payload
-      ) as ServerInterface;
+      state.database = action.payload;
     },
   },
 });
@@ -52,6 +33,6 @@ export const serverConnectionSlice = createSlice({
 export const { change, clear, setDB } = serverConnectionSlice.actions;
 
 export const selectServerConnection = (state: RootState) =>
-  state.connection.serverConnection;
+  state.connection.serverConnectionModel;
 
 export default serverConnectionSlice.reducer;

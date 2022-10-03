@@ -7,7 +7,6 @@ import {
   setDB,
 } from '../redux/ServerConnections/ServerConnection';
 import { store } from '../redux/store';
-import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
 import { ConnectionModel, ConnectionModelType } from '../Models';
 import ConnectionEntity from '../entity/ConnectionEntity';
@@ -50,7 +49,7 @@ export default class ConnectionService {
           Buffer.from(model.connectionConfig.password, 'base64')
         );
       }
-      store.dispatch(change(new PgClient(model))); // TODO instantiate based on model.type
+      store.dispatch(change(model)); // TODO instantiate based on model.type
       return this.repository.save(entity);
     }
     return new ConnectionEntity();
@@ -64,11 +63,13 @@ export default class ConnectionService {
   }
 
   public async disconnect(): Promise<void> {
+    /*
     store
       .getState()
       .connection.serverConnection.pool.end()
       .then(() => log.info('Curr Connection Pool Ended'))
       .catch(() => log.error('Couldnt end Pool'));
+    */
     store.dispatch(clear());
   }
 
@@ -92,8 +93,11 @@ export default class ConnectionService {
 
   public async verify(): Promise<boolean> {
     // Check if the current connection is marked valid and works
+    /*
     return store.getState().connection.valid
       ? store.getState().connection.serverConnection.verify()
       : false;
+      */
+    return true;
   }
 }

@@ -1,4 +1,5 @@
 import { store } from './redux/store';
+import getRightClient from './clients/ClientUtils';
 
 export enum Direction {
   IN = 'IN',
@@ -26,30 +27,44 @@ export default class Procedures {
   }
 
   public async getDatabases() {
-    return store.getState().connection.serverConnection.getDatabasesQuery();
+    const client = getRightClient(
+      store.getState().connection.serverConnectionModel,
+      store.getState().connection.database
+    );
+    return client.getDatabasesQuery();
   }
 
   public async fetchProcedures(): Promise<string[]> {
-    return store.getState().connection.serverConnection.fetchProceduresQuery();
+    const client = getRightClient(
+      store.getState().connection.serverConnectionModel,
+      store.getState().connection.database
+    );
+    return client.fetchProceduresQuery();
   }
 
   public async triggerProcedure(procedure: string, parameters: string[]) {
-    return store
-      .getState()
-      .connection.serverConnection.callProcedureQuery(procedure, parameters);
+    const client = getRightClient(
+      store.getState().connection.serverConnectionModel,
+      store.getState().connection.database
+    );
+    return client.callProcedureQuery(procedure, parameters);
   }
 
   public async getProcedureParameters(
     procedure: string
   ): Promise<ProcedureParameter[]> {
-    return store
-      .getState()
-      .connection.serverConnection.fetchProcedureParametersQuery(procedure);
+    const client = getRightClient(
+      store.getState().connection.serverConnectionModel,
+      store.getState().connection.database
+    );
+    return client.fetchProcedureParametersQuery(procedure);
   }
 
   public async fetchContent(procedure: string): Promise<string[]> {
-    return store
-      .getState()
-      .connection.serverConnection.fetchContentQuery(procedure);
+    const client = getRightClient(
+      store.getState().connection.serverConnectionModel,
+      store.getState().connection.database
+    );
+    return client.fetchContentQuery(procedure);
   }
 }
