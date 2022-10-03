@@ -13,9 +13,24 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ### New Features
 
+- Server Connections
+  - Connect to server manually
+  - View, edit, and select from recent connections list
+  - Ability to disconnect from a server
+  - Ability to switch databases within a server
+- View procedure contents
+- Reformatted and styled application
+- Encrypt user credentials
+- Support for file logging
+
 ### Bug Fixes
 
+- Removed hard coded values
+- Fixed infinite connection issue and moved to Database Pools
+
 ### Known Issues
+
+- Password field is not being verified by PostgreSQL
 
 ## Version 0.1.0
 
