@@ -143,12 +143,13 @@ const NewConnectionForm = () => {
 
     try {
       // creates the server connection in sqlite and connects to it
-      await window.connections.ipcRenderer.create(connection);
+      const db = await window.connections.ipcRenderer.create(connection);
 
       // verify if server connection was established
       const verified = await window.connections.ipcRenderer.verify();
       if (!verified) {
         setAlert(true);
+        await window.connections.ipcRenderer.delete(db.id);
         return;
       }
       // show alert modal if unexpected error

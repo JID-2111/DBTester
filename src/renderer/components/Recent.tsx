@@ -20,6 +20,7 @@ const RecentList = () => {
   const handleClick = async (id: number) => {
     try {
       await window.connections.ipcRenderer.select(id);
+      await window.procedures.ipcRenderer.fetchProcedures();
     } catch (e) {
       setAlert(true);
       return;
