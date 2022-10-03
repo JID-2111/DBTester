@@ -4,7 +4,18 @@ An application to unit test stored procedures inside databases
 
 Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
+[![Build Status][github-actions-status]][github-actions-url]
+[![Github Tag][github-tag-image]][github-tag-url]
+
 # Release Notes
+
+## Version 0.2.0
+
+### New Features
+
+### Bug Fixes
+
+### Known Issues
 
 ## Version 0.1.0
 
@@ -115,3 +126,8 @@ src/renderer/preload.d.ts
 - ![#1589F0](https://via.placeholder.com/15/7de2d1ff/7de2d1ff.png) `#7de2d1ff: Middle Blue Green`
 - ![#1589F0](https://via.placeholder.com/15/fffafbff/fffafbff.png) `#fffafbff: Snow`
 - ![#1589F0](https://via.placeholder.com/15/e4c3ad/e4c3ad.png) `#e4c3ad: Sand`
+
+[github-actions-status]: https://github.com/JID-2111/JID-2111/workflows/Test/badge.svg
+[github-actions-url]: https://github.com/JID-2111/JID-2111/actions
+[github-tag-image]: https://img.shields.io/github/v/tag/JID-2111/JID-2111.svg?label=version&sort=semver
+[github-tag-url]: https://github.com/JID-2111/JID-2111/releases/latest
