@@ -9,16 +9,18 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import 'reflect-metadata';
+import './ipc';
+import AppDataSource from '../data-source';
+import { resolveHtmlPath, setLog } from './util';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
-import Procedures from '../db/Procedures';
 
 class AppUpdater {
   constructor() {
-    log.transports.file.level = 'info';
+    setLog();
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
   }
@@ -26,26 +28,9 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
-
-ipcMain.handle('procedures:listProcedures', () => {
-  return new Procedures().getProceduresForDB(['React']);
-});
-
-ipcMain.handle('procedures:listDatabases', () => {
-  return new Procedures().getDatabases();
-});
-
-ipcMain.handle('procedures:getProcedure', async (_event, ...args) => {
-  return new Procedures().fetchContent('React', args[0]);
-});
-
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
+  log.transports.console.level = 'info';
   sourceMapSupport.install();
 }
 
@@ -53,6 +38,7 @@ const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDebug) {
+  log.transports.console.level = 'debug';
   require('electron-debug')();
 }
 
@@ -140,7 +126,8 @@ app.on('window-all-closed', () => {
 
 app
   .whenReady()
-  .then(() => {
+  .then(async () => {
+    await AppDataSource.initialize();
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

@@ -1,0 +1,19 @@
+@use './utils/colors.scss';
+
+.new-conn-form {
+  padding: 10px;
+  width: 80%;
+  display: block;
+}
+
+.new-conn-wrapper {
+  background-color: colors.$snow;
+  color: colors.$jet;
+  width: 90vw;
+  height: auto;
+  border-radius: 0.375em;
+}
+
+.new-conn-header {
+  margin-top: 10px;
+}

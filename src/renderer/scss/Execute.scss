@@ -1,21 +1,32 @@
+@use './utils/colors.scss';
+
 .execute-wrapper {
-  height: 80vh;
-  width: 100vw;
+  background-color: colors.$snow;
+  color: colors.$jet;
+  width: 90vw;
+  height: auto;
+  border-radius: 0.375em;
+}
+
+.code-wrapper {
+  height: auto;
+  min-height: 40vh;
   display: flex;
   justify-content: center;
   align-items: center;
   vertical-align: middle;
 }
 
-.execute-footer {
-  float: right;
+.dropdown button {
+  margin: 5px;
+  margin-left: 10vw;
+  min-width: 5em;
 }
 
-.home-button {
-  margin: 5px;
-  margin-right: 10vw;
+.procedure-code {
+  white-space: break-spaces;
 }
 
-.dropdown {
-  margin: 5px;
+h6 {
+  margin-left: 10vw;
 }

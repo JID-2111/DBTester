@@ -1,26 +1,24 @@
-const { Client } = require('pg');
+import { store } from './redux/store';
 
-type DBProcedure = {
-  routine_catalog: string;
-  routine_name: string;
-};
-
-type DBQuery = {
-  datname: string;
+export enum Direction {
+  IN = 'IN',
+  OUT = 'OUT',
+  INOUT = 'INOUT',
+}
+export type ProcedureParameter = {
+  direction: Direction;
+  name: string;
+  type: string;
 };
 
 export default class Procedures {
-  address: string;
-
-  port: number;
-
   public async getProceduresForDB(
     databases: string[]
   ): Promise<Map<string, string[]>> {
     const res = new Map<string, string[]>();
     await Promise.all(
       databases.map(async (database) => {
-        const procedures = await this.fetchProcedures(database);
+        const procedures = await this.fetchProcedures();
         res.set(database, procedures);
       })
     );
@@ -28,62 +26,30 @@ export default class Procedures {
   }
 
   public async getDatabases() {
-    const database = 'React';
-    const client = await new Client({
-      host: this.address,
-      port: this.port,
-      password: 'asdf',
-      user: 'kpmg',
-      database,
-    });
-    client.connect((err: any) => {
-      if (err) {
-        console.error('connection error', err.stack);
-      } else {
-        console.log('connected');
-      }
-    });
-    const result = await client.query(
-      `select datname from pg_catalog.pg_database where datistemplate = false`
-    );
-    client.end();
-    return Promise.all(
-      result.rows.map((row: DBQuery) => {
-        return row.datname;
-      })
-    );
+    return store.getState().connection.serverConnection.getDatabasesQuery();
   }
 
-  public async fetchProcedures(database: string): Promise<string[]> {
-    const client = await new Client({
-      host: this.address,
-      port: this.port,
-      password: 'asdf',
-      user: 'kpmg',
-      database,
-    });
-    client.connect((err: any) => {
-      if (err) {
-        console.error('connection error', err.stack);
-      } else {
-        console.log('connected');
-      }
-    });
-    const result = await client.query(
-      `SELECT routine_catalog, routine_name FROM information_schema.routines WHERE routine_type = 'PROCEDURE'`
-    );
-    client.end();
-    return Promise.all(
-      result.rows.map((row: DBProcedure) => {
-        return row.routine_name;
-      })
-    );
+  public async fetchProcedures(): Promise<string[]> {
+    return store.getState().connection.serverConnection.fetchProceduresQuery();
   }
 
-  constructor() {
-    // TODO get address from user
-    this.address =
-      process.env.NODE_ENV === 'development' ? 'localhost' : 'localhost';
-    this.port = 5432;
+  public async triggerProcedure(procedure: string, parameters: string[]) {
+    return store
+      .getState()
+      .connection.serverConnection.callProcedureQuery(procedure, parameters);
+  }
+
+  public async getProcedureParameters(
+    procedure: string
+  ): Promise<ProcedureParameter[]> {
+    return store
+      .getState()
+      .connection.serverConnection.fetchProcedureParametersQuery(procedure);
+  }
+
+  public async fetchContent(procedure: string): Promise<string[]> {
+    return store
+      .getState()
+      .connection.serverConnection.fetchContentQuery(procedure);
   }
 }

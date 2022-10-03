@@ -1,4 +1,9 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { ConnectionModelType } from '../db/Models';
+
+const log = require('electron-log');
+
+window.log = log.functions;
 
 export type Channels = 'ipc-example';
 
@@ -20,11 +25,34 @@ contextBridge.exposeInMainWorld('electron', {
   },
 });
 
+contextBridge.exposeInMainWorld('util', {
+  ipcRenderer: {
+    parse: (connection: ConnectionModelType) =>
+      ipcRenderer.invoke('util:parse', connection),
+  },
+});
+
 contextBridge.exposeInMainWorld('procedures', {
   ipcRenderer: {
     fetchProcedures: () => ipcRenderer.invoke('procedures:listProcedures'),
     fetchDatabases: () => ipcRenderer.invoke('procedures:listDatabases'),
     fetchContent: (procedure: string) =>
       ipcRenderer.invoke('procedures:getProcedure', procedure),
+  },
+});
+
+contextBridge.exposeInMainWorld('connections', {
+  ipcRenderer: {
+    fetch: () => ipcRenderer.invoke('connections:fetch'),
+    create: (model: ConnectionModelType) =>
+      ipcRenderer.invoke('connections:create', model),
+    select: (id: number) => ipcRenderer.invoke('connections:select', id),
+    delete: (id: number) => ipcRenderer.invoke('connections:delete', id),
+    disconnect: () => ipcRenderer.invoke('connections:disconnect'),
+    update: (model: ConnectionModelType) =>
+      ipcRenderer.invoke('connections:update', model),
+    switch: (database: string) =>
+      ipcRenderer.invoke('connections:switch', database),
+    verify: () => ipcRenderer.invoke('connections:verify'),
   },
 });

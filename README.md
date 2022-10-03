@@ -96,3 +96,22 @@ See boilerplate [docs and guides here](https://electron-react-boilerplate.js.org
   - Reload Script [docs](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts)
   - IPC Renderer [Documentation](https://www.electronjs.org/docs/latest/api/ipc-renderer)
   - IPC two way usage [docs](https://www.electronjs.org/docs/latest/tutorial/ipc#pattern-2-renderer-to-main-two-way)
+
+## IPC Renderer
+
+In order to make sure your backend function can be used by the frontend, change these files:
+
+```
+src/main/ipc.ts
+src/main/preload.ts
+src/renderer/preload.d.ts
+```
+
+## Color Palette
+
+- ![#f03c15](https://via.placeholder.com/15/131515ff/131515ff.png) `#131515ff: Eerie Black`
+- ![#c5f015](https://via.placeholder.com/15/2b2c28ff/2b2c28ff.png) `#2b2c28ff: Jet`
+- ![#1589F0](https://via.placeholder.com/15/339989ff/339989ff.png) `#339989ff: Persian Green`
+- ![#1589F0](https://via.placeholder.com/15/7de2d1ff/7de2d1ff.png) `#7de2d1ff: Middle Blue Green`
+- ![#1589F0](https://via.placeholder.com/15/fffafbff/fffafbff.png) `#fffafbff: Snow`
+- ![#1589F0](https://via.placeholder.com/15/e4c3ad/e4c3ad.png) `#e4c3ad: Sand`
