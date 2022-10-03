@@ -1,3 +1,28 @@
+# Stored Procedure Unit Tester
+
+An application to unit test stored procedures inside databases
+
+Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+# Release Notes
+
+## Version 0.1.0
+
+### New Features
+
+- Added support for connecting to a local Postgres database
+- Added a user interface for connecting to a local database
+- Added a dropdown to display all stored procedures from a local database
+
+### Bug Fixes
+
+- None
+
+### Known Issues
+
+- Pressing the connect button infinitely establishes a connection with the Postgres database
+- Connection configuration is a hardcoded set of values
+
 # 🚀 Developing
 
 ## Pre requisites
@@ -64,10 +89,6 @@ npm run package
 ## Docs
 
 See boilerplate [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation)
-
-## License
-
-MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
 
 # Links
 
