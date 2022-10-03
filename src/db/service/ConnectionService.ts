@@ -20,7 +20,11 @@ export default class ConnectionService {
   }
 
   public async fetch(): Promise<ConnectionModel[]> {
-    const entities = await this.repository.find();
+    const entities = await this.repository.find({
+      order: {
+        lastUsed: 'DESC',
+      },
+    });
     return entities.map((entity) => {
       return new ConnectionModel(entity);
     });
@@ -37,7 +41,12 @@ export default class ConnectionService {
       throw new Error('Error Encrypting Password');
     }
     const entity = await this.repository.save(parsedEntity);
-    return this.select(entity.id);
+    try {
+      return await this.select(entity.id);
+    } catch (e) {
+      this.delete(entity.id);
+      throw new Error('Connection is not valid');
+    }
   }
 
   public async select(id: number): Promise<ConnectionEntity> {
