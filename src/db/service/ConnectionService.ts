@@ -51,6 +51,11 @@ export default class ConnectionService {
         );
       }
       store.dispatch(change(new PgClient(model))); // TODO instantiate based on model.type
+      if (!(await this.verify())) {
+        store.dispatch(clear());
+        log.error('Connection is not valid');
+        throw new Error('Connection is not valid');
+      }
       return this.repository.save(entity);
     }
     return new ConnectionEntity();
