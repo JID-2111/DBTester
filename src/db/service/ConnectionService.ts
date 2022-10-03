@@ -37,7 +37,12 @@ export default class ConnectionService {
       throw new Error('Error Encrypting Password');
     }
     const entity = await this.repository.save(parsedEntity);
-    return this.select(entity.id);
+    try {
+      return await this.select(entity.id);
+    } catch (e) {
+      this.delete(entity.id);
+      throw new Error('Connection is not valid');
+    }
   }
 
   public async select(id: number): Promise<ConnectionEntity> {
