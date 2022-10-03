@@ -31,6 +31,7 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 ### Known Issues
 
 - Password field is not being verified by PostgreSQL
+- Had to disable front end unit tests due to Electron issues
 
 ## Version 0.1.0
 
