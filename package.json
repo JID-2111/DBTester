@@ -1,4 +1,5 @@
 {
+  "version": "v0.2.0",
   "description": "A foundation for scalable desktop apps",
   "keywords": [
     "electron",
@@ -19,11 +20,9 @@
     "type": "git",
     "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "name": "JID-2111"
   },
   "contributors": [
     {
@@ -257,8 +256,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "JID-2111",
+      "repo": "JID-2111"
     }
   },
   "collective": {
