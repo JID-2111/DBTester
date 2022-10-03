@@ -20,7 +20,11 @@ export default class ConnectionService {
   }
 
   public async fetch(): Promise<ConnectionModel[]> {
-    const entities = await this.repository.find();
+    const entities = await this.repository.find({
+      order: {
+        lastUsed: 'DESC',
+      },
+    });
     return entities.map((entity) => {
       return new ConnectionModel(entity);
     });
