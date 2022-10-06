@@ -9,8 +9,13 @@ import {
 import { store } from '../redux/store';
 import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
-import { ConnectionModel, ConnectionModelType } from '../Models';
+import {
+  ConnectionInputType,
+  ConnectionModel,
+  ConnectionModelType,
+} from '../models/ConnectionModels';
 import ConnectionEntity from '../entity/ConnectionEntity';
+import DBProvider from '../entity/enum';
 
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
@@ -30,19 +35,20 @@ export default class ConnectionService {
     });
   }
 
-  public async create(model: ConnectionModelType): Promise<ConnectionEntity> {
+  public async create(model: ConnectionInputType): Promise<ConnectionEntity> {
     model.lastUsed = new Date();
     const parsedEntity = new ConnectionEntity(model);
-    if (safeStorage.isEncryptionAvailable()) {
-      parsedEntity.password = safeStorage
-        .encryptString(parsedEntity.password)
-        .toString('base64');
-    } else {
-      throw new Error('Error Encrypting Password');
-    }
+    // if (safeStorage.isEncryptionAvailable()) {
+    //   parsedEntity.password = safeStorage
+    //     .encryptString(parsedEntity.password)
+    //     .toString('base64');
+    // } else {
+    //   throw new Error('Error Encrypting Password');
+    // }
     const entity = await this.repository.save(parsedEntity);
     try {
-      return await this.select(entity.id);
+      return entity;
+      // return await this.select(entity.id);
     } catch (e) {
       this.delete(entity.id);
       throw new Error('Connection is not valid');

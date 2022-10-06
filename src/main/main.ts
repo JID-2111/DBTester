@@ -17,6 +17,7 @@ import './ipc';
 import AppDataSource from '../data-source';
 import { resolveHtmlPath, setLog } from './util';
 import MenuBuilder from './menu';
+import ConnectionService from '../db/service/ConnectionService';
 
 class AppUpdater {
   constructor() {
@@ -128,6 +129,7 @@ app
   .whenReady()
   .then(async () => {
     await AppDataSource.initialize();
+    new ConnectionService().test();
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

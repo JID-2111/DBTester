@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import {
-  ConnectionModelType,
+  ConnectionInputType,
   ConnectionString,
   ManualConnectionConfig,
-} from 'db/Models';
+} from 'db/models/ConnectionModels';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
@@ -135,7 +135,7 @@ const NewConnectionForm = () => {
       };
     }
 
-    const connection: ConnectionModelType = {
+    const connection: ConnectionInputType = {
       nickname: form.nickname,
       type: form.type,
       connectionConfig,

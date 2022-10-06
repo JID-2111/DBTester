@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import log from 'electron-log';
-import { ConnectionModelType } from './Models';
+import { ConnectionModelType } from './models/ConnectionModels';
 import ServerInterface from './ServerInterface';
 import { ProcedureParameter, Direction } from './Procedures';
 
@@ -23,19 +23,13 @@ export type DBParameter = {
 export default class PgClient implements ServerInterface {
   constructor(model: ConnectionModelType, database?: string) {
     this.model = model;
-    if (model.connectionConfig.config === 'manual') {
-      this.pool = new Pool({
-        host: model.connectionConfig.address,
-        port: model.connectionConfig.port,
-        password: model.connectionConfig.password,
-        user: model.connectionConfig.username,
-        database: database ?? 'React',
-      });
-    } else {
-      this.pool = new Pool({
-        connectionString: model.connectionConfig.connectionString,
-      });
-    }
+    this.pool = new Pool({
+      host: model.connectionConfig.address,
+      port: model.connectionConfig.port,
+      password: model.connectionConfig.password,
+      user: model.connectionConfig.username,
+      database: database ?? 'React',
+    });
   }
 
   pool: Pool;

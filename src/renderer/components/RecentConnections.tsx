@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { Trash } from 'react-bootstrap-icons';
-import { ConnectionModel } from '../../db/Models';
+import { ConnectionModel } from '../../db/models/ConnectionModels';
 import EditForm from './EditForm';
 
 import '../scss/RecentConnections.scss';

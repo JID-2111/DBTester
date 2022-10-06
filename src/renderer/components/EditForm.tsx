@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
-import { ConnectionModel } from '../../db/Models';
+import { ConnectionModel } from '../../db/models/ConnectionModels';
 import DBProvider from '../../db/entity/enum';
 import '../scss/RecentConnections.scss';
 

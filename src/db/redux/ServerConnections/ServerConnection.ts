@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import DBProvider from '../../entity/enum';
-import { ConnectionModel } from '../../Models';
+import { ConnectionModelType } from '../../models/ConnectionModels';
 import PgClient from '../../PgClient';
 import ServerInterface from '../../ServerInterface';
 import { RootState } from '../store';
 
-const model = new ConnectionModel({
+const model: ConnectionModelType = {
   type: DBProvider.PostgreSQL,
   nickname: 'something_dumb',
   connectionConfig: {
@@ -15,7 +15,7 @@ const model = new ConnectionModel({
     address: 'localhost',
     port: 5432,
   },
-});
+};
 
 export interface ServerConnectionState {
   serverConnection: ServerInterface;
