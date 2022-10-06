@@ -38,17 +38,9 @@ export default class ConnectionService {
   public async create(model: ConnectionInputType): Promise<ConnectionEntity> {
     model.lastUsed = new Date();
     const parsedEntity = new ConnectionEntity(model);
-    // if (safeStorage.isEncryptionAvailable()) {
-    //   parsedEntity.password = safeStorage
-    //     .encryptString(parsedEntity.password)
-    //     .toString('base64');
-    // } else {
-    //   throw new Error('Error Encrypting Password');
-    // }
     const entity = await this.repository.save(parsedEntity);
     try {
-      return entity;
-      // return await this.select(entity.id);
+      return await this.select(entity.id);
     } catch (e) {
       this.delete(entity.id);
       throw new Error('Connection is not valid');
@@ -60,11 +52,6 @@ export default class ConnectionService {
     if (entity !== null) {
       entity.lastUsed = new Date();
       const model = new ConnectionModel(entity);
-      if (model.connectionConfig.config === 'manual') {
-        model.connectionConfig.password = safeStorage.decryptString(
-          Buffer.from(model.connectionConfig.password, 'base64')
-        );
-      }
       store.dispatch(change(new PgClient(model))); // TODO instantiate based on model.type
       if (!(await this.verify())) {
         store.dispatch(clear());
