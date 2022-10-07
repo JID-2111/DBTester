@@ -1,6 +1,5 @@
 import { Repository } from 'typeorm';
 import log from 'electron-log';
-import { safeStorage } from 'electron';
 import {
   clear,
   change,
@@ -15,7 +14,6 @@ import {
   ConnectionModelType,
 } from '../models/ConnectionModels';
 import ConnectionEntity from '../entity/ConnectionEntity';
-import DBProvider from '../entity/enum';
 
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;

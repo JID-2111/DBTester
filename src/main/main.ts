@@ -17,7 +17,6 @@ import './ipc';
 import AppDataSource from '../data-source';
 import { resolveHtmlPath, setLog } from './util';
 import MenuBuilder from './menu';
-import ConnectionService from '../db/service/ConnectionService';
 
 class AppUpdater {
   constructor() {
