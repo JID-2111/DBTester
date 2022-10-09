@@ -21,6 +21,9 @@ class ConnectionEntity {
   id: number;
 
   @Column()
+  defaultDatabase: string;
+
+  @Column()
   nickname: string;
 
   @Column({ nullable: true })
@@ -69,9 +72,11 @@ class ConnectionEntity {
   constructor(model?: ConnectionInputType | ConnectionModelType) {
     if (model === undefined) return;
     if (model.connectionConfig.config === 'manual') {
-      const { username, password, address, port } = model.connectionConfig;
+      const { username, password, address, port, defaultDatabase } =
+        model.connectionConfig;
       Object.assign(this, {
         config: 'manual',
+        defaultDatabase,
         username,
         password,
         address,
@@ -82,10 +87,11 @@ class ConnectionEntity {
         model.type,
         model.connectionConfig.connectionString
       );
-      const { username, password } = fields;
+      const { username, password, endpoint } = fields;
       if (fields.hosts.length > 0) {
         Object.assign(this, {
           config: 'manual',
+          defaultDatabase: endpoint,
           username,
           password,
           address: fields.hosts[0].host,

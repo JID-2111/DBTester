@@ -1,5 +1,4 @@
 import { store } from './redux/store';
-import getRightClient from './clients/ClientUtils';
 
 export enum Direction {
   IN = 'IN',
@@ -27,44 +26,54 @@ export default class Procedures {
   }
 
   public async getDatabases() {
-    const client = getRightClient(
-      store.getState().connection.serverConnectionModel,
-      store.getState().connection.database
-    );
-    return client.getDatabasesQuery();
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.getDatabasesQuery();
   }
 
   public async fetchProcedures(): Promise<string[]> {
-    const client = getRightClient(
-      store.getState().connection.serverConnectionModel,
-      store.getState().connection.database
-    );
-    return client.fetchProceduresQuery();
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.fetchProceduresQuery();
   }
 
   public async triggerProcedure(procedure: string, parameters: string[]) {
-    const client = getRightClient(
-      store.getState().connection.serverConnectionModel,
-      store.getState().connection.database
-    );
-    return client.callProcedureQuery(procedure, parameters);
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.callProcedureQuery(procedure, parameters);
   }
 
   public async getProcedureParameters(
     procedure: string
   ): Promise<ProcedureParameter[]> {
-    const client = getRightClient(
-      store.getState().connection.serverConnectionModel,
-      store.getState().connection.database
-    );
-    return client.fetchProcedureParametersQuery(procedure);
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.fetchProcedureParametersQuery(procedure);
   }
 
   public async fetchContent(procedure: string): Promise<string[]> {
-    const client = getRightClient(
-      store.getState().connection.serverConnectionModel,
-      store.getState().connection.database
-    );
-    return client.fetchContentQuery(procedure);
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.fetchContentQuery(procedure);
   }
 }

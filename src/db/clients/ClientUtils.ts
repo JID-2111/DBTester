@@ -1,5 +1,5 @@
-import DBProvider from 'db/entity/enum';
-import { ConnectionModelType } from '../Models';
+import DBProvider from '../entity/enum';
+import { ConnectionModelType } from '../models/ConnectionModels';
 import PgClient from './PgClient';
 
 const getRightClient = (model: ConnectionModelType, database?: string) => {

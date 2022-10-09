@@ -1,31 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import DBProvider from '../../entity/enum';
+import { enableMapSet } from 'immer';
+import getRightClient from '../../clients/ClientUtils';
+import ServerInterface from '../../clients/ServerInterface';
 import {
   ConnectionModel,
   ConnectionModelType,
 } from '../../models/ConnectionModels';
 import { RootState } from '../store';
 
-const model: ConnectionModelType = {
-  type: DBProvider.PostgreSQL,
-  nickname: 'something_dumb',
-  connectionConfig: {
-    config: 'manual',
-    username: 'kpmg',
-    password: 'asdf',
-    address: 'localhost',
-    port: 5432,
-  },
-};
-
+enableMapSet();
 export interface ServerConnectionState {
   serverConnectionModel: ConnectionModelType;
-  database: string;
+  database: Map<string, ServerInterface>;
+  currentDatabase: string;
 }
 
 const initialState: ServerConnectionState = {
-  serverConnectionModel: new ConnectionModel(), // TODO maybe change this later
-  database: '',
+  serverConnectionModel: new ConnectionModel(),
+  database: new Map<string, ServerInterface>(),
+  currentDatabase: '',
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -35,13 +28,31 @@ export const serverConnectionSlice = createSlice({
   reducers: {
     change: (state, action: PayloadAction<ConnectionModelType>) => {
       state.serverConnectionModel = action.payload;
+      state.database.forEach((value) => {
+        value.pool.end();
+      });
+      state.database.clear();
+      state.currentDatabase =
+        state.serverConnectionModel.connectionConfig.defaultDatabase;
+      state.database.set(
+        state.currentDatabase,
+        getRightClient(state.serverConnectionModel, state.currentDatabase)
+      );
     },
     clear: (state) => {
       state.serverConnectionModel = new ConnectionModel();
-      state.database = '';
+      state.database.forEach((connection: ServerInterface) => {
+        connection.pool.end();
+      });
+      state.database.clear();
+      state.currentDatabase = '';
     },
     setDB: (state, action: PayloadAction<string>) => {
-      state.database = action.payload;
+      state.database.set(
+        action.payload,
+        getRightClient(state.serverConnectionModel, action.payload)
+      );
+      state.currentDatabase = action.payload;
     },
   },
 });

@@ -4,6 +4,8 @@ import DBProvider from '../entity/enum';
 export type ManualConnectionConfig = {
   config: 'manual';
 
+  defaultDatabase: string;
+
   address: string;
 
   port: number;
@@ -54,7 +56,8 @@ export class ConnectionModel {
 
   constructor(model?: ConnectionEntity) {
     if (model === undefined) return;
-    const { nickname, id, createdDate, lastUsed, type } = model;
+    const { nickname, id, createdDate, lastUsed, type, defaultDatabase } =
+      model;
     Object.assign(this, {
       nickname,
       id,
@@ -65,6 +68,7 @@ export class ConnectionModel {
     const { username, password, address, port } = model;
     this.connectionConfig = {
       config: 'manual',
+      defaultDatabase,
       username,
       password,
       address,
