@@ -56,7 +56,7 @@ const RecentList = () => {
           let connectionString = '';
           connectionString =
             `${connection.type}://${connectionConfig.username}:` +
-            `asdf` +
+            `****` +
             `@${connectionConfig.address}:${connectionConfig.port}`;
           return (
             <>
