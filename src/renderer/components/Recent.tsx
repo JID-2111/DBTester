@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ConnectionModel } from 'db/Models';
+import { ConnectionModel } from 'db/models/ConnectionModels';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap';
 
@@ -54,14 +54,10 @@ const RecentList = () => {
           const { connectionConfig } = connection;
 
           let connectionString = '';
-          if (connectionConfig.config === 'manual') {
-            connectionString =
-              `${connection.type}://${connectionConfig.username}:` +
-              `asdf` +
-              `@${connectionConfig.address}:${connectionConfig.port}`;
-          } else if (connectionConfig.config === 'string') {
-            connectionString = connectionConfig.connectionString;
-          }
+          connectionString =
+            `${connection.type}://${connectionConfig.username}:` +
+            `asdf` +
+            `@${connectionConfig.address}:${connectionConfig.port}`;
           return (
             <>
               <button

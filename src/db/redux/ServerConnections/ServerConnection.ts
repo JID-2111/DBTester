@@ -1,6 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ConnectionModel, ConnectionModelType } from '../../Models';
+import DBProvider from '../../entity/enum';
+import {
+  ConnectionModel,
+  ConnectionModelType,
+} from '../../models/ConnectionModels';
 import { RootState } from '../store';
+
+const model: ConnectionModelType = {
+  type: DBProvider.PostgreSQL,
+  nickname: 'something_dumb',
+  connectionConfig: {
+    config: 'manual',
+    username: 'kpmg',
+    password: 'asdf',
+    address: 'localhost',
+    port: 5432,
+  },
+};
 
 export interface ServerConnectionState {
   serverConnectionModel: ConnectionModelType;
