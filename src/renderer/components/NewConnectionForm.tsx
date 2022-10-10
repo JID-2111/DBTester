@@ -13,6 +13,7 @@ import DBProvider from '../../db/entity/enum';
 interface INewConnectionForm {
   nickname: string;
   type: DBProvider;
+  database?: string;
   address?: string;
   port?: number;
   username?: string;
@@ -23,6 +24,7 @@ interface INewConnectionForm {
 
 interface INewConnectionErrors {
   nickname?: string;
+  database?: string;
   type?: string;
   address?: string;
   port?: string;
@@ -77,6 +79,7 @@ const NewConnectionForm = () => {
     const {
       nickname,
       type,
+      database,
       address,
       port,
       username,
@@ -93,6 +96,9 @@ const NewConnectionForm = () => {
     } else {
       if (!type) {
         newErrors.type = 'Please select a database type.';
+      }
+      if (!database) {
+        newErrors.type = 'Please type a database';
       }
       if (!address) {
         newErrors.address = 'Please type an address.';
@@ -128,6 +134,7 @@ const NewConnectionForm = () => {
     } else {
       connectionConfig = {
         config: 'manual',
+        defaultDatabase: form.database!,
         address: form.address!,
         port: form.port!,
         username: form.username!,
@@ -220,6 +227,20 @@ const NewConnectionForm = () => {
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.port}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-2" controlId="connectionDatabase">
+                <Form.Label>Database</Form.Label>
+                <Form.Control
+                  className="form-control-sm"
+                  value={form.database}
+                  onChange={(e) => setField('database', e.target.value)}
+                  type="text"
+                  placeholder="Ex: React"
+                  isInvalid={!!errors.database}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.database}
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-2" controlId="connectionUser">

@@ -1,8 +1,8 @@
 import { Pool } from 'pg';
 import log from 'electron-log';
-import { ConnectionModelType } from './models/ConnectionModels';
+import { ConnectionModelType } from '../models/ConnectionModels';
 import ServerInterface from './ServerInterface';
-import { ProcedureParameter, Direction } from './Procedures';
+import { ProcedureParameter, Direction } from '../Procedures';
 
 type DBQuery = {
   datname: string;

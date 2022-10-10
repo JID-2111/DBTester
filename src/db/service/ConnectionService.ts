@@ -6,7 +6,6 @@ import {
   setDB,
 } from '../redux/ServerConnections/ServerConnection';
 import { store } from '../redux/store';
-import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
 import {
   ConnectionInputType,
@@ -40,6 +39,7 @@ export default class ConnectionService {
     try {
       return await this.select(entity.id);
     } catch (e) {
+      log.error(e);
       this.delete(entity.id);
       throw new Error('Connection is not valid');
     }
@@ -50,7 +50,7 @@ export default class ConnectionService {
     if (entity !== null) {
       entity.lastUsed = new Date();
       const model = new ConnectionModel(entity);
-      store.dispatch(change(new PgClient(model))); // TODO instantiate based on model.type
+      store.dispatch(change(model));
       if (!(await this.verify())) {
         store.dispatch(clear());
         log.error('Connection is not valid');
@@ -69,11 +69,6 @@ export default class ConnectionService {
   }
 
   public async disconnect(): Promise<void> {
-    store
-      .getState()
-      .connection.serverConnection.pool.end()
-      .then(() => log.info('Curr Connection Pool Ended'))
-      .catch(() => log.error('Couldnt end Pool'));
     store.dispatch(clear());
   }
 
@@ -96,9 +91,12 @@ export default class ConnectionService {
   }
 
   public async verify(): Promise<boolean> {
-    // Check if the current connection is marked valid and works
-    return store.getState().connection.valid
-      ? store.getState().connection.serverConnection.verify()
-      : false;
+    const connection = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (connection === undefined) {
+      return false;
+    }
+    return connection.verify();
   }
 }
