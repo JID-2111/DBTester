@@ -4,14 +4,14 @@ import { ConnectionModel } from 'db/Models';
 
 interface IProps {
   value: ConnectionModel;
-  handleCancel: () => void;
-  handelChange: (event, value: ConnectionModel) => void;
+  toggleReadOnly: () => void;
+  handleChange: (event) => void;
 }
 
-const EditRow = ({ value, handleCancel, handelChange }: IProps) => {
+const EditRow = ({ value, toggleReadOnly, handleChange }: IProps) => {
   if (value.connectionConfig.config === 'manual') {
     return (
-      <tr>
+      <tr key={value.id}>
         <td>
           <input
             type="text"
@@ -26,9 +26,9 @@ const EditRow = ({ value, handleCancel, handelChange }: IProps) => {
         <td>{value.connectionConfig.username}</td>
         <td>
           <button type="button">
-            <Check onClick={(event) => handelChange(event, value)} />
+            <Check onClick={(event) => handleChange(event)} />
           </button>
-          <button type="button" onClick={() => handleCancel()}>
+          <button type="button" onClick={() => toggleReadOnly()}>
             <X />
           </button>
         </td>
