@@ -28,7 +28,7 @@ const RecentConnections = () => {
 
   // changes the state to know which row is being edited
   const handleEdit = (Event: Event, Connection: ConnectionModel) => {
-    Event?.preventDefault();
+    Event.preventDefault();
     setEdit(Connection.id);
   };
 
