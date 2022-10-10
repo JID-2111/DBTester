@@ -7,6 +7,7 @@ import {
   AfterLoad,
   BeforeInsert,
   BeforeUpdate,
+  ManyToMany,
 } from 'typeorm';
 import { parseConnectionString } from '../../main/util';
 import {
@@ -14,6 +15,7 @@ import {
   ConnectionModelType,
 } from '../models/ConnectionModels';
 import DBProvider from './enum';
+import ExecutionEntity from './ExecutionEntity';
 
 @Entity({ name: 'Connection' })
 class ConnectionEntity {
@@ -49,6 +51,11 @@ class ConnectionEntity {
 
   @Column('datetime')
   lastUsed: Date;
+
+  @ManyToMany((_type) => ConnectionEntity, {
+    onDelete: 'CASCADE',
+  })
+  executions: ExecutionEntity[];
 
   @AfterLoad()
   decryptPassword() {
