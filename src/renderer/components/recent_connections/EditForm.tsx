@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { useEffect, useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Modal } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
-import { ConnectionModel } from '../../../db/Models';
 import DBProvider from '../../../db/entity/enum';
+import { ConnectionModel } from '../../../db/models/ConnectionModels';
 import '../../scss/RecentConnections.scss';
-import Modal from '../utils/Modal';
 
 interface IEditProps {
   config: ConnectionModel;

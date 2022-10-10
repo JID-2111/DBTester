@@ -1,17 +1,27 @@
+import { safeStorage } from 'electron';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  AfterLoad,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { parseConnectionString } from '../../main/util';
-import { ConnectionModelType } from '../Models';
+import {
+  ConnectionInputType,
+  ConnectionModelType,
+} from '../models/ConnectionModels';
 import DBProvider from './enum';
 
 @Entity({ name: 'Connection' })
 class ConnectionEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  defaultDatabase: string;
 
   @Column()
   nickname: string;
@@ -34,37 +44,58 @@ class ConnectionEntity {
   })
   type: DBProvider;
 
-  @Column({ nullable: true })
-  connectionString: string;
-
   @CreateDateColumn()
   createdDate: Date;
 
   @Column('datetime')
   lastUsed: Date;
 
-  constructor(model?: ConnectionModelType) {
+  @AfterLoad()
+  decryptPassword() {
+    this.password = safeStorage.decryptString(
+      Buffer.from(this.password, 'base64')
+    );
+  }
+
+  @BeforeUpdate()
+  @BeforeInsert()
+  encryptPassword() {
+    if (safeStorage.isEncryptionAvailable()) {
+      this.password = safeStorage
+        .encryptString(this.password)
+        .toString('base64');
+    } else {
+      throw new Error('Error Encrypting Password');
+    }
+  }
+
+  constructor(model?: ConnectionInputType | ConnectionModelType) {
     if (model === undefined) return;
     if (model.connectionConfig.config === 'manual') {
-      const { username, password, address, port } = model.connectionConfig;
+      const { username, password, address, port, defaultDatabase } =
+        model.connectionConfig;
       Object.assign(this, {
         config: 'manual',
+        defaultDatabase,
         username,
         password,
         address,
         port,
       });
     } else {
-      const fields = parseConnectionString(model);
-      if (fields === undefined || fields === null) return;
-      const { username, password } = fields;
-      if (fields?.hosts.length > 0) {
+      const fields = parseConnectionString(
+        model.type,
+        model.connectionConfig.connectionString
+      );
+      const { username, password, endpoint } = fields;
+      if (fields.hosts.length > 0) {
         Object.assign(this, {
           config: 'manual',
+          defaultDatabase: endpoint,
           username,
           password,
-          address: fields?.hosts[0].host,
-          port: fields?.hosts[0].port,
+          address: fields.hosts[0].host,
+          port: fields.hosts[0].port,
         });
       }
     }

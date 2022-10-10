@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { ConnectionModelType } from '../db/Models';
+import { ConnectionModelType } from '../db/models/ConnectionModels';
 
 const log = require('electron-log');
 
