@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ConnectionModel } from 'db/models/ConnectionModels';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal } from 'react-bootstrap';
+import { ConnectionModel } from '../../../db/models/ConnectionModels';
+import ServerConnectionErrorModal from '../modals/ServerConnectionErrorModal';
 
 const RecentList = () => {
   const navigate = useNavigate();
@@ -26,25 +26,6 @@ const RecentList = () => {
     }
 
     navigate('/execute');
-  };
-
-  const showAlert = () => {
-    return (
-      <Modal show={alert} onHide={() => setAlert(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Error</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Could not connect to the server. Please check your configuration
-          details.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setAlert(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
   };
 
   return (
@@ -73,7 +54,12 @@ const RecentList = () => {
           );
         })}
       </div>
-      {alert && showAlert()}
+      {alert && (
+        <ServerConnectionErrorModal
+          show={alert}
+          handleClose={() => setAlert(false)}
+        />
+      )}
     </>
   );
 };

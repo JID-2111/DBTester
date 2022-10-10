@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import {
   ConnectionInputType,
   ConnectionString,
   ManualConnectionConfig,
-} from 'db/models/ConnectionModels';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
-import DBProvider from '../../db/entity/enum';
+} from '../../../db/models/ConnectionModels';
+import DBProvider from '../../../db/entity/enum';
+import ServerConnectionErrorModal from '../modals/ServerConnectionErrorModal';
 
 interface INewConnectionForm {
   nickname: string;
@@ -317,20 +318,12 @@ const NewConnectionForm = () => {
           </Row>
         </Form>
       </div>
-      <Modal show={alert} onHide={() => setAlert(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Error</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Could not connect to the server. Please check your configuration
-          details.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setAlert(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {alert && (
+        <ServerConnectionErrorModal
+          show={alert}
+          handleClose={() => setAlert(false)}
+        />
+      )}
     </div>
   );
 };
