@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-import '../scss/App.scss';
+import '../../scss/App.scss';
 
 interface IDBDropdownProps {
   activeDb: string;

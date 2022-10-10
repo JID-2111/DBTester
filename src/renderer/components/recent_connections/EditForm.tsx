@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { useEffect, useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
-import { ConnectionModel } from '../../db/Models';
-import DBProvider from '../../db/entity/enum';
-import '../scss/RecentConnections.scss';
+import { ConnectionModel } from '../../../db/Models';
+import DBProvider from '../../../db/entity/enum';
+import '../../scss/RecentConnections.scss';
+import Modal from '../utils/Modal';
 
 interface IEditProps {
   config: ConnectionModel;
@@ -57,11 +58,11 @@ const EditForm = ({ config, setConnect }: IEditProps) => {
         <PencilSquare />
       </button>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Connection</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <Modal
+        show={show}
+        handleClose={handleClose}
+        title="Edit Connection"
+        modalBody={
           <Form>
             <Form.Group controlId="nickname">
               <Form.Label>Nickname</Form.Label>
@@ -73,20 +74,9 @@ const EditForm = ({ config, setConnect }: IEditProps) => {
               />
             </Form.Group>
           </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="primary"
-            onClick={() => handleSubmit()}
-            className="edit-submit-btn"
-          >
-            Submit
-          </Button>
-          <Button variant="secondary" onClick={() => setShow(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        }
+        submit={handleSubmit}
+      />
     </>
   );
 };
