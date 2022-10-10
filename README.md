@@ -4,25 +4,34 @@ An application to unit test stored procedures inside databases
 
 Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
+[![Build Status][github-actions-status]][github-actions-url]
+[![Github Tag][github-tag-image]][github-tag-url]
+
 # Release Notes
 
 ## Version 0.2.0
 
 ### New Features
 
-- Added a Database connection screen where user can enter Database information and connect to a local database
-- Added a recent connections page where a user can see the five most recent connections-user can edit and delete entries
-- Once connected to a database a user can now disconnect from the dataBase with the disconnect button
+- Server Connections
+  - Connect to server manually
+  - View, edit, and select from recent connections list
+  - Ability to disconnect from a server
+  - Ability to switch databases within a server
+- View procedure contents
+- Reformatted and styled application
+- Encrypt user credentials
+- Support for file logging
 
 ### Bug Fixes
 
-- New disconnect button solves the infinite connection issue in V0.1.0
-- Connections are no longer hardcoded and are fetched from backend database
+- Removed hard coded values
+- Fixed infinite connection issue and moved to Database Pools
 
 ### Known Issues
 
-- Pressing the connect button infinitely establishes a connection with the Postgres database
-- Connection configuration is a hardcoded set of values
+- Password field is not being verified by PostgreSQL
+- Had to disable front end unit tests due to Electron issues
 
 ## Version 0.1.0
 
@@ -133,3 +142,8 @@ src/renderer/preload.d.ts
 - ![#1589F0](https://via.placeholder.com/15/7de2d1ff/7de2d1ff.png) `#7de2d1ff: Middle Blue Green`
 - ![#1589F0](https://via.placeholder.com/15/fffafbff/fffafbff.png) `#fffafbff: Snow`
 - ![#1589F0](https://via.placeholder.com/15/e4c3ad/e4c3ad.png) `#e4c3ad: Sand`
+
+[github-actions-status]: https://github.com/JID-2111/JID-2111/workflows/Test/badge.svg
+[github-actions-url]: https://github.com/JID-2111/JID-2111/actions
+[github-tag-image]: https://img.shields.io/github/v/tag/JID-2111/JID-2111.svg?label=version&sort=semver
+[github-tag-url]: https://github.com/JID-2111/JID-2111/releases/latest
