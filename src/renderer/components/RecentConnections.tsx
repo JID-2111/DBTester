@@ -9,6 +9,7 @@ import EditRow from './EditRow';
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModel[]>([]);
   const [edit, setEdit] = useState<any>();
+  const [editdata, setEditData] = useState();
   const getConnections = async () => {
     const connections = await window.connections.ipcRenderer.fetch();
     setConnect(connections);
@@ -25,10 +26,13 @@ const RecentConnections = () => {
     await window.connections.ipcRenderer.select(ConnectionID);
   };
 
+  // changes the state to know which row is being edited
   const handleEdit = (Event: Event, Connection: ConnectionModel) => {
     Event?.preventDefault();
     setEdit(Connection.id);
   };
+
+  // updates UI aswell as backend nickname
   const submitForm = async (event) => {
     event.preventDefault();
     const name = event.target.value;
@@ -39,7 +43,7 @@ const RecentConnections = () => {
       setEdit(null);
     }
   };
-
+  // sets state back to read only
   const handlecancel = () => {
     setEdit(null);
   };
