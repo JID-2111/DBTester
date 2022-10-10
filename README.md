@@ -6,6 +6,24 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Release Notes
 
+## Version 0.2.0
+
+### New Features
+
+- Added a Database connection screen where user can enter Database information and connect to a local database
+- Added a recent connections page where a user can see the five most recent connections-user can edit and delete entries
+- Once connected to a database a user can now disconnect from the dataBase with the disconnect button
+
+### Bug Fixes
+
+- New disconnect button solves the infinite connection issue in V0.1.0
+- Connections are no longer hardcoded and are fetched from backend database
+
+### Known Issues
+
+- Pressing the connect button infinitely establishes a connection with the Postgres database
+- Connection configuration is a hardcoded set of values
+
 ## Version 0.1.0
 
 ### New Features
