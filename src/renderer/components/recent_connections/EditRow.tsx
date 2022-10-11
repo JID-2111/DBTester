@@ -34,10 +34,14 @@ const EditRow = ({ value, toggleReadOnly, handleSubmit }: IProps) => {
         <td>{value.connectionConfig.port}</td>
         <td>{value.connectionConfig.username}</td>
         <td>
-          <button type="button">
+          <button type="button" className="buttonSelect">
             <Check onClick={() => handleSubmit(name)} />
           </button>
-          <button type="button" onClick={() => toggleReadOnly()}>
+          <button
+            type="button"
+            className="deleteButton"
+            onClick={() => toggleReadOnly()}
+          >
             <X />
           </button>
         </td>
