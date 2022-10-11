@@ -1,18 +1,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import {
-  ConnectionModelType,
-  ConnectionString,
-  ManualConnectionConfig,
-} from 'db/Models';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
-import DBProvider from '../../db/entity/enum';
+import { Button, Col, Form, Row } from 'react-bootstrap';
+import {
+  ConnectionInputType,
+  ConnectionString,
+  ManualConnectionConfig,
+} from '../../../db/models/ConnectionModels';
+import DBProvider from '../../../db/entity/enum';
+import ServerConnectionErrorModal from '../modals/ServerConnectionErrorModal';
 
 interface INewConnectionForm {
   nickname: string;
   type: DBProvider;
+  database?: string;
   address?: string;
   port?: number;
   username?: string;
@@ -23,6 +25,7 @@ interface INewConnectionForm {
 
 interface INewConnectionErrors {
   nickname?: string;
+  database?: string;
   type?: string;
   address?: string;
   port?: string;
@@ -77,6 +80,7 @@ const NewConnectionForm = () => {
     const {
       nickname,
       type,
+      database,
       address,
       port,
       username,
@@ -93,6 +97,9 @@ const NewConnectionForm = () => {
     } else {
       if (!type) {
         newErrors.type = 'Please select a database type.';
+      }
+      if (!database) {
+        newErrors.type = 'Please type a database';
       }
       if (!address) {
         newErrors.address = 'Please type an address.';
@@ -128,6 +135,7 @@ const NewConnectionForm = () => {
     } else {
       connectionConfig = {
         config: 'manual',
+        defaultDatabase: form.database!,
         address: form.address!,
         port: form.port!,
         username: form.username!,
@@ -135,7 +143,7 @@ const NewConnectionForm = () => {
       };
     }
 
-    const connection: ConnectionModelType = {
+    const connection: ConnectionInputType = {
       nickname: form.nickname,
       type: form.type,
       connectionConfig,
@@ -222,6 +230,20 @@ const NewConnectionForm = () => {
                   {errors.port}
                 </Form.Control.Feedback>
               </Form.Group>
+              <Form.Group className="mb-2" controlId="connectionDatabase">
+                <Form.Label>Database</Form.Label>
+                <Form.Control
+                  className="form-control-sm"
+                  value={form.database}
+                  onChange={(e) => setField('database', e.target.value)}
+                  type="text"
+                  placeholder="Ex: React"
+                  isInvalid={!!errors.database}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.database}
+                </Form.Control.Feedback>
+              </Form.Group>
               <Form.Group className="mb-2" controlId="connectionUser">
                 <Form.Label>Username</Form.Label>
                 <Form.Control
@@ -296,20 +318,12 @@ const NewConnectionForm = () => {
           </Row>
         </Form>
       </div>
-      <Modal show={alert} onHide={() => setAlert(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Error</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Could not connect to the server. Please check your configuration
-          details.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setAlert(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {alert && (
+        <ServerConnectionErrorModal
+          show={alert}
+          handleClose={() => setAlert(false)}
+        />
+      )}
     </div>
   );
 };

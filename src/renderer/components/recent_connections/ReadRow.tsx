@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Trash, PencilSquare } from 'react-bootstrap-icons';
-import { ConnectionModel } from '../../db/Models';
+import { MouseEvent } from 'react';
+import { ConnectionModel } from '../../../db/models/ConnectionModels';
 
 interface IReadProps {
   value: ConnectionModel;
   handleDelete: (number: number) => Promise<void>;
   handleSelect: (number: number) => Promise<void>;
-  handleEdit: (event, connection: ConnectionModel) => void;
+  handleEdit: (event: MouseEvent, connection: ConnectionModel) => void;
 }
 const ReadRow = ({
   value,

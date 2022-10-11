@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Button, Table, Form } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
-import { ConnectionModel } from '../../db/Models';
-import '../scss/RecentConnections.scss';
+import { useState, useEffect, MouseEvent } from 'react';
+import { ConnectionModel } from '../../../db/models/ConnectionModels';
 import ReadRow from './ReadRow';
 import EditRow from './EditRow';
+
+import '../../scss/RecentConnections.scss';
 
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModel[]>([]);

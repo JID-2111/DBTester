@@ -1,7 +1,7 @@
-import '../scss/RecentConnections.scss';
+import '../../scss/RecentConnections.scss';
 import { Check, X } from 'react-bootstrap-icons';
-import { ConnectionModel } from 'db/Models';
 import { useState } from 'react';
+import { ConnectionModel } from '../../../db/models/ConnectionModels';
 
 interface IProps {
   value: ConnectionModel;

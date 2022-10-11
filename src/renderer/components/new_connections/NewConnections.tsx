@@ -2,7 +2,7 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import NewConnectionForm from './NewConnectionForm';
 
-import '../scss/NewConnection.scss';
+import '../../scss/NewConnection.scss';
 
 const NewConnections = () => {
   return (

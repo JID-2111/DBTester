@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
-import { ConnectionModelType } from './Models';
-import { ProcedureParameter } from './Procedures';
+import { ConnectionModelType } from '../models/ConnectionModels';
+import { ProcedureParameter } from '../Procedures';
 
 export default interface ServerInterface {
   pool: Pool;
