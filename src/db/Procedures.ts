@@ -26,30 +26,54 @@ export default class Procedures {
   }
 
   public async getDatabases() {
-    return store.getState().connection.serverConnection.getDatabasesQuery();
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.getDatabasesQuery();
   }
 
   public async fetchProcedures(): Promise<string[]> {
-    return store.getState().connection.serverConnection.fetchProceduresQuery();
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.fetchProceduresQuery();
   }
 
   public async triggerProcedure(procedure: string, parameters: string[]) {
-    return store
+    const res = store
       .getState()
-      .connection.serverConnection.callProcedureQuery(procedure, parameters);
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.callProcedureQuery(procedure, parameters);
   }
 
   public async getProcedureParameters(
     procedure: string
   ): Promise<ProcedureParameter[]> {
-    return store
+    const res = store
       .getState()
-      .connection.serverConnection.fetchProcedureParametersQuery(procedure);
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.fetchProcedureParametersQuery(procedure);
   }
 
   public async fetchContent(procedure: string): Promise<string[]> {
-    return store
+    const res = store
       .getState()
-      .connection.serverConnection.fetchContentQuery(procedure);
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.fetchContentQuery(procedure);
   }
 }

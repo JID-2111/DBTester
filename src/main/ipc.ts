@@ -1,16 +1,11 @@
 import { ipcMain } from 'electron';
 import Procedures from '../db/Procedures';
 import ConnectionService from '../db/service/ConnectionService';
-import { parseConnectionString } from './util';
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
-});
-
-ipcMain.handle('util:parse', async (_event, ...args) => {
-  return parseConnectionString(args[0]);
 });
 
 ipcMain.handle('procedures:listProcedures', () => {

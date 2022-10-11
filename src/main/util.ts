@@ -8,7 +8,6 @@ import {
 } from 'connection-string-parser';
 import log, { LogMessage } from 'electron-log';
 import chalk from 'chalk';
-import { ConnectionModelType } from '../db/Models';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -21,22 +20,18 @@ export function resolveHtmlPath(htmlFileName: string) {
 }
 
 export function getDataPath() {
-  return process.env.NODE_ENV === 'development' ? '.' : app.getPath('userData');
+  return process.env.NODE_ENV !== 'production' ? '.' : app.getPath('userData');
 }
 
 export function parseConnectionString(
-  model: ConnectionModelType
-): IConnectionStringParameters | null {
+  type: string,
+  cs: string
+): IConnectionStringParameters {
   const connectionStringParser = new ConnectionStringParser({
-    scheme: model.type.toLocaleLowerCase(),
+    scheme: type.toLowerCase(),
     hosts: [],
   });
-
-  if (model.connectionConfig.config === 'string')
-    return connectionStringParser.parse(
-      model.connectionConfig.connectionString
-    );
-  return null;
+  return connectionStringParser.parse(cs);
 }
 
 export function setLog() {
