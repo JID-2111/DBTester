@@ -8,7 +8,7 @@ import {
   ConnectionString,
   ManualConnectionConfig,
 } from '../../../db/models/ConnectionModels';
-import DBProvider from '../../../db/entity/enum';
+import { DBProvider } from '../../../db/entity/enum';
 import ServerConnectionErrorModal from '../modals/ServerConnectionErrorModal';
 
 interface INewConnectionForm {

@@ -3,33 +3,46 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToMany,
-  JoinTable,
+  OneToMany,
 } from 'typeorm';
 import ConnectionEntity from './ConnectionEntity';
+import RuleEntity from './RuleEntity';
 
+/**
+ * A list of previous executions. Contains the test data, group, and test conditions.
+ * Currently supports only one database // TODO add support
+ */
 @Entity({ name: 'Execution' })
 class ExecutionEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany((_type) => ConnectionEntity, {
-    onDelete: 'SET NULL',
-  })
-  @JoinTable({
-    name: 'execution_connections',
-    joinColumn: {
-      name: 'execution',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'connection',
-      referencedColumnName: 'id',
-    },
-  })
-  connections: ConnectionEntity[];
-
   @Column()
-  name: string;
+  timestamp: Date;
+
+  /**
+   * The name of the table with test data
+   */
+  @Column()
+  testData: string;
+
+  /**
+   * A list of the rules being tested
+   */
+  @OneToMany((_type) => RuleEntity, (rule) => rule)
+  rules: RuleEntity[];
+
+  /**
+   * The server connections to execute on
+   */
+  @ManyToMany(
+    (_type) => ConnectionEntity,
+    (connection) => connection.executions,
+    {
+      onDelete: 'CASCADE',
+    }
+  )
+  connections: ConnectionEntity[];
 }
 
 export default ExecutionEntity;

@@ -1,4 +1,5 @@
 import { safeStorage } from 'electron';
+import log from 'electron-log';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,13 +9,16 @@ import {
   BeforeInsert,
   BeforeUpdate,
   ManyToMany,
+  JoinTable,
+  AfterRemove,
 } from 'typeorm';
+import AppDataSource from '../../data-source';
 import { parseConnectionString } from '../../main/util';
 import {
   ConnectionInputType,
   ConnectionModelType,
 } from '../models/ConnectionModels';
-import DBProvider from './enum';
+import { DBProvider } from './enum';
 import ExecutionEntity from './ExecutionEntity';
 
 @Entity({ name: 'Connection' })
@@ -52,8 +56,28 @@ class ConnectionEntity {
   @Column('datetime')
   lastUsed: Date;
 
-  @ManyToMany((_type) => ConnectionEntity, {
-    onDelete: 'CASCADE',
+  /**
+   * All executions that were run on this server
+   */
+  @ManyToMany(
+    (_type) => ExecutionEntity,
+    (execution) => execution.connections,
+    {
+      onDelete: 'CASCADE',
+      cascade: true,
+      orphanedRowAction: 'delete',
+    }
+  )
+  @JoinTable({
+    name: 'execution_connections',
+    joinColumn: {
+      name: 'connection',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'execution',
+      referencedColumnName: 'id',
+    },
   })
   executions: ExecutionEntity[];
 

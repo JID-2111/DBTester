@@ -1,4 +1,4 @@
-import DBProvider from '../entity/enum';
+import { DBProvider } from '../entity/enum';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import PgClient from './PgClient';
 
