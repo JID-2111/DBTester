@@ -21,12 +21,6 @@ class ExecutionEntity {
   timestamp: Date;
 
   /**
-   * The name of the table with test data
-   */
-  @Column()
-  testData: string;
-
-  /**
    * A list of the rules being tested
    */
   @OneToMany((_type) => RuleEntity, (rule) => rule)

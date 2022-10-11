@@ -22,6 +22,18 @@ class RuleEntity {
   @Column()
   ruleId: number;
 
+  /**
+   * The database to run the unit tests on
+   */
+  @Column()
+  database: string;
+
+  /**
+   * The name of the table with test data
+   */
+  @Column()
+  testData: string;
+
   @ManyToOne((_type) => ExecutionEntity)
   execution: ExecutionEntity;
 
