@@ -1,14 +1,16 @@
 import '../scss/RecentConnections.scss';
 import { Check, X } from 'react-bootstrap-icons';
 import { ConnectionModel } from 'db/Models';
+import { useState } from 'react';
 
 interface IProps {
   value: ConnectionModel;
   toggleReadOnly: () => void;
-  handleChange: (event) => void;
+  handleSubmit: (name: string) => void;
 }
 
-const EditRow = ({ value, toggleReadOnly, handleChange }: IProps) => {
+const EditRow = ({ value, toggleReadOnly, handleSubmit }: IProps) => {
+  const [name, setName] = useState<string>('');
   if (value.connectionConfig.config === 'manual') {
     return (
       <tr key={value.id}>
@@ -18,6 +20,13 @@ const EditRow = ({ value, toggleReadOnly, handleChange }: IProps) => {
             required
             defaultValue={value.nickname}
             name="Nickname"
+            onChange={(e) => {
+              if (e.target.value === '' || undefined) {
+                setName(value.nickname);
+              } else {
+                setName(e.target.value);
+              }
+            }}
           />
         </td>
         <td>{value.type}</td>
@@ -26,7 +35,7 @@ const EditRow = ({ value, toggleReadOnly, handleChange }: IProps) => {
         <td>{value.connectionConfig.username}</td>
         <td>
           <button type="button">
-            <Check onClick={(event) => handleChange(event)} />
+            <Check onClick={() => handleSubmit(name)} />
           </button>
           <button type="button" onClick={() => toggleReadOnly()}>
             <X />

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Form } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { ConnectionModel } from '../../db/Models';
 import '../scss/RecentConnections.scss';
@@ -8,7 +8,7 @@ import EditRow from './EditRow';
 
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModel[]>([]);
-  const [edit, setEdit] = useState<any>();
+  const [edit, setEdit] = useState<unknown>();
 
   const getConnections = async () => {
     const connections = await window.connections.ipcRenderer.fetch();
@@ -17,7 +17,8 @@ const RecentConnections = () => {
   useEffect(() => {
     getConnections();
   }, []);
-  const handledelete = async (ConnectionID: number) => {
+
+  const handleDelete = async (ConnectionID: number) => {
     await window.connections.ipcRenderer.delete(ConnectionID);
     const connections = await window.connections.ipcRenderer.fetch();
     setConnect(connections);
@@ -27,18 +28,16 @@ const RecentConnections = () => {
   };
 
   // changes the state to know which row is being edited
-  const handleEdit = (Event: Event, Connection: ConnectionModel) => {
+  const handleEdit = (Event: MouseEvent, Connection: ConnectionModel) => {
     Event.preventDefault();
     setEdit(Connection.id);
   };
 
   // updates UI
-  const submitForm = async (event) => {
-    event.preventDefault();
-    const name = event.target.value;
+  const submitForm = async (newval: string) => {
     const model = connect.find((connection) => connection.id === edit);
     if (model !== undefined) {
-      model.nickname = name;
+      model.nickname = newval;
       await window.connections.ipcRenderer.update(model);
     }
     setEdit(null);
@@ -55,7 +54,7 @@ const RecentConnections = () => {
       <div className="recent-wrapper">
         <h1>Recent Connections</h1>
         <div className="d-flex justify-content-center">
-          <form onSubmit={submitForm}>
+          <Form>
             <Table className="table">
               <thead>
                 <tr>
@@ -75,12 +74,12 @@ const RecentConnections = () => {
                         <EditRow
                           value={value}
                           toggleReadOnly={handleCancel}
-                          handleChange={submitForm}
+                          handleSubmit={submitForm}
                         />
                       ) : (
                         <ReadRow
                           value={value}
-                          handleDelete={handledelete}
+                          handleDelete={handleDelete}
                           handleSelect={handleSelect}
                           handleEdit={handleEdit}
                         />
@@ -90,7 +89,7 @@ const RecentConnections = () => {
                 })}
               </tbody>
             </Table>
-          </form>
+          </Form>
         </div>
         <div className="home-btn-footer">
           <Link to="/" className="link">
