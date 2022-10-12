@@ -31,10 +31,7 @@ class ExecutionEntity {
    */
   @ManyToMany(
     (_type) => ConnectionEntity,
-    (connection) => connection.executions,
-    {
-      onDelete: 'CASCADE',
-    }
+    (connection) => connection.executions
   )
   connections: ConnectionEntity[];
 }

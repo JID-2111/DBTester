@@ -34,12 +34,12 @@ class RuleEntity {
   @Column()
   testData: string;
 
-  @ManyToOne((_type) => ExecutionEntity)
-  execution: ExecutionEntity;
-
-  @OneToMany((_type) => UnitTestEntity, (unitTest) => unitTest.rule, {
+  @ManyToOne((_type) => ExecutionEntity, {
     onDelete: 'CASCADE',
   })
+  execution: ExecutionEntity;
+
+  @OneToMany((_type) => UnitTestEntity, (unitTest) => unitTest.rule)
   unitTests: UnitTestEntity[];
 }
 

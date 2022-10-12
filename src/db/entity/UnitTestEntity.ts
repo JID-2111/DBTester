@@ -21,7 +21,9 @@ export class UnitTestEntity {
   @Column()
   column: string;
 
-  @ManyToOne((_type) => RuleEntity, (rule) => rule.unitTests)
+  @ManyToOne((_type) => RuleEntity, (rule) => rule.unitTests, {
+    onDelete: 'CASCADE',
+  })
   rule: RuleEntity;
 }
 
