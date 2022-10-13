@@ -18,9 +18,6 @@ export class UnitTestEntity {
   @Column()
   name: string;
 
-  @Column()
-  column: string;
-
   @ManyToOne((_type) => RuleEntity, (rule) => rule.unitTests, {
     onDelete: 'CASCADE',
   })
@@ -34,6 +31,14 @@ export class TableTestEntity extends UnitTestEntity {
     enum: TableOperations,
   })
   operation: TableOperations;
+
+  @Column()
+  tableName: string;
+
+  @Column({
+    nullable: true,
+  })
+  count: number;
 }
 
 @ChildEntity()
@@ -43,4 +48,10 @@ export class RowTestEntity extends UnitTestEntity {
     enum: RowOperations,
   })
   operation: RowOperations;
+
+  @Column()
+  column: string;
+
+  @Column()
+  value: string;
 }

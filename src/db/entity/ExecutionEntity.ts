@@ -2,7 +2,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  ManyToOne,
   OneToMany,
 } from 'typeorm';
 import ConnectionEntity from './ConnectionEntity';
@@ -29,9 +29,12 @@ class ExecutionEntity {
   /**
    * The server connections to execute on
    */
-  @ManyToMany(
+  @ManyToOne(
     (_type) => ConnectionEntity,
-    (connection) => connection.executions
+    (connection) => connection.executions,
+    {
+      onDelete: 'CASCADE',
+    }
   )
   connections: ConnectionEntity[];
 }

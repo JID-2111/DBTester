@@ -8,8 +8,7 @@ import {
   AfterLoad,
   BeforeInsert,
   BeforeUpdate,
-  ManyToMany,
-  JoinTable,
+  OneToMany,
   AfterRemove,
 } from 'typeorm';
 import AppDataSource from '../../data-source';
@@ -59,26 +58,7 @@ class ConnectionEntity {
   /**
    * All executions that were run on this server
    */
-  @ManyToMany(
-    (_type) => ExecutionEntity,
-    (execution) => execution.connections,
-    {
-      onDelete: 'CASCADE',
-      cascade: true,
-      orphanedRowAction: 'delete',
-    }
-  )
-  @JoinTable({
-    name: 'execution_connections',
-    joinColumn: {
-      name: 'connection',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'execution',
-      referencedColumnName: 'id',
-    },
-  })
+  @OneToMany((_type) => ExecutionEntity, (execution) => execution.connections)
   executions: ExecutionEntity[];
 
   /**
