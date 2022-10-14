@@ -76,4 +76,24 @@ export default class Procedures {
     }
     return res.fetchContentQuery(procedure);
   }
+
+  public async checkTableExists(table: string): Promise<boolean> {
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.checkTableExists(table);
+  }
+
+  public async numRecordsInTable(table: string): Promise<number> {
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.numRecordsInTable(table);
+  }
 }
