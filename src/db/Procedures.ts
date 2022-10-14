@@ -1,3 +1,4 @@
+import { DBColumn } from './clients/PgClient';
 import { store } from './redux/store';
 
 export enum Direction {
@@ -75,5 +76,15 @@ export default class Procedures {
       throw new Error('Database does not exist/is not connected');
     }
     return res.fetchContentQuery(procedure);
+  }
+
+  public async fetchColumns(table: string): Promise<DBColumn[]> {
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.fetchColumnsQuery(table);
   }
 }
