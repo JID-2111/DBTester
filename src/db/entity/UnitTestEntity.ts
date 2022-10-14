@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -26,6 +27,7 @@ export class UnitTestEntity {
   @ManyToOne((_type) => RuleEntity, (rule) => rule.unitTests, {
     onDelete: 'CASCADE',
   })
+  @Type(() => RuleEntity)
   rule: RuleEntity;
 
   @Column()

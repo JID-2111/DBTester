@@ -1,27 +1,9 @@
-import ExecutionEntity from '../entity/ExecutionEntity';
+import { ExecutionModelType } from './ExecutionModel';
 
-export type RuleType = {
+export type RuleModelType = {
   name: string;
   ruleId: number;
   database: string;
   testData: string;
-  execution: ExecutionEntity;
+  execution: ExecutionModelType;
 };
-
-export class RuleModel {
-  id: number;
-
-  name: string;
-
-  ruleId: number;
-
-  database: string;
-
-  testData: string;
-
-  execution: ExecutionEntity;
-
-  constructor(model: RuleType) {
-    Object.assign(this, model);
-  }
-}

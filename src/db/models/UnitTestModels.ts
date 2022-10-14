@@ -1,14 +1,9 @@
-import {
-  OutputFormat,
-  RowOperations,
-  TableOperations,
-  TestLevel,
-} from '../entity/enum';
-import { RuleModel } from './RuleModel';
+import { OutputFormat, RowOperations, TableOperations } from '../entity/enum';
+import { RuleModelType } from './RuleModel';
 
 export interface UnitTestType {
   name: string;
-  rule: RuleModel;
+  rule: RuleModelType;
   result: boolean;
   output: string;
   format: OutputFormat;
@@ -24,28 +19,4 @@ export interface RowTestType extends UnitTestType {
   operation: RowOperations;
   column: string;
   value?: string;
-}
-
-export class RowTestModel {
-  name: string;
-
-  rule: RuleModel;
-
-  result: boolean;
-
-  output: string;
-
-  format: OutputFormat;
-
-  type: TestLevel = TestLevel.ROW;
-
-  operation: RowOperations;
-
-  column: string;
-
-  value?: string;
-
-  constructor(model: RowTestType) {
-    Object.assign(this, model);
-  }
 }

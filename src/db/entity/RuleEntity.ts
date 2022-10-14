@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -37,9 +38,11 @@ class RuleEntity {
   @ManyToOne((_type) => ExecutionEntity, {
     onDelete: 'CASCADE',
   })
+  @Type(() => ExecutionEntity)
   execution: ExecutionEntity;
 
   @OneToMany((_type) => UnitTestEntity, (unitTest) => unitTest.rule)
+  @Type(() => UnitTestEntity)
   unitTests: UnitTestEntity[];
 }
 

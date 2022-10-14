@@ -49,7 +49,3 @@ export type ConnectionModelType = ConnectionInfo & {
 
   password: string;
 };
-
-export class Execution {
-  dummy: string;
-}
