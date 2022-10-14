@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ProcedureDropdown from './ProcedureDropdown';
 
@@ -9,6 +9,7 @@ import DBDropdown from './DBDropdown';
 
 const Execute = () => {
   const [code, setCode] = useState<string>('');
+  const [alert, setAlert] = useState<boolean>(false);
   const [activeDb, setActiveDb] = useState<string>('React');
   const [activeProcedure, setActiveProcedure] = useState<string>('');
 
@@ -20,6 +21,17 @@ const Execute = () => {
 
   const handleClick = async () => {
     await window.connections.ipcRenderer.disconnect();
+  };
+
+  const showAlert = () => {
+    return (
+      <Modal show={alert} onHide={() => setAlert(false)} fullscreen>
+        <Modal.Header closeButton>
+          <Modal.Title>Procedure Code</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="code-wrapper">{code}</Modal.Body>
+      </Modal>
+    );
   };
 
   return (
@@ -38,10 +50,9 @@ const Execute = () => {
             setActiveProcedure={setActiveProcedure}
             setCode={setCode}
           />
+          <Button onClick={() => setAlert(true)}>code</Button>
         </div>
-        <div className="code-wrapper">
-          <p className="procedure-code">{code}</p>
-        </div>
+        <div> </div>
         <div className="home-btn-footer">
           <Link to="/">
             <Button onClick={() => handleClick()} className="home-btn">
@@ -49,6 +60,7 @@ const Execute = () => {
             </Button>
           </Link>
         </div>
+        {alert && showAlert()}
       </div>
     </div>
   );
