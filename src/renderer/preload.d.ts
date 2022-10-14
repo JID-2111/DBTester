@@ -4,7 +4,6 @@ import { Channels } from 'main/preload';
 import ConnectionEntity from '../db/entity/ConnectionEntity';
 import {
   ConnectionInputType,
-  ConnectionModel,
   ConnectionModelType,
 } from '../db/models/ConnectionModels';
 
@@ -37,8 +36,8 @@ declare global {
     };
     connections: {
       ipcRenderer: {
-        fetch(): Promise<ConnectionModel[]>;
-        create(model: ConnectionInputType): Promise<ConnectionModel>;
+        fetch(): Promise<ConnectionModelType[]>;
+        create(model: ConnectionInputType): Promise<ConnectionModelType>;
         select(id: number): Promise<ConnectionEntity>;
         update(model: ConnectionModelType): Promise<void>;
         delete(id: number): Promise<void>;

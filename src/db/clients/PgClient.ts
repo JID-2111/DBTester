@@ -24,10 +24,10 @@ export default class PgClient implements ServerInterface {
   constructor(model: ConnectionModelType, database?: string) {
     this.model = model;
     this.pool = new Pool({
-      host: model.connectionConfig.address,
-      port: model.connectionConfig.port,
-      password: model.connectionConfig.password,
-      user: model.connectionConfig.username,
+      host: model.address,
+      port: model.port,
+      password: model.password,
+      user: model.username,
       database: database ?? 'React',
     });
   }

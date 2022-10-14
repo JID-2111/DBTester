@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { Form, Modal } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
 import { DBProvider } from '../../../db/entity/enum';
-import { ConnectionModel } from '../../../db/models/ConnectionModels';
+import { ConnectionModelType } from '../../../db/models/ConnectionModels';
 import '../../scss/RecentConnections.scss';
 
 interface IEditProps {
-  config: ConnectionModel;
+  config: ConnectionModelType;
   setConnect: () => void;
 }
 

@@ -3,11 +3,11 @@ import { Button, Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { Trash } from 'react-bootstrap-icons';
 import EditForm from './EditForm';
-import { ConnectionModel } from '../../../db/models/ConnectionModels';
+import { ConnectionModelType } from '../../../db/models/ConnectionModels';
 import '../../scss/RecentConnections.scss';
 
 const RecentConnections = () => {
-  const [connect, setConnect] = useState<ConnectionModel[]>([]);
+  const [connect, setConnect] = useState<ConnectionModelType[]>([]);
   const getConnections = async () => {
     const connections = await window.connections.ipcRenderer.fetch();
     setConnect(connections);
@@ -44,38 +44,35 @@ const RecentConnections = () => {
             </thead>
             <tbody>
               {connect.map((value) => {
-                if (value.connectionConfig.config === 'manual') {
-                  return (
-                    <tr key={value.id}>
-                      <td>
-                        <Link to="/Execute">
-                          <button
-                            className="buttonSelect"
-                            type="button"
-                            onClick={() => handleSelect(value.id)}
-                          >
-                            {value.nickname}
-                          </button>
-                        </Link>
-                      </td>
-                      <td>{value.type}</td>
-                      <td>{value.connectionConfig.address}</td>
-                      <td>{value.connectionConfig.port}</td>
-                      <td>{value.connectionConfig.username}</td>
-                      <td>
-                        <EditForm config={value} setConnect={getConnections} />
+                return (
+                  <tr key={value.id}>
+                    <td>
+                      <Link to="/Execute">
                         <button
+                          className="buttonSelect"
                           type="button"
-                          className="deleteButton"
-                          onClick={() => handledelete(value.id)}
+                          onClick={() => handleSelect(value.id)}
                         >
-                          <Trash />
+                          {value.nickname}
                         </button>
-                      </td>
-                    </tr>
-                  );
-                }
-                return null;
+                      </Link>
+                    </td>
+                    <td>{value.type}</td>
+                    <td>{value.address}</td>
+                    <td>{value.port}</td>
+                    <td>{value.username}</td>
+                    <td>
+                      <EditForm config={value} setConnect={getConnections} />
+                      <button
+                        type="button"
+                        className="deleteButton"
+                        onClick={() => handledelete(value.id)}
+                      >
+                        <Trash />
+                      </button>
+                    </td>
+                  </tr>
+                );
               })}
             </tbody>
           </Table>

@@ -2,21 +2,18 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { enableMapSet } from 'immer';
 import getRightClient from '../../clients/ClientUtils';
 import ServerInterface from '../../clients/ServerInterface';
-import {
-  ConnectionModel,
-  ConnectionModelType,
-} from '../../models/ConnectionModels';
+import { ConnectionModelType } from '../../models/ConnectionModels';
 import { RootState } from '../store';
 
 enableMapSet();
 export interface ServerConnectionState {
-  serverConnectionModel: ConnectionModelType;
+  serverConnectionModel: ConnectionModelType | null;
   database: Map<string, ServerInterface>;
   currentDatabase: string;
 }
 
 const initialState: ServerConnectionState = {
-  serverConnectionModel: new ConnectionModel(),
+  serverConnectionModel: null,
   database: new Map<string, ServerInterface>(),
   currentDatabase: '',
 };
@@ -32,15 +29,14 @@ export const serverConnectionSlice = createSlice({
         value.pool.end();
       });
       state.database.clear();
-      state.currentDatabase =
-        state.serverConnectionModel.connectionConfig.defaultDatabase;
+      state.currentDatabase = state.serverConnectionModel.defaultDatabase;
       state.database.set(
         state.currentDatabase,
         getRightClient(state.serverConnectionModel, state.currentDatabase)
       );
     },
     clear: (state) => {
-      state.serverConnectionModel = new ConnectionModel();
+      state.serverConnectionModel = null;
       state.database.forEach((connection: ServerInterface) => {
         connection.pool.end();
       });
@@ -48,6 +44,7 @@ export const serverConnectionSlice = createSlice({
       state.currentDatabase = '';
     },
     setDB: (state, action: PayloadAction<string>) => {
+      if (state.serverConnectionModel === null) return;
       state.database.set(
         action.payload,
         getRightClient(state.serverConnectionModel, action.payload)
