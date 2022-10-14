@@ -25,7 +25,13 @@ const Execute = () => {
 
   const showAlert = () => {
     return (
-      <Modal show={alert} onHide={() => setAlert(false)} fullscreen>
+      <Modal
+        show={alert}
+        onHide={() => setAlert(false)}
+        fullscreen
+        scrollable
+        animation={false}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Procedure Code</Modal.Title>
         </Modal.Header>
@@ -44,13 +50,17 @@ const Execute = () => {
         </div>
         <div>
           <h6>Selected Procedure</h6>
-          <ProcedureDropdown
-            activeDb={activeDb}
-            activeProcedure={activeProcedure}
-            setActiveProcedure={setActiveProcedure}
-            setCode={setCode}
-          />
-          <Button onClick={() => setAlert(true)}>code</Button>
+          <div className="d-flex flex-direction-column">
+            <ProcedureDropdown
+              activeDb={activeDb}
+              activeProcedure={activeProcedure}
+              setActiveProcedure={setActiveProcedure}
+              setCode={setCode}
+            />
+            <Button variant="primary" size="sm" onClick={() => setAlert(true)}>
+              code
+            </Button>
+          </div>
         </div>
         <div> </div>
         <div className="home-btn-footer">
