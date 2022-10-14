@@ -7,13 +7,15 @@ import {
   AfterLoad,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from 'typeorm';
 import { parseConnectionString } from '../../main/util';
 import {
   ConnectionInputType,
   ConnectionModelType,
 } from '../models/ConnectionModels';
-import DBProvider from './enum';
+import { DBProvider } from './enum';
+import ExecutionEntity from './ExecutionEntity';
 
 @Entity({ name: 'Connection' })
 class ConnectionEntity {
@@ -49,6 +51,12 @@ class ConnectionEntity {
 
   @Column('datetime')
   lastUsed: Date;
+
+  /**
+   * All executions that were run on this server
+   */
+  @OneToMany((_type) => ExecutionEntity, (execution) => execution.connections)
+  executions: ExecutionEntity[];
 
   @AfterLoad()
   decryptPassword() {

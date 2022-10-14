@@ -1,5 +1,5 @@
 import ConnectionEntity from '../entity/ConnectionEntity';
-import DBProvider from '../entity/enum';
+import { DBProvider } from '../entity/enum';
 
 export type ManualConnectionConfig = {
   config: 'manual';
