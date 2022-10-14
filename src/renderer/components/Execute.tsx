@@ -57,7 +57,7 @@ const Execute = () => {
               setActiveProcedure={setActiveProcedure}
               setCode={setCode}
             />
-            <Button variant="primary" size="sm" onClick={() => setAlert(true)}>
+            <Button variant="link" size="sm" onClick={() => setAlert(true)}>
               code
             </Button>
           </div>
