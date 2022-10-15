@@ -41,6 +41,10 @@ contextBridge.exposeInMainWorld('procedures', {
     fetchDatabases: () => ipcRenderer.invoke('procedures:listDatabases'),
     fetchContent: (procedure: string) =>
       ipcRenderer.invoke('procedures:getProcedure', procedure),
+    checkTableExists: (table: string) =>
+      ipcRenderer.invoke('procedures:checkTableExists', table),
+    numRecordsInTable: (table: string) =>
+      ipcRenderer.invoke('procedures:numRecordsInTable', table),
   },
 });
 
