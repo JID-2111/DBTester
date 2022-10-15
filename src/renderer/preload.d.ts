@@ -33,6 +33,7 @@ declare global {
       ipcRenderer: {
         fetchProcedures(): Promise<Map<string, string[]>>;
         fetchDatabases(): Promise<string[]>;
+        fetchTables(): Promise<string[]>;
         fetchContent(procedure: string): Promise<string>;
         fetchColumns(table: string): Promise<DBColumn[]>;
       };
