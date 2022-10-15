@@ -22,6 +22,8 @@ export default interface ServerInterface {
 
   fetchColumnsQuery(tb_name: string): Promise<DBColumn[]>;
 
+  fetchTablesQuery(): Promise<string[]>;
+
   callProcedureQuery(
     procedure: string,
     parameters: string[]

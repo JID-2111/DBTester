@@ -87,4 +87,14 @@ export default class Procedures {
     }
     return res.fetchColumnsQuery(table);
   }
+
+  public async fetchTables(): Promise<string[]> {
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    return res.fetchTablesQuery();
+  }
 }

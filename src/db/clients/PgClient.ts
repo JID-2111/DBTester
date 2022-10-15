@@ -13,6 +13,10 @@ type DBProcedure = {
   routine_name: string;
 };
 
+type DBTablename = {
+  tablename: string;
+};
+
 export type DBColumn = {
   column_name: string;
   data_type: string;
@@ -127,6 +131,17 @@ export default class PgClient implements ServerInterface {
         column_name: row.column_name,
         data_type: row.data_type,
       };
+    });
+  }
+
+  public async fetchTablesQuery(): Promise<string[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `SELECT tablename FROM pg_tables WHERE schemaname='public'`
+    );
+    client.release();
+    return result.rows.map((row: DBTablename) => {
+      return row.tablename;
     });
   }
 }
