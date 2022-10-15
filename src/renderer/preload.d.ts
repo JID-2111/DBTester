@@ -33,8 +33,6 @@ declare global {
         fetchProcedures(): Promise<Map<string, string[]>>;
         fetchDatabases(): Promise<string[]>;
         fetchContent(procedure: string): Promise<string>;
-        checkTableExists(table: string): Promise<boolean>;
-        numRecordsInTable(table: string): Promise<number>;
       };
     };
     connections: {
