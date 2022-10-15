@@ -20,14 +20,6 @@ ipcMain.handle('procedures:getProcedure', async (_event, ...args) => {
   return new Procedures().fetchContent(args[0]);
 });
 
-ipcMain.handle('procedures:checkTableExists', async (_event, ...args) => {
-  return new Procedures().checkTableExists(args[0]);
-});
-
-ipcMain.handle('procedures:numRecordsInTable', async (_event, ...args) => {
-  return new Procedures().numRecordsInTable(args[0]);
-});
-
 ipcMain.handle('connections:fetch', () => {
   return new ConnectionService().fetch();
 });
