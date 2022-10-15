@@ -13,6 +13,11 @@ type DBProcedure = {
   routine_name: string;
 };
 
+export type DBColumn = {
+  column_name: string;
+  data_type: string;
+};
+
 export type DBParameter = {
   pronamespace: string;
   proname: string;
@@ -109,5 +114,19 @@ export default class PgClient implements ServerInterface {
     );
     client.release();
     return result.rows;
+  }
+
+  public async fetchColumnsQuery(tb_name: string): Promise<DBColumn[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '${tb_name}'`
+    );
+    client.release();
+    return result.rows.map((row: DBColumn) => {
+      return {
+        column_name: row.column_name,
+        data_type: row.data_type,
+      };
+    });
   }
 }

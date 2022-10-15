@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import { ProcedureParameter } from '../Procedures';
+import { DBColumn } from './PgClient';
 
 export default interface ServerInterface {
   pool: Pool;
@@ -18,6 +19,8 @@ export default interface ServerInterface {
   fetchProcedureParametersQuery(
     procedure: string
   ): Promise<ProcedureParameter[]>;
+
+  fetchColumnsQuery(tb_name: string): Promise<DBColumn[]>;
 
   callProcedureQuery(
     procedure: string,

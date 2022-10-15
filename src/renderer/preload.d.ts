@@ -1,4 +1,5 @@
 import { IConnectionStringParameters } from 'connection-string-parser';
+import { DBColumn } from 'db/clients/PgClient';
 import { LogFunctions } from 'electron-log';
 import { Channels } from 'main/preload';
 import ConnectionEntity from '../db/entity/ConnectionEntity';
@@ -33,6 +34,7 @@ declare global {
         fetchProcedures(): Promise<Map<string, string[]>>;
         fetchDatabases(): Promise<string[]>;
         fetchContent(procedure: string): Promise<string>;
+        fetchColumns(table: string): Promise<DBColumn[]>;
       };
     };
     connections: {

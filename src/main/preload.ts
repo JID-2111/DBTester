@@ -38,6 +38,8 @@ contextBridge.exposeInMainWorld('procedures', {
     fetchDatabases: () => ipcRenderer.invoke('procedures:listDatabases'),
     fetchContent: (procedure: string) =>
       ipcRenderer.invoke('procedures:getProcedure', procedure),
+    fetchColumns: (table: string) =>
+      ipcRenderer.invoke('procedures:getColumns', table),
   },
 });
 
