@@ -62,7 +62,7 @@ class RowTestService {
         test.operation
       );
     } else if (test.level === UnitTestOperations.RowBooleanOperations) {
-      return this.getClient(test.rule.database)?.checkBoolean(
+      return this.getClient(test.rule.database)?.checkExact(
         test.table,
         test.column ?? '',
         test.operation

@@ -60,12 +60,6 @@ interface ServerInterface {
     value: number,
     comparison: RowNumberOperations
   ): Promise<unknown[]>;
-
-  checkBoolean(
-    table: string,
-    column: string,
-    value: RowBooleanOperations
-  ): Promise<unknown[]>;
 }
 
 export default ServerInterface;
