@@ -178,4 +178,26 @@ export default class PgClient implements ServerInterface {
     client.release();
     return result.rows;
   }
+
+  public async checkTableExists(table: string) {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `SELECT EXISTS (
+        SELECT FROM
+            pg_tables
+        WHERE
+            schemaname = 'public' AND
+            tablename  = '${table}'
+        );`
+    );
+    return result.rows[0].exists;
+  }
+
+  public async numRecordsInTable(table: string) {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `SELECT COUNT(*) as count_rows FROM ${table};`
+    );
+    return result.rows[0].count_rows;
+  }
 }

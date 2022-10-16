@@ -60,6 +60,11 @@ interface ServerInterface {
     value: number,
     comparison: RowNumberOperations
   ): Promise<unknown[]>;
+
+  checkTableExists(table: string): Promise<boolean>;
+
+  numRecordsInTable(table: string): Promise<number>;
+  // eslint-disable-next-line prettier/prettier, semi
 }
 
 export default ServerInterface;
