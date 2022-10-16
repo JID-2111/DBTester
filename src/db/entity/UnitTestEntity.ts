@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,7 +7,12 @@ import {
   TableInheritance,
   ChildEntity,
 } from 'typeorm';
-import { RowOperations, TableOperations } from './enum';
+import {
+  OutputFormat,
+  RowOperations,
+  TableOperations,
+  TestLevel,
+} from './enum';
 import RuleEntity from './RuleEntity';
 
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
@@ -21,11 +27,21 @@ export class UnitTestEntity {
   @ManyToOne((_type) => RuleEntity, (rule) => rule.unitTests, {
     onDelete: 'CASCADE',
   })
+  @Type(() => RuleEntity)
   rule: RuleEntity;
+
+  @Column()
+  result: boolean; // Pass or Fail
+
+  output: string; // Debug information
+
+  format: OutputFormat; // Format for output field
 }
 
 @ChildEntity()
 export class TableTestEntity extends UnitTestEntity {
+  type: TestLevel = TestLevel.TABLE;
+
   @Column({
     type: 'simple-enum',
     enum: TableOperations,
@@ -43,6 +59,8 @@ export class TableTestEntity extends UnitTestEntity {
 
 @ChildEntity()
 export class RowTestEntity extends UnitTestEntity {
+  type: TestLevel = TestLevel.ROW;
+
   @Column({
     type: 'simple-enum',
     enum: RowOperations,

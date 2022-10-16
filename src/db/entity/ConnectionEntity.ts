@@ -11,12 +11,10 @@ import {
   OneToMany,
   AfterRemove,
 } from 'typeorm';
+import { Type } from 'class-transformer';
 import AppDataSource from '../../data-source';
 import { parseConnectionString } from '../../main/util';
-import {
-  ConnectionInputType,
-  ConnectionModelType,
-} from '../models/ConnectionModels';
+import { ConnectionInputType } from '../models/ConnectionModels';
 import { DBProvider } from './enum';
 import ExecutionEntity from './ExecutionEntity';
 
@@ -59,6 +57,7 @@ class ConnectionEntity {
    * All executions that were run on this server
    */
   @OneToMany((_type) => ExecutionEntity, (execution) => execution.connections)
+  @Type(() => ExecutionEntity)
   executions: ExecutionEntity[];
 
   /**
@@ -104,7 +103,7 @@ class ConnectionEntity {
     }
   }
 
-  constructor(model?: ConnectionInputType | ConnectionModelType) {
+  constructor(model?: ConnectionInputType) {
     if (model === undefined) return;
     if (model.connectionConfig.config === 'manual') {
       const { username, password, address, port, defaultDatabase } =

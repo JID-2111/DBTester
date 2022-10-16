@@ -22,3 +22,8 @@ export enum RowOperations {
   ID_INPUT, // record ID is in set provided by user
   ID_TEST, // record ID is in test dataset
 }
+
+export enum OutputFormat {
+  JSON, // Return a JSON string from a test
+  PLAIN, // Return a simple message
+}

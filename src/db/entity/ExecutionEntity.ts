@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -36,6 +37,7 @@ class ExecutionEntity {
       onDelete: 'CASCADE',
     }
   )
+  @Type(() => ConnectionEntity)
   connections: ConnectionEntity[];
 }
 
