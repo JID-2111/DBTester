@@ -3,11 +3,7 @@ import log from 'electron-log';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import ServerInterface from './ServerInterface';
 import { ProcedureParameter, Direction } from '../Procedures';
-import {
-  DBProvider,
-  RowBooleanOperations,
-  RowNumberOperations,
-} from '../entity/enum';
+import { RowBooleanOperations, RowNumberOperations } from '../entity/enum';
 
 type DBQuery = {
   datname: string;
@@ -166,7 +162,6 @@ export default class PgClient implements ServerInterface {
                          WHERE  inputTable.ID = target.ID)`
     );
     client.release();
-    console.log(result.rows);
     return result.rows;
   }
 
@@ -180,7 +175,6 @@ export default class PgClient implements ServerInterface {
     const result = await client.query(
       `select * from ${table} where ${column} ${comparison} ${value}`
     );
-    console.log(result.rows);
     client.release();
     return result.rows;
   }
@@ -194,24 +188,7 @@ export default class PgClient implements ServerInterface {
     const result = await client.query(
       `select * from ${table} where ${column} = ${value}`
     );
-    console.log(result.rows);
     client.release();
     return result.rows;
   }
 }
-
-const p = new PgClient({
-  nickname: 'asdf',
-  type: DBProvider.PostgreSQL,
-  id: 1,
-  defaultDatabase: 'React',
-  address: 'localhost',
-  password: 'asdf',
-  username: 'kpmg',
-  port: 5432,
-});
-p.checkExact('accounts', 'name', 'Bob');
-p.checkID('accounts2', 'accounts');
-p.checkNumber('accounts', 'balance', 9999, RowNumberOperations.LT);
-p.checkNumber('accounts', 'balance', 9999, RowNumberOperations.GT);
-p.checkBoolean('accounts2', 'valid', RowBooleanOperations.TRUE);
