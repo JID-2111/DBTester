@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { RowBooleanOperations, RowNumberOperations } from '../entity/enum';
+import { RowNumberOperations } from '../entity/enum';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import { ProcedureParameter } from '../Procedures';
 

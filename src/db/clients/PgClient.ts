@@ -3,7 +3,7 @@ import log from 'electron-log';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import ServerInterface from './ServerInterface';
 import { ProcedureParameter, Direction } from '../Procedures';
-import { RowBooleanOperations, RowNumberOperations } from '../entity/enum';
+import { RowNumberOperations } from '../entity/enum';
 
 type DBQuery = {
   datname: string;
