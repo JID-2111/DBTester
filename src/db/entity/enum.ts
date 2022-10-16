@@ -5,22 +5,56 @@ export enum DBProvider {
   PostgreSQL = 'PostgreSQL',
 }
 
-export enum TestLevel {
-  TABLE,
-  ROW,
+/**
+ * Operations for row tests based on the column type
+ */
+export enum UnitTestOperations {
+  TableGenericOperations = 'table',
+  RowStringOperations = 'string',
+  RowNumberOperations = 'number',
+  RowIDOperations = 'id',
+  RowBooleanOperations = 'boolean',
 }
 
-export enum TableOperations {
+export enum TableGenericOperations {
   EXISTS,
   COUNT,
 }
 
-export enum RowOperations {
+/**
+ * Methods for validating string attributes
+ */
+export enum RowStringOperations {
   CONTAINS, // attribute contains value
   EXACTLY, // attribute exactly matches value
   REGEX, // attribute matches regex statement
+}
+
+/**
+ * Methods for validating IDs
+ */
+export enum RowIDOperations {
   ID_INPUT, // record ID is in set provided by user
   ID_TEST, // record ID is in test dataset
+}
+
+/**
+ * Methods for validating number attributes
+ */
+export enum RowNumberOperations {
+  LT = '<',
+  LTE = '<=',
+  GT = '>',
+  GTE = '>=',
+  EQ = '==',
+}
+
+/**
+ * Methods for validating boolean attributes
+ */
+export enum RowBooleanOperations {
+  TRUE = 'true',
+  FALSE = 'false',
 }
 
 export enum OutputFormat {

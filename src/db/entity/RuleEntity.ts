@@ -6,8 +6,16 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
+import { UnitTestOperations } from './enum';
 import ExecutionEntity from './ExecutionEntity';
-import { UnitTestEntity } from './UnitTestEntity';
+import {
+  RowBooleanEntity,
+  RowIDEntity,
+  RowNumberEntity,
+  RowStringEntity,
+  TableTestEntity,
+  UnitTestEntity,
+} from './UnitTestEntity';
 
 /**
  * A single rule group with its associated unit test conditions
@@ -41,8 +49,36 @@ class RuleEntity {
   @Type(() => ExecutionEntity)
   execution: ExecutionEntity;
 
-  @OneToMany((_type) => UnitTestEntity, (unitTest) => unitTest.rule)
-  @Type(() => UnitTestEntity)
+  @OneToMany((_type) => UnitTestEntity, (unitTest) => unitTest.rule, {
+    cascade: true,
+  })
+  @Type(() => UnitTestEntity, {
+    discriminator: {
+      property: 'level',
+      subTypes: [
+        {
+          value: TableTestEntity,
+          name: UnitTestOperations.TableGenericOperations,
+        },
+        {
+          value: RowStringEntity,
+          name: UnitTestOperations.RowStringOperations,
+        },
+        {
+          value: RowIDEntity,
+          name: UnitTestOperations.RowIDOperations,
+        },
+        {
+          value: RowNumberEntity,
+          name: UnitTestOperations.RowNumberOperations,
+        },
+        {
+          value: RowBooleanEntity,
+          name: UnitTestOperations.RowBooleanOperations,
+        },
+      ],
+    },
+  })
   unitTests: UnitTestEntity[];
 }
 

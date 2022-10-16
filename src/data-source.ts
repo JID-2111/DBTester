@@ -5,7 +5,7 @@ import 'reflect-metadata';
 import ExecutionEntity from './db/entity/ExecutionEntity';
 import RuleEntity from './db/entity/RuleEntity';
 import {
-  RowTestEntity,
+  RowStringEntity,
   TableTestEntity,
   UnitTestEntity,
 } from './db/entity/UnitTestEntity';
@@ -14,12 +14,12 @@ const AppDataSource = new DataSource({
   type: 'sqlite',
   database: `${getDataPath()}/UserData.sqlite3`, // TODO use UserData folder
   entities: [
+    RowStringEntity,
+    TableTestEntity,
+    UnitTestEntity,
+    RuleEntity,
     ConnectionEntity,
     ExecutionEntity,
-    RuleEntity,
-    UnitTestEntity,
-    TableTestEntity,
-    RowTestEntity,
   ],
   synchronize: true, // TODO might need to remove for production
 });
