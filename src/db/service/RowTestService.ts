@@ -1,4 +1,8 @@
-import { RowIDOperations, RowStringOperations } from '../entity/enum';
+import {
+  RowIDOperations,
+  RowStringOperations,
+  UnitTestOperations,
+} from '../entity/enum';
 import {
   RowBooleanEntity,
   RowIDEntity,
@@ -23,7 +27,7 @@ class RowTestService {
   }
 
   public check(test: RowTestTypes) {
-    if (test.type === 'string') {
+    if (test.level === UnitTestOperations.RowStringOperations) {
       switch (test.operation) {
         case RowStringOperations.EXACTLY:
           return this.getClient(test.rule.database)?.checkExact(
@@ -40,7 +44,7 @@ class RowTestService {
         default:
           return null;
       }
-    } else if (test.type === 'id') {
+    } else if (test.level === UnitTestOperations.RowIDOperations) {
       switch (test.operation) {
         case RowIDOperations.ID_TEST:
           return this.getClient(test.rule.database)?.checkID(
@@ -50,14 +54,14 @@ class RowTestService {
         default:
           return null;
       }
-    } else if (test.type === 'number') {
+    } else if (test.level === UnitTestOperations.RowNumberOperations) {
       return this.getClient(test.rule.database)?.checkNumber(
         test.table,
         test.column ?? '',
         Number(test.value),
         test.operation
       );
-    } else if (test.type === 'boolean') {
+    } else if (test.level === UnitTestOperations.RowBooleanOperations) {
       return this.getClient(test.rule.database)?.checkBoolean(
         test.table,
         test.column ?? '',
