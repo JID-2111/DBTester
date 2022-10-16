@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import {
   OutputFormat,
+  RecordMatches,
   RowBooleanOperations,
   RowIDOperations,
   RowNumberOperations,
@@ -32,6 +33,18 @@ export abstract class UnitTestEntity {
 
   @Column()
   name: string;
+
+  @Column({
+    enum: RecordMatches,
+    type: 'simple-enum',
+  })
+  expectedRecordMatches: RecordMatches;
+
+  @Column()
+  total: boolean;
+
+  @Column()
+  expectedNumRecords: number;
 
   @Column()
   table: string; // table to run test on

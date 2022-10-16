@@ -16,6 +16,15 @@ export enum UnitTestOperations {
   RowBooleanOperations = 'boolean',
 }
 
+/**
+ * How to validate number of records
+ */
+export enum RecordMatches {
+  ZERO,
+  GREATER_THAN,
+  TABLE_ROWS,
+}
+
 export enum TableGenericOperations {
   EXISTS,
   COUNT,
