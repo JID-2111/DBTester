@@ -22,8 +22,6 @@ export interface UnitTestType {
 
   value?: string;
 
-  type: 'string' | 'number' | 'id' | 'boolean' | 'table';
-
   operation:
     | TableGenericOperations
     | RowStringOperations
