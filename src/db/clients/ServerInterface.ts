@@ -23,5 +23,9 @@ export default interface ServerInterface {
     procedure: string,
     parameters: string[]
   ): Promise<string[]>;
+
+  checkTableExists(table: string): Promise<boolean>;
+
+  numRecordsInTable(table: string): Promise<number>;
   // eslint-disable-next-line prettier/prettier, semi
 }
