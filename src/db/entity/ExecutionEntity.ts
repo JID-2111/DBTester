@@ -25,6 +25,7 @@ class ExecutionEntity {
    * A list of the rules being tested
    */
   @OneToMany((_type) => RuleEntity, (rule) => rule)
+  @Type(() => RuleEntity)
   rules: RuleEntity[];
 
   /**
