@@ -91,7 +91,10 @@ export default class ExecutionService {
             }
             break;
           }
-          case UnitTestOperations.RowBooleanOperations: {
+          case UnitTestOperations.RowBooleanOperations:
+          case UnitTestOperations.RowIDOperations:
+          case UnitTestOperations.RowNumberOperations:
+          case UnitTestOperations.RowStringOperations: {
             const rows = await new RowTestService().check(
               unitTest as RowTestType
             );
