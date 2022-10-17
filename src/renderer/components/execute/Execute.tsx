@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ProcedureDropdown from './ProcedureDropdown';
+import TableDropdown from './TableDropdown';
 
 import '../../scss/Execute.scss';
 import DBDropdown from './DBDropdown';
@@ -38,6 +39,10 @@ const Execute = () => {
             setActiveProcedure={setActiveProcedure}
             setCode={setCode}
           />
+        </div>
+        <div>
+          <h6>Selected Table</h6>
+          <TableDropdown activeDb={activeDb} />
         </div>
         <div className="code-wrapper">
           <p className="procedure-code">{code}</p>
