@@ -36,7 +36,7 @@ export enum TableGenericOperations {
 export enum RowStringOperations {
   CONTAINS = 'contains', // attribute contains value
   EXACTLY = 'exactly', // attribute exactly matches value
-  REGEX = 'pegex', // attribute matches regex statement
+  REGEX = 'regex', // attribute matches regex statement
 }
 
 /**
