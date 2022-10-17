@@ -55,7 +55,7 @@ export default class ExecutionService {
     }
     await Promise.all(
       test.rules.map(async (rule: RuleModelType) => {
-        await Promise.all(
+        return Promise.all(
           rule.unitTests.map(async (unitTest: UnitTestType) => {
             const { expectedRecordMatches, total, expectedNumRecords, table } =
               unitTest;
