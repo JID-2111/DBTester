@@ -3,7 +3,7 @@ import log from 'electron-log';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import ServerInterface from './ServerInterface';
 import { ProcedureParameter, Direction } from '../Procedures';
-import { RowBooleanOperations, RowNumberOperations } from '../entity/enum';
+import { RowNumberOperations } from '../entity/enum';
 
 type DBQuery = {
   datname: string;
@@ -196,19 +196,6 @@ export default class PgClient implements ServerInterface {
     const client = await this.pool.connect();
     const result = await client.query(
       `select * from ${table} where ${column} ${comparison} ${value}`
-    );
-    client.release();
-    return result.rows;
-  }
-
-  public async checkBoolean(
-    table: string,
-    column: string,
-    value: RowBooleanOperations
-  ): Promise<unknown[]> {
-    const client = await this.pool.connect();
-    const result = await client.query(
-      `select * from ${table} where ${column} = ${value}`
     );
     client.release();
     return result.rows;

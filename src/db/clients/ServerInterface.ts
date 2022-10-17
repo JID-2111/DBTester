@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { RowBooleanOperations, RowNumberOperations } from '../entity/enum';
+import { RowNumberOperations } from '../entity/enum';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import { ProcedureParameter } from '../Procedures';
 
@@ -63,12 +63,6 @@ interface ServerInterface {
     column: string,
     value: number,
     comparison: RowNumberOperations
-  ): Promise<unknown[]>;
-
-  checkBoolean(
-    table: string,
-    column: string,
-    value: RowBooleanOperations
   ): Promise<unknown[]>;
 }
 
