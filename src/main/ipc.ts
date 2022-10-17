@@ -20,6 +20,14 @@ ipcMain.handle('procedures:getProcedure', async (_event, ...args) => {
   return new Procedures().fetchContent(args[0]);
 });
 
+ipcMain.handle('procedures:getColumns', async (_event, ...args) => {
+  return new Procedures().fetchColumns(args[0]);
+});
+
+ipcMain.handle('procedures:getTables', () => {
+  return new Procedures().fetchTables();
+});
+
 ipcMain.handle('connections:fetch', () => {
   return new ConnectionService().fetch();
 });
