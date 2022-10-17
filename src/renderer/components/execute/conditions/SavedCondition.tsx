@@ -15,7 +15,8 @@ const SavedCondition = ({
   value,
   deleteCondition,
 }: IConditionProps) => {
-  const opString = Object.keys(TestLevel).filter((key) => Number.isNaN(key))[
+  // eslint-disable-next-line no-restricted-globals
+  const opString = Object.keys(TestLevel).filter((key) => isNaN(Number(key)))[
     operationType
   ];
 
