@@ -112,6 +112,11 @@ export default class PgClient implements ServerInterface {
     return result.rows;
   }
 
+  /**
+   * Check if a table exists through postgres
+   * @param table table to check
+   * @returns whether the table exists or not
+   */
   public async checkTableExists(table: string) {
     const client = await this.pool.connect();
     const result = await client.query(
@@ -126,6 +131,11 @@ export default class PgClient implements ServerInterface {
     return result.rows[0].exists;
   }
 
+  /**
+   * Find the number of rows in table through postgres
+   * @param table table to check
+   * @returns the number of rows in a table if it exists, zero otherwise
+   */
   public async numRecordsInTable(table: string) {
     const client = await this.pool.connect();
     const result = await client.query(
@@ -135,7 +145,7 @@ export default class PgClient implements ServerInterface {
   }
 
   /**
-   * Check if a table has rows where column is exactly value
+   * Check if a table has rows where column is exactly value through postgres
    * @param table table to check
    * @param column attribute to check
    * @param value value to compare against
@@ -155,7 +165,7 @@ export default class PgClient implements ServerInterface {
   }
 
   /**
-   * Check if a table has rows where column contains value
+   * Check if a table has rows where column contains value through postgres
    * @param table table to check
    * @param column attribute to check
    * @param value value to compare against
@@ -174,6 +184,11 @@ export default class PgClient implements ServerInterface {
     return result.rows;
   }
 
+  /**
+   * Looks for a row with a IDs from test table through postgres
+   * @param data table with IDS to look for
+   * @param table table to check for IDs
+   */
   public async checkID(data: string, table: string): Promise<unknown[]> {
     const client = await this.pool.connect();
     const result = await client.query(
@@ -187,6 +202,13 @@ export default class PgClient implements ServerInterface {
     return result.rows;
   }
 
+  /**
+   * Looks for rows where column contains values that compare to a certain value through postgres
+   * @param table the table to check
+   * @param column attribute to check
+   * @param value value to compare against
+   * @param comparison whether the fields should be less than/ less than equal to/ greater than/greater than equal to/equal to value
+   */
   public async checkNumber(
     table: string,
     column: string,

@@ -25,8 +25,18 @@ interface ServerInterface {
     parameters: string[]
   ): Promise<string[]>;
 
+  /**
+   * Check if a table exists
+   * @param table table to check
+   * @returns whether the table exists or not
+   */
   checkTableExists(table: string): Promise<boolean>;
 
+  /**
+   * Find the number of rows in table
+   * @param table table to check
+   * @returns the number of rows in a table if it exists, zero otherwise
+   */
   numRecordsInTable(table: string): Promise<number>;
 
   /**
@@ -58,6 +68,13 @@ interface ServerInterface {
    */
   checkID(data: string, table: string): Promise<unknown[]>;
 
+  /**
+   * Looks for rows where column contains values that compare to a certain value
+   * @param table the table to check
+   * @param column attribute to check
+   * @param value value to compare against
+   * @param comparison whether the fields should be less than/ less than equal to/ greater than/greater than equal to/equal to value
+   */
   checkNumber(
     table: string,
     column: string,
