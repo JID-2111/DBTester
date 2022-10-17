@@ -78,6 +78,7 @@ class RuleEntity {
         },
       ],
     },
+    keepDiscriminatorProperty: true,
   })
   unitTests: UnitTestEntity[];
 }

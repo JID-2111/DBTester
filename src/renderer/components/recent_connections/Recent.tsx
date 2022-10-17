@@ -24,7 +24,6 @@ const RecentList = () => {
       setAlert(true);
       return;
     }
-
     navigate('/execute');
   };
 

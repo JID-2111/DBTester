@@ -8,7 +8,7 @@ import {
   TableGenericOperations,
   UnitTestOperations,
 } from '../entity/enum';
-import RuleEntity from '../entity/RuleEntity';
+import { RuleModelType } from './RuleModel';
 
 export interface UnitTestType {
   level: UnitTestOperations;
@@ -42,7 +42,7 @@ export interface UnitTestType {
 
   output: string; // Debug information
 
-  rule: RuleEntity;
+  rule: RuleModelType;
 }
 
 export interface TableTestType extends UnitTestType {

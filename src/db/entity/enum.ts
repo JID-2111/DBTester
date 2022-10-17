@@ -26,25 +26,25 @@ export enum RecordMatches {
 }
 
 export enum TableGenericOperations {
-  EXISTS,
-  COUNT,
+  EXISTS = 'exists',
+  COUNT = 'count',
 }
 
 /**
  * Methods for validating string attributes
  */
 export enum RowStringOperations {
-  CONTAINS, // attribute contains value
-  EXACTLY, // attribute exactly matches value
-  REGEX, // attribute matches regex statement
+  CONTAINS = 'contains', // attribute contains value
+  EXACTLY = 'exactly', // attribute exactly matches value
+  REGEX = 'pegex', // attribute matches regex statement
 }
 
 /**
  * Methods for validating IDs
  */
 export enum RowIDOperations {
-  ID_INPUT, // record ID is in set provided by user
-  ID_TEST, // record ID is in test dataset
+  ID_INPUT = 'input', // record ID is in set provided by user
+  ID_TEST = 'test', // record ID is in test dataset
 }
 
 /**
@@ -55,7 +55,7 @@ export enum RowNumberOperations {
   LTE = '<=',
   GT = '>',
   GTE = '>=',
-  EQ = '==',
+  EQ = '=',
 }
 
 /**

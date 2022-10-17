@@ -59,12 +59,8 @@ export abstract class UnitTestEntity {
   })
   value?: string;
 
-  abstract operation:
-    | TableGenericOperations
-    | RowStringOperations
-    | RowBooleanOperations
-    | RowNumberOperations
-    | RowIDOperations;
+  @Column()
+  abstract operation: string;
 
   @Column()
   result: boolean; // Pass or Fail
@@ -87,6 +83,10 @@ export abstract class UnitTestEntity {
 
 @ChildEntity()
 export class TableTestEntity extends UnitTestEntity {
+  @Column({
+    enum: UnitTestOperations.TableGenericOperations,
+    type: 'simple-enum',
+  })
   level: UnitTestOperations.TableGenericOperations;
 
   @Column({
@@ -98,6 +98,10 @@ export class TableTestEntity extends UnitTestEntity {
 
 @ChildEntity()
 export class RowStringEntity extends UnitTestEntity {
+  @Column({
+    enum: UnitTestOperations.RowStringOperations,
+    type: 'simple-enum',
+  })
   level: UnitTestOperations.RowStringOperations;
 
   @Column({
@@ -109,6 +113,10 @@ export class RowStringEntity extends UnitTestEntity {
 
 @ChildEntity()
 export class RowIDEntity extends UnitTestEntity {
+  @Column({
+    enum: UnitTestOperations.RowIDOperations,
+    type: 'simple-enum',
+  })
   level: UnitTestOperations.RowIDOperations;
 
   @Column({
@@ -120,6 +128,10 @@ export class RowIDEntity extends UnitTestEntity {
 
 @ChildEntity()
 export class RowNumberEntity extends UnitTestEntity {
+  @Column({
+    enum: UnitTestOperations.RowNumberOperations,
+    type: 'simple-enum',
+  })
   level: UnitTestOperations.RowNumberOperations;
 
   @Column({
@@ -131,6 +143,10 @@ export class RowNumberEntity extends UnitTestEntity {
 
 @ChildEntity()
 export class RowBooleanEntity extends UnitTestEntity {
+  @Column({
+    enum: UnitTestOperations.RowBooleanOperations,
+    type: 'simple-enum',
+  })
   level: UnitTestOperations.RowBooleanOperations;
 
   @Column({

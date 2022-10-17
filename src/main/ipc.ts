@@ -1,4 +1,5 @@
 import { ipcMain } from 'electron';
+import ExecutionService from '../db/service/ExecutionService';
 import Procedures from '../db/Procedures';
 import ConnectionService from '../db/service/ConnectionService';
 
@@ -18,14 +19,6 @@ ipcMain.handle('procedures:listDatabases', () => {
 
 ipcMain.handle('procedures:getProcedure', async (_event, ...args) => {
   return new Procedures().fetchContent(args[0]);
-});
-
-ipcMain.handle('procedures:checkTableExists', async (_event, ...args) => {
-  return new Procedures().checkTableExists(args[0]);
-});
-
-ipcMain.handle('procedures:numRecordsInTable', async (_event, ...args) => {
-  return new Procedures().numRecordsInTable(args[0]);
 });
 
 ipcMain.handle('connections:fetch', () => {
@@ -58,4 +51,8 @@ ipcMain.handle('connections:switch', (_event, ...args) => {
 
 ipcMain.handle('connections:verify', (_event) => {
   return new ConnectionService().verify();
+});
+
+ipcMain.handle('executions:checkPassFail', (_event, ...args) => {
+  return new ExecutionService().checkPassFail(args[0], args[1], args[2]);
 });

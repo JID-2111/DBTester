@@ -50,5 +50,5 @@ export type ConnectionModelType = ConnectionInfo & {
 
   password: string;
 
-  executions: ExecutionModelType[];
+  executions?: ExecutionModelType[];
 };

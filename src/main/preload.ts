@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { ExecutionModelType } from '../db/models/ExecutionModel';
 import {
   ConnectionInputType,
   ConnectionModelType,
@@ -41,10 +42,6 @@ contextBridge.exposeInMainWorld('procedures', {
     fetchDatabases: () => ipcRenderer.invoke('procedures:listDatabases'),
     fetchContent: (procedure: string) =>
       ipcRenderer.invoke('procedures:getProcedure', procedure),
-    checkTableExists: (table: string) =>
-      ipcRenderer.invoke('procedures:checkTableExists', table),
-    numRecordsInTable: (table: string) =>
-      ipcRenderer.invoke('procedures:numRecordsInTable', table),
   },
 });
 
@@ -61,5 +58,17 @@ contextBridge.exposeInMainWorld('connections', {
     switch: (database: string) =>
       ipcRenderer.invoke('connections:switch', database),
     verify: () => ipcRenderer.invoke('connections:verify'),
+  },
+});
+
+contextBridge.exposeInMainWorld('executions', {
+  ipcRenderer: {
+    test: (procedure: string, parameters: string, test: ExecutionModelType) =>
+      ipcRenderer.invoke(
+        'executions:checkPassFail',
+        procedure,
+        parameters,
+        test
+      ),
   },
 });

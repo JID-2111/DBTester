@@ -24,7 +24,7 @@ class ExecutionEntity {
   /**
    * A list of the rules being tested
    */
-  @OneToMany((_type) => RuleEntity, (rule) => rule, {
+  @OneToMany((_type) => RuleEntity, (rule) => rule.execution, {
     cascade: true,
   })
   @Type(() => RuleEntity)
