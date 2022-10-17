@@ -1,0 +1,78 @@
+@use './utils/button-variants.scss';
+@use './utils/colors.scss';
+
+.condition-box {
+  width: auto;
+  margin: 0px 5px;
+  border: 1px black solid;
+  padding: 5px;
+}
+
+.condition-list {
+  width: auto;
+}
+.condition-item {
+  width: auto;
+  display: flex;
+  margin: 5px 0px;
+
+  button {
+    margin: 0px 5px;
+    font-size: 0.8em;
+    padding: 4px;
+  }
+
+  .form-control {
+    font-size: 0.8em;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  .add-condition-btn {
+    @include button-variants.bootstrap-button(colors.$middle-blue-green);
+  }
+
+  .add-btn-table-value-inactive {
+    margin-left: 0px;
+  }
+
+  .condition-input {
+    width: 7em;
+  }
+
+  .dropdown-item {
+    font-size: 0.8em;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .dropdown-menu {
+    min-width: auto;
+  }
+  .condition-dropdown {
+    button {
+      @include button-variants.bootstrap-button(colors.$sand);
+    }
+  }
+
+  .compare-dropdown {
+    button {
+      margin-left: 0;
+      min-width: 3em;
+      @include button-variants.bootstrap-button(colors.$sand);
+    }
+  }
+
+  .deleteButton {
+    width: 30px;
+    margin-right: 0;
+  }
+
+  .edit-button {
+    width: 30px;
+    margin-left: 0;
+  }
+
+  p {
+    margin: 0px 5px 0px 0px;
+  }
+}

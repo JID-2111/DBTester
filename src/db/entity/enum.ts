@@ -7,18 +7,18 @@ export enum DBProvider {
 
 export enum TestLevel {
   TABLE,
-  ROW,
+  COL,
 }
 
 export enum TableOperations {
-  EXISTS,
-  COUNT,
+  EXISTS = 'Exists',
+  COUNT = 'Count',
 }
 
 export enum RowOperations {
-  CONTAINS, // attribute contains value
-  EXACTLY, // attribute exactly matches value
-  REGEX, // attribute matches regex statement
-  ID_INPUT, // record ID is in set provided by user
-  ID_TEST, // record ID is in test dataset
+  CONTAINS = 'Contains', // attribute contains value
+  EXACTLY = 'Is Exactly', // attribute exactly matches value
+  REGEX = 'Matches Regex', // attribute matches regex statement
+  ID_INPUT = 'Input ID', // record ID is in set provided by user
+  ID_TEST = 'Test ID', // record ID is in test dataset
 }

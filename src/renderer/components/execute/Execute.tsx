@@ -1,16 +1,19 @@
 import { useState } from 'react';
 
-import { Button } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Condition } from 'renderer/types';
 import ProcedureDropdown from './ProcedureDropdown';
 
 import '../../scss/Execute.scss';
 import DBDropdown from './DBDropdown';
+import ConditionContainer from './conditions/ConditionContainer';
 
 const Execute = () => {
   const [code, setCode] = useState<string>('');
   const [activeDb, setActiveDb] = useState<string>('React');
   const [activeProcedure, setActiveProcedure] = useState<string>('');
+  const [conditionList, setConditionList] = useState<Condition[]>([]);
 
   const updateDb = (database: string) => {
     setActiveDb(database);
@@ -26,19 +29,29 @@ const Execute = () => {
     <div className="d-flex justify-content-center align-items-center">
       <div className="execute-wrapper">
         <h1>Execute Stored Procedures</h1>
-        <div>
-          <h6>Selected Database</h6>
-          <DBDropdown activeDb={activeDb} updateDb={updateDb} />
-        </div>
-        <div>
-          <h6>Selected Procedure</h6>
-          <ProcedureDropdown
-            activeDb={activeDb}
-            activeProcedure={activeProcedure}
-            setActiveProcedure={setActiveProcedure}
-            setCode={setCode}
-          />
-        </div>
+        <Container>
+          <Row>
+            <Col>
+              <Row>
+                <h6>Selected Database</h6>
+                <DBDropdown activeDb={activeDb} updateDb={updateDb} />
+              </Row>
+              <Row>
+                <h6>Selected Procedure</h6>
+                <ProcedureDropdown
+                  activeDb={activeDb}
+                  activeProcedure={activeProcedure}
+                  setActiveProcedure={setActiveProcedure}
+                  setCode={setCode}
+                />
+              </Row>
+            </Col>
+            <ConditionContainer
+              conditionList={conditionList}
+              setConditionList={setConditionList}
+            />
+          </Row>
+        </Container>
         <div className="code-wrapper">
           <p className="procedure-code">{code}</p>
         </div>
