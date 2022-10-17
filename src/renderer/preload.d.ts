@@ -1,6 +1,7 @@
 import { IConnectionStringParameters } from 'connection-string-parser';
 import { LogFunctions } from 'electron-log';
 import { Channels } from 'main/preload';
+import { ExecutionModelType } from '../db/models/ExecutionModel';
 import ConnectionEntity from '../db/entity/ConnectionEntity';
 import {
   ConnectionInputType,
@@ -45,6 +46,15 @@ declare global {
         switch(database: string): Promise<boolean>;
         preload(): Promise<boolean>;
         verify(): Promise<boolean>;
+      };
+    };
+    executions: {
+      ipcRenderer: {
+        checkPassFail(
+          procedure: string,
+          parameters: string,
+          test: ExecutionModelType
+        ): Promise<void>;
       };
     };
   }

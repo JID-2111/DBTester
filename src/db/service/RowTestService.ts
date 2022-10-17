@@ -1,21 +1,10 @@
+import { RowTestType } from '../models/UnitTestModels';
 import {
   RowIDOperations,
   RowStringOperations,
   UnitTestOperations,
 } from '../entity/enum';
-import {
-  RowBooleanEntity,
-  RowIDEntity,
-  RowNumberEntity,
-  RowStringEntity,
-} from '../entity/UnitTestEntity';
 import { store } from '../redux/store';
-
-type RowTestTypes =
-  | RowStringEntity
-  | RowIDEntity
-  | RowNumberEntity
-  | RowBooleanEntity;
 
 class RowTestService {
   public create(fields: unknown) {
@@ -26,7 +15,7 @@ class RowTestService {
     return store.getState().connection.database.get(database);
   }
 
-  public check(test: RowTestTypes) {
+  public check(test: RowTestType) {
     if (test.level === UnitTestOperations.RowStringOperations) {
       switch (test.operation) {
         case RowStringOperations.EXACTLY:

@@ -8,5 +8,5 @@ export type ExecutionModelType = {
 
   rules: RuleModelType[];
 
-  connections: ConnectionModelType[];
+  connection: ConnectionModelType;
 };

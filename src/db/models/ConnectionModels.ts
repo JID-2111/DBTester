@@ -1,4 +1,5 @@
 import { DBProvider } from '../entity/enum';
+import { ExecutionModelType } from './ExecutionModel';
 
 export type ManualConnectionConfig = {
   config: 'manual';
@@ -48,4 +49,6 @@ export type ConnectionModelType = ConnectionInfo & {
   username: string;
 
   password: string;
+
+  executions?: ExecutionModelType[];
 };
