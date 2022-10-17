@@ -3,6 +3,7 @@ import log from 'electron-log';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import ServerInterface from './ServerInterface';
 import { ProcedureParameter, Direction } from '../Procedures';
+import { RowNumberOperations } from '../entity/enum';
 
 type DBQuery = {
   datname: string;
@@ -111,14 +112,81 @@ export default class PgClient implements ServerInterface {
     return result.rows;
   }
 
+  /**
+   * Check if a table has rows where column is exactly value
+   * @param table table to check
+   * @param column attribute to check
+   * @param value value to compare against
+   * @returns list of rows matching condition
+   */
+  public async checkExact(
+    table: string,
+    column: string,
+    value: string
+  ): Promise<unknown[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `select * from ${table} where ${column} = '${value}'`
+    );
+    client.release();
+    return result.rows;
+  }
+
+  /**
+   * Check if a table has rows where column contains value
+   * @param table table to check
+   * @param column attribute to check
+   * @param value value to compare against
+   * @returns list of rows matching condition
+   */
+  public async checkContains(
+    table: string,
+    column: string,
+    value: string
+  ): Promise<unknown[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `select * from ${table} where ${column} like '${value}'`
+    );
+    client.release();
+    return result.rows;
+  }
+
+  public async checkID(data: string, table: string): Promise<unknown[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `SELECT *
+      FROM   ${table} target
+      WHERE  NOT EXISTS (SELECT 1
+                         FROM   ${data} inputTable
+                         WHERE  inputTable.ID = target.ID)`
+    );
+    client.release();
+    return result.rows;
+  }
+
+  public async checkNumber(
+    table: string,
+    column: string,
+    value: number,
+    comparison: RowNumberOperations
+  ): Promise<unknown[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `select * from ${table} where ${column} ${comparison} ${value}`
+    );
+    client.release();
+    return result.rows;
+  }
+
   public async checkTableExists(table: string) {
     const client = await this.pool.connect();
     const result = await client.query(
       `SELECT EXISTS (
-        SELECT FROM 
+        SELECT FROM
             pg_tables
-        WHERE 
-            schemaname = 'public' AND 
+        WHERE
+            schemaname = 'public' AND
             tablename  = '${table}'
         );`
     );

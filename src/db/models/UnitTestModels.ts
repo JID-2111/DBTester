@@ -1,22 +1,39 @@
-import { OutputFormat, RowOperations, TableOperations } from '../entity/enum';
-import { RuleModelType } from './RuleModel';
+import {
+  OutputFormat,
+  RowBooleanOperations,
+  RowIDOperations,
+  RowNumberOperations,
+  RowStringOperations,
+  TableGenericOperations,
+  UnitTestOperations,
+} from '../entity/enum';
+import RuleEntity from '../entity/RuleEntity';
 
 export interface UnitTestType {
+  level: UnitTestOperations;
+
+  id: number;
+
   name: string;
-  rule: RuleModelType;
-  result: boolean;
-  output: string;
-  format: OutputFormat;
-}
 
-export interface TableTestType extends UnitTestType {
-  operation: TableOperations;
-  tableName: string;
-  count?: number;
-}
+  table: string; // table to run test on
 
-export interface RowTestType extends UnitTestType {
-  operation: RowOperations;
-  column: string;
+  column?: string;
+
   value?: string;
+
+  operation:
+    | TableGenericOperations
+    | RowStringOperations
+    | RowBooleanOperations
+    | RowNumberOperations
+    | RowIDOperations;
+
+  result: boolean; // Pass or Fail
+
+  format: OutputFormat; // Format for output field
+
+  output: string; // Debug information
+
+  rule: RuleEntity;
 }
