@@ -50,7 +50,7 @@ declare global {
     };
     executions: {
       ipcRenderer: {
-        test(
+        checkPassFail(
           procedure: string,
           parameters: string,
           test: ExecutionModelType

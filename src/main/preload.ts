@@ -63,7 +63,11 @@ contextBridge.exposeInMainWorld('connections', {
 
 contextBridge.exposeInMainWorld('executions', {
   ipcRenderer: {
-    test: (procedure: string, parameters: string, test: ExecutionModelType) =>
+    checkPassFail: (
+      procedure: string,
+      parameters: string,
+      test: ExecutionModelType
+    ) =>
       ipcRenderer.invoke(
         'executions:checkPassFail',
         procedure,
