@@ -2,6 +2,7 @@ import { Pool } from 'pg';
 import { RowNumberOperations } from '../entity/enum';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import { ProcedureParameter } from '../Procedures';
+import { DBColumn } from './PgClient';
 
 interface ServerInterface {
   pool: Pool;
@@ -19,6 +20,10 @@ interface ServerInterface {
   fetchProcedureParametersQuery(
     procedure: string
   ): Promise<ProcedureParameter[]>;
+
+  fetchColumnsQuery(tb_name: string): Promise<DBColumn[]>;
+
+  fetchTablesQuery(): Promise<string[]>;
 
   callProcedureQuery(
     procedure: string,

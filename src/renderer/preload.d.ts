@@ -1,4 +1,5 @@
 import { IConnectionStringParameters } from 'connection-string-parser';
+import { DBColumn } from 'db/clients/PgClient';
 import { LogFunctions } from 'electron-log';
 import { Channels } from 'main/preload';
 import { ExecutionModelType } from '../db/models/ExecutionModel';
@@ -32,7 +33,9 @@ declare global {
       ipcRenderer: {
         fetchProcedures(): Promise<Map<string, string[]>>;
         fetchDatabases(): Promise<string[]>;
+        fetchTables(): Promise<string[]>;
         fetchContent(procedure: string): Promise<string>;
+        fetchColumns(table: string): Promise<DBColumn[]>;
       };
     };
     connections: {

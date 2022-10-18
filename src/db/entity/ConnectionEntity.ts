@@ -1,5 +1,4 @@
 import { safeStorage } from 'electron';
-import log from 'electron-log';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,10 +8,8 @@ import {
   BeforeInsert,
   BeforeUpdate,
   OneToMany,
-  AfterRemove,
 } from 'typeorm';
 import { Type } from 'class-transformer';
-import AppDataSource from '../../data-source';
 import { parseConnectionString } from '../../main/util';
 import { ConnectionInputType } from '../models/ConnectionModels';
 import { DBProvider } from './enum';
@@ -63,30 +60,6 @@ class ConnectionEntity {
   @OneToMany((_type) => ExecutionEntity, (execution) => execution.connection)
   @Type(() => ExecutionEntity)
   executions: ExecutionEntity[];
-
-  /**
-   * If a connection is removed, delete any executions associated with it
-   */
-  @AfterRemove()
-  async cleanupExecutions() {
-    console.log('triggered');
-    const rep = AppDataSource.getRepository(ExecutionEntity);
-    const orphans = await rep
-      .createQueryBuilder()
-      .leftJoinAndSelect(
-        'execution_connections',
-        'ec',
-        'ExecutionEntity.id=ec.execution'
-      )
-      .where('ec.connection is null')
-      .getMany();
-    log.debug(
-      `Removing orphan executions with id: [${orphans.map(
-        (entity) => entity.id
-      )}]`
-    );
-    await rep.remove(orphans);
-  }
 
   @AfterLoad()
   decryptPassword() {
