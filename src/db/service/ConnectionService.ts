@@ -13,7 +13,6 @@ import {
   ConnectionModelType,
 } from '../models/ConnectionModels';
 import ConnectionEntity from '../entity/ConnectionEntity';
-import ExecutionService from './ExecutionService';
 
 /**
  * Service for managing {@link ConnectionEntity}.

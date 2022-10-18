@@ -21,8 +21,6 @@ import { store } from '../redux/store';
 import RowTestService from './RowTestService';
 import TableTestService from './TableTestService';
 
-const util = require('util');
-
 export default class ExecutionService {
   repository: Repository<ExecutionEntity>;
 
