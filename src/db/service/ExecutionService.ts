@@ -51,56 +51,50 @@ export default class ExecutionService {
       });
     });
     new Procedures().triggerProcedure(procedure, parameters);
-    // const resultRules: RuleModelType[] = cloneDeep(test.rules);
-    // for (let i = 0; i < resultRules.length; i += 1) {
-    //   resultRules[i].unitTests = [];
-    // }
     await Promise.all(
       test.rules.map(async (rule: RuleModelType) => {
         return Promise.all(
           rule.unitTests.map(async (unitTest: UnitTestType) => {
             const { expectedRecordMatches, total, expectedNumRecords, table } =
               unitTest;
-            let result = false;
-            let output = '';
             switch (unitTest.level) {
               case UnitTestOperations.TableGenericOperations: {
                 const res = await new TableTestService().check(
                   unitTest as TableTestType
                 );
                 if (unitTest.operation === TableGenericOperations.EXISTS) {
-                  result = Boolean(res);
-                  output = `${unitTest.table} table exists is ${result}`;
+                  unitTest.result = Boolean(res);
+                  unitTest.output = `${unitTest.table} table exists is ${unitTest.result}`;
                 } else {
                   switch (expectedRecordMatches) {
                     case RecordMatches.ZERO:
-                      result = Number(res) === 0;
-                      output = `${unitTest.table} had ${Number(
+                      unitTest.result = Number(res) === 0;
+                      unitTest.output = `${unitTest.table} had ${Number(
                         res
                       )} rows and expected 0 rows`;
                       break;
                     case RecordMatches.GREATER_THAN:
-                      result = Number(res) > 0;
-                      output = `${unitTest.table} had ${Number(
+                      unitTest.result = Number(res) > 0;
+                      unitTest.output = `${unitTest.table} had ${Number(
                         res
                       )} rows and expected more than 0 rows`;
                       break;
                     case RecordMatches.TABLE_ROWS:
                       if (total) {
-                        result = Number(res) === expectedNumRecords;
-                        output = `${unitTest.table} had ${Number(
+                        unitTest.result = Number(res) === expectedNumRecords;
+                        unitTest.output = `${unitTest.table} had ${Number(
                           res
                         )} rows and expected ${expectedNumRecords} rows`;
                       } else {
-                        result =
+                        unitTest.result =
                           Number(res) - tableRows[table] === expectedNumRecords;
-                        output = `${unitTest.table} had ${
+                        unitTest.output = `${unitTest.table} had ${
                           Number(res) - tableRows[table]
                         } new rows and expected ${expectedNumRecords} new rows`;
                       }
                       break;
                     default:
-                      result = false;
+                      unitTest.result = false;
                       break;
                   }
                 }
@@ -115,34 +109,43 @@ export default class ExecutionService {
                 );
                 switch (expectedRecordMatches) {
                   case RecordMatches.ZERO:
-                    result = Number(rows?.length) === 0;
-                    output = `First 10 rows: ${JSON.stringify(
+                    unitTest.result = Number(rows?.length) === 0;
+                    unitTest.output = `${unitTest.table} had ${Number(
+                      rows?.length
+                    )} and expected 0 rows. ${
+                      Number(rows?.length) < 10 ? 'All rows' : 'First 10 rows'
+                    } matching constraints: ${JSON.stringify(
                       rows?.slice(0, 10)
                     )}`;
                     break;
                   case RecordMatches.GREATER_THAN:
                     unitTest.result = Number(rows?.length) > 0;
-                    output = `First 10 rows: ${JSON.stringify(
+                    unitTest.output = `${unitTest.table} had ${Number(
+                      rows?.length
+                    )} and expected more than 0 rows. ${
+                      Number(rows?.length) < 10 ? 'All rows' : 'First 10 rows'
+                    } matching constraints: ${JSON.stringify(
                       rows?.slice(0, 10)
                     )}`;
                     break;
                   case RecordMatches.TABLE_ROWS:
                     if (total) {
-                      result = Number(rows?.length) === expectedNumRecords;
-                      output = `${unitTest.table} had ${Number(
+                      unitTest.result =
+                        Number(rows?.length) === expectedNumRecords;
+                      unitTest.output = `${unitTest.table} had ${Number(
                         rows?.length
                       )} rows and expected ${expectedNumRecords} rows`;
                     } else {
-                      result =
+                      unitTest.result =
                         Number(rows?.length) - tableRows[table] ===
                         expectedNumRecords;
-                      output = `${unitTest.table} had ${
+                      unitTest.output = `${unitTest.table} had ${
                         Number(rows?.length) - tableRows[table]
                       } new rows and expected ${expectedNumRecords} new rows`;
                     }
                     break;
                   default:
-                    result = false;
+                    unitTest.result = false;
                     break;
                 }
                 break;
@@ -151,22 +154,11 @@ export default class ExecutionService {
                 break;
               }
             }
-            // const curr = resultRules.find((resultRule) => {
-            //   return resultRule.ruleId === rule.ruleId;
-            // });
-            // const cloned = cloneDeep(unitTest);
-            // cloned.result = result;
-            // cloned.output = output;
-            // cloned.format = OutputFormat.PLAIN;
-            // curr?.unitTests.push(cloned);
-            unitTest.result = result;
-            unitTest.output = output;
             unitTest.format = OutputFormat.PLAIN;
           })
         );
       })
     );
-    // test.rules = resultRules;
     try {
       const res = plainToInstance(ExecutionEntity, test, {
         enableCircularCheck: true,
@@ -276,7 +268,7 @@ export default class ExecutionService {
         operation: RowNumberOperations.EQ,
         level: UnitTestOperations.RowNumberOperations,
         name: 'test5',
-        expectedRecordMatches: RecordMatches.ZERO,
+        expectedRecordMatches: RecordMatches.GREATER_THAN,
         total: true,
         column: 'balance',
         expectedNumRecords: 2,
