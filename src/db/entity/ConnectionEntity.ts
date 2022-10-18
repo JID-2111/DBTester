@@ -18,6 +18,10 @@ import { ConnectionInputType } from '../models/ConnectionModels';
 import { DBProvider } from './enum';
 import ExecutionEntity from './ExecutionEntity';
 
+/**
+ * A connection to a single server.
+ * Contains a list of previous executions: {@link ExecutionEntity}.
+ */
 @Entity({ name: 'Connection' })
 class ConnectionEntity {
   @PrimaryGeneratedColumn()
@@ -56,7 +60,7 @@ class ConnectionEntity {
   /**
    * All executions that were run on this server
    */
-  @OneToMany((_type) => ExecutionEntity, (execution) => execution.connections)
+  @OneToMany((_type) => ExecutionEntity, (execution) => execution.connection)
   @Type(() => ExecutionEntity)
   executions: ExecutionEntity[];
 

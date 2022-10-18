@@ -13,7 +13,11 @@ import {
   ConnectionModelType,
 } from '../models/ConnectionModels';
 import ConnectionEntity from '../entity/ConnectionEntity';
+import ExecutionService from './ExecutionService';
 
+/**
+ * Service for managing {@link ConnectionEntity}.
+ */
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
 
@@ -23,6 +27,15 @@ export default class ConnectionService {
 
   private entityToModel(entity: ConnectionEntity): ConnectionModelType {
     return instanceToPlain(entity) as unknown as ConnectionModelType;
+  }
+
+  /**
+   * Get a connection entity by id
+   * @param id id of the connection
+   * @returns Matching ConnectionEntity
+   */
+  public async findById(id: number): Promise<ConnectionEntity | null> {
+    return this.repository.findOneBy({ id });
   }
 
   public async fetch(): Promise<ConnectionModelType[]> {
@@ -55,6 +68,7 @@ export default class ConnectionService {
     if (entity !== null) {
       entity.lastUsed = new Date();
       store.dispatch(change(this.entityToModel(entity)));
+      new ExecutionService().test();
       if (!(await this.verify())) {
         store.dispatch(clear());
         log.error('Connection is not valid');

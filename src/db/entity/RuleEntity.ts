@@ -18,7 +18,7 @@ import {
 } from './UnitTestEntity';
 
 /**
- * A single rule group with its associated unit test conditions
+ * A single rule group with its associated unit test conditions: {@link UnitTestEntity}.
  */
 @Entity({ name: 'RuleGroup' })
 class RuleEntity {
