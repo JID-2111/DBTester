@@ -54,5 +54,5 @@ ipcMain.handle('connections:verify', (_event) => {
 });
 
 ipcMain.handle('executions:checkPassFail', (_event, ...args) => {
-  return new ExecutionService().checkPassFail(args[0], args[1], args[2]);
+  return new ExecutionService().checkPassFail(args[0]);
 });

@@ -68,7 +68,6 @@ export default class ConnectionService {
     if (entity !== null) {
       entity.lastUsed = new Date();
       store.dispatch(change(this.entityToModel(entity)));
-      new ExecutionService().test();
       if (!(await this.verify())) {
         store.dispatch(clear());
         log.error('Connection is not valid');

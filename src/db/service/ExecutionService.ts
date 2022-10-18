@@ -157,10 +157,6 @@ export default class ExecutionService {
       const res = plainToInstance(ExecutionEntity, test, {
         enableCircularCheck: true,
       });
-      console.log('trying to set');
-      console.log(
-        util.inspect(test, { showHidden: false, depth: 4, colors: true })
-      );
       this.repository.save(res);
     } catch (e) {
       log.error(e);
