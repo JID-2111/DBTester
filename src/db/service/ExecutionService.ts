@@ -1,7 +1,6 @@
 import { Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 import log from 'electron-log';
-import { cloneDeep } from 'lodash';
 import { ExecutionModelType } from '../models/ExecutionModel';
 import AppDataSource from '../../data-source';
 import ExecutionEntity from '../entity/ExecutionEntity';
@@ -17,7 +16,6 @@ import {
   TableGenericOperations,
   RecordMatches,
   OutputFormat,
-  RowNumberOperations,
 } from '../entity/enum';
 import { store } from '../redux/store';
 import RowTestService from './RowTestService';
@@ -36,11 +34,7 @@ export default class ExecutionService {
     return store.getState().connection.database.get(database);
   }
 
-  public async checkPassFail(
-    procedure: string,
-    parameters: string[],
-    test: ExecutionModelType
-  ) {
+  public async checkPassFail(test: ExecutionModelType) {
     const tableRows: { [key: string]: number } = {};
     test.rules.forEach((rule: RuleModelType) => {
       rule.unitTests.forEach(async (unitTest: UnitTestType) => {
@@ -50,9 +44,9 @@ export default class ExecutionService {
         );
       });
     });
-    new Procedures().triggerProcedure(procedure, parameters);
     await Promise.all(
       test.rules.map(async (rule: RuleModelType) => {
+        new Procedures().triggerProcedure(rule.procedure, rule.parameters);
         return Promise.all(
           rule.unitTests.map(async (unitTest: UnitTestType) => {
             const { expectedRecordMatches, total, expectedNumRecords, table } =
@@ -168,122 +162,6 @@ export default class ExecutionService {
         util.inspect(test, { showHidden: false, depth: 4, colors: true })
       );
       this.repository.save(res);
-    } catch (e) {
-      log.error(e);
-    }
-  }
-
-  public async test() {
-    try {
-      // const connection = {
-      //   nickname: 'asdf',
-      //   type: DBProvider.PostgreSQL,
-      //   defaultDatabase: 'React',
-      //   address: 'localhost',
-      //   password: 'asdf',
-      //   username: 'kpmg',
-      //   port: 5432,
-      // };
-      const execution: ExecutionModelType = {
-        timestamp: new Date(),
-        rules: [],
-      };
-
-      const rule1: RuleModelType = {
-        name: 'rule1',
-        ruleId: 0,
-        database: 'React',
-        testData: '',
-        unitTests: [],
-        execution,
-      };
-
-      const rule2: RuleModelType = {
-        name: 'rule2',
-        ruleId: 1,
-        database: 'React',
-        testData: '',
-        unitTests: [],
-        execution,
-      };
-      const test1: TableTestType = {
-        operation: TableGenericOperations.EXISTS,
-        level: UnitTestOperations.TableGenericOperations,
-        name: 'test1',
-        expectedRecordMatches: 0,
-        total: false,
-        expectedNumRecords: 0,
-        table: 'accounts',
-        result: false,
-        format: OutputFormat.PLAIN,
-        output: '',
-        rule: rule1,
-      };
-
-      const test2: TableTestType = {
-        operation: TableGenericOperations.COUNT,
-        level: UnitTestOperations.TableGenericOperations,
-        name: 'test2',
-        expectedRecordMatches: RecordMatches.TABLE_ROWS,
-        total: true,
-        expectedNumRecords: 10,
-        table: 'accounts',
-        result: false,
-        format: OutputFormat.PLAIN,
-        output: '',
-        rule: rule1,
-      };
-
-      const test3: TableTestType = {
-        operation: TableGenericOperations.COUNT,
-        level: UnitTestOperations.TableGenericOperations,
-        name: 'test3',
-        expectedRecordMatches: RecordMatches.TABLE_ROWS,
-        total: false,
-        expectedNumRecords: 2,
-        table: 'accounts',
-        result: false,
-        format: OutputFormat.PLAIN,
-        output: '',
-        rule: rule1,
-      };
-
-      const test4: RowTestType = {
-        operation: RowNumberOperations.LT,
-        level: UnitTestOperations.RowNumberOperations,
-        name: 'test4',
-        expectedRecordMatches: RecordMatches.TABLE_ROWS,
-        total: true,
-        column: 'balance',
-        expectedNumRecords: 2,
-        table: 'accounts',
-        result: false,
-        format: OutputFormat.PLAIN,
-        output: '',
-        value: '200',
-        rule: rule2,
-      };
-
-      const test5: RowTestType = {
-        operation: RowNumberOperations.EQ,
-        level: UnitTestOperations.RowNumberOperations,
-        name: 'test5',
-        expectedRecordMatches: RecordMatches.GREATER_THAN,
-        total: true,
-        column: 'balance',
-        expectedNumRecords: 2,
-        table: 'accounts',
-        result: false,
-        format: OutputFormat.PLAIN,
-        output: '',
-        value: '100',
-        rule: rule2,
-      };
-
-      rule1.unitTests = [test1, test2, test3];
-      rule2.unitTests = [test4, test5];
-      execution.rules = [rule1, rule2];
-      this.checkPassFail('transfer2', ['1', '2', '400'], execution);
     } catch (e) {
       log.error(e);
     }
