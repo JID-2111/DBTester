@@ -1,7 +1,6 @@
 import { Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 import log from 'electron-log';
-import { cloneDeep } from 'lodash';
 import { ExecutionModelType } from '../models/ExecutionModel';
 import AppDataSource from '../../data-source';
 import ExecutionEntity from '../entity/ExecutionEntity';
@@ -16,6 +15,7 @@ import {
   UnitTestOperations,
   TableGenericOperations,
   RecordMatches,
+  OutputFormat,
 } from '../entity/enum';
 import { store } from '../redux/store';
 import RowTestService from './RowTestService';
@@ -28,74 +28,65 @@ export default class ExecutionService {
     this.repository = AppDataSource.getRepository(ExecutionEntity);
   }
 
-  public async checkPassFail(
-    procedure: string,
-    parameters: string[],
-    test: ExecutionModelType
-  ) {
+  private getClient(database: string) {
+    return store.getState().connection.database.get(database);
+  }
+
+  public async checkPassFail(test: ExecutionModelType) {
     const tableRows: { [key: string]: number } = {};
     test.rules.forEach((rule: RuleModelType) => {
       rule.unitTests.forEach(async (unitTest: UnitTestType) => {
         const { table } = unitTest;
         tableRows[table] = Number(
-          await store
-            .getState()
-            .connection.database.get(unitTest.rule.database)
-            ?.numRecordsInTable(table)
+          await this.getClient(unitTest.rule.database)?.numRecordsInTable(table)
         );
       });
     });
-    new Procedures().triggerProcedure(procedure, parameters);
-    const resultRules: RuleModelType[] = cloneDeep(test.rules);
-    for (let i = 0; i < resultRules.length; i += 1) {
-      resultRules[i].unitTests = [];
-    }
     await Promise.all(
       test.rules.map(async (rule: RuleModelType) => {
+        new Procedures().triggerProcedure(rule.procedure, rule.parameters);
         return Promise.all(
           rule.unitTests.map(async (unitTest: UnitTestType) => {
             const { expectedRecordMatches, total, expectedNumRecords, table } =
               unitTest;
-            let result = false;
-            let output = '';
             switch (unitTest.level) {
               case UnitTestOperations.TableGenericOperations: {
                 const res = await new TableTestService().check(
                   unitTest as TableTestType
                 );
                 if (unitTest.operation === TableGenericOperations.EXISTS) {
-                  result = Boolean(res);
-                  output = `${unitTest.table} table exists is ${result}`;
+                  unitTest.result = Boolean(res);
+                  unitTest.output = `${unitTest.table} table exists is ${unitTest.result}`;
                 } else {
                   switch (expectedRecordMatches) {
                     case RecordMatches.ZERO:
-                      result = Number(res) === 0;
-                      output = `${unitTest.table} had ${Number(
+                      unitTest.result = Number(res) === 0;
+                      unitTest.output = `${unitTest.table} had ${Number(
                         res
                       )} rows and expected 0 rows`;
                       break;
                     case RecordMatches.GREATER_THAN:
-                      result = Number(res) > 0;
-                      output = `${unitTest.table} had ${Number(
+                      unitTest.result = Number(res) > 0;
+                      unitTest.output = `${unitTest.table} had ${Number(
                         res
                       )} rows and expected more than 0 rows`;
                       break;
                     case RecordMatches.TABLE_ROWS:
                       if (total) {
-                        result = Number(res) === expectedNumRecords;
-                        output = `${unitTest.table} had ${Number(
+                        unitTest.result = Number(res) === expectedNumRecords;
+                        unitTest.output = `${unitTest.table} had ${Number(
                           res
                         )} rows and expected ${expectedNumRecords} rows`;
                       } else {
-                        result =
+                        unitTest.result =
                           Number(res) - tableRows[table] === expectedNumRecords;
-                        output = `${unitTest.table} had ${
+                        unitTest.output = `${unitTest.table} had ${
                           Number(res) - tableRows[table]
                         } new rows and expected ${expectedNumRecords} new rows`;
                       }
                       break;
                     default:
-                      result = false;
+                      unitTest.result = false;
                       break;
                   }
                 }
@@ -110,34 +101,43 @@ export default class ExecutionService {
                 );
                 switch (expectedRecordMatches) {
                   case RecordMatches.ZERO:
-                    result = Number(rows?.length) === 0;
-                    output = `First 10 rows: ${JSON.stringify(
+                    unitTest.result = Number(rows?.length) === 0;
+                    unitTest.output = `${unitTest.table} had ${Number(
+                      rows?.length
+                    )} and expected 0 rows. ${
+                      Number(rows?.length) < 10 ? 'All rows' : 'First 10 rows'
+                    } matching constraints: ${JSON.stringify(
                       rows?.slice(0, 10)
                     )}`;
                     break;
                   case RecordMatches.GREATER_THAN:
                     unitTest.result = Number(rows?.length) > 0;
-                    output = `First 10 rows: ${JSON.stringify(
+                    unitTest.output = `${unitTest.table} had ${Number(
+                      rows?.length
+                    )} and expected more than 0 rows. ${
+                      Number(rows?.length) < 10 ? 'All rows' : 'First 10 rows'
+                    } matching constraints: ${JSON.stringify(
                       rows?.slice(0, 10)
                     )}`;
                     break;
                   case RecordMatches.TABLE_ROWS:
                     if (total) {
-                      result = Number(rows?.length) === expectedNumRecords;
-                      output = `${unitTest.table} had ${Number(
+                      unitTest.result =
+                        Number(rows?.length) === expectedNumRecords;
+                      unitTest.output = `${unitTest.table} had ${Number(
                         rows?.length
                       )} rows and expected ${expectedNumRecords} rows`;
                     } else {
-                      result =
+                      unitTest.result =
                         Number(rows?.length) - tableRows[table] ===
                         expectedNumRecords;
-                      output = `${unitTest.table} had ${
+                      unitTest.output = `${unitTest.table} had ${
                         Number(rows?.length) - tableRows[table]
                       } new rows and expected ${expectedNumRecords} new rows`;
                     }
                     break;
                   default:
-                    result = false;
+                    unitTest.result = false;
                     break;
                 }
                 break;
@@ -146,18 +146,11 @@ export default class ExecutionService {
                 break;
               }
             }
-            const curr = resultRules.find((resultRule) => {
-              return resultRule.ruleId === rule.ruleId;
-            });
-            const cloned = cloneDeep(unitTest);
-            cloned.result = result;
-            cloned.output = output;
-            curr?.unitTests.push(cloned);
+            unitTest.format = OutputFormat.PLAIN;
           })
         );
       })
     );
-    test.rules = resultRules;
     try {
       const res = plainToInstance(ExecutionEntity, test, {
         enableCircularCheck: true,

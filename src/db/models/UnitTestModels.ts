@@ -13,7 +13,7 @@ import { RuleModelType } from './RuleModel';
 export interface UnitTestType {
   level: UnitTestOperations;
 
-  id: number;
+  id?: number;
 
   name: string;
 

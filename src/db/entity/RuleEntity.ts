@@ -5,6 +5,8 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  BeforeInsert,
+  AfterLoad,
 } from 'typeorm';
 import { UnitTestOperations } from './enum';
 import ExecutionEntity from './ExecutionEntity';
@@ -18,7 +20,7 @@ import {
 } from './UnitTestEntity';
 
 /**
- * A single rule group with its associated unit test conditions
+ * A single rule group with its associated unit test conditions: {@link UnitTestEntity}.
  */
 @Entity({ name: 'RuleGroup' })
 class RuleEntity {
@@ -42,6 +44,30 @@ class RuleEntity {
    */
   @Column()
   testData: string;
+
+  /**
+   * The name of the procedure to trigger
+   */
+  @Column()
+  procedure: string;
+
+  parameters: string[];
+
+  /**
+   * JSON string with list of parameters for the procedure.
+   */
+  @Column()
+  parameterList: string;
+
+  @BeforeInsert()
+  parseParameters() {
+    this.parameterList = JSON.stringify(this.parameters);
+  }
+
+  @AfterLoad()
+  loadParameters() {
+    this.parameters = JSON.parse(this.parameterList);
+  }
 
   @ManyToOne((_type) => ExecutionEntity, {
     onDelete: 'CASCADE',

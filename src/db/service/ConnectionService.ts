@@ -14,6 +14,9 @@ import {
 } from '../models/ConnectionModels';
 import ConnectionEntity from '../entity/ConnectionEntity';
 
+/**
+ * Service for managing {@link ConnectionEntity}.
+ */
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
 
@@ -23,6 +26,15 @@ export default class ConnectionService {
 
   private entityToModel(entity: ConnectionEntity): ConnectionModelType {
     return instanceToPlain(entity) as unknown as ConnectionModelType;
+  }
+
+  /**
+   * Get a connection entity by id
+   * @param id id of the connection
+   * @returns Matching ConnectionEntity
+   */
+  public async findById(id: number): Promise<ConnectionEntity | null> {
+    return this.repository.findOneBy({ id });
   }
 
   public async fetch(): Promise<ConnectionModelType[]> {

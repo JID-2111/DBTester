@@ -8,4 +8,6 @@ export type RuleModelType = {
   testData: string;
   unitTests: UnitTestType[];
   execution: ExecutionModelType;
+  procedure: string;
+  parameters: string[];
 };
