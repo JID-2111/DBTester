@@ -30,7 +30,6 @@ const ParameterContainer = ({ procedure }: IParameterContainerProps) => {
             </InputGroup>
           )
       )}
-      ;
     </div>
   );
 };
