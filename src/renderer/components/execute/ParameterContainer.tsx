@@ -18,20 +18,23 @@ const ParameterContainer = ({ procedure }: IParameterContainerProps) => {
     getParams();
   }, [procedure]);
 
-  return (
-    <div className="condition-box">
-      <h4> Set Procedure Parameters </h4>
-      {parameters.map(
-        (item) =>
-          item.direction === 'IN' && (
-            <InputGroup className="mb-2">
-              <InputGroup.Text>{`${item.name} (${item.type})`}</InputGroup.Text>
-              <Form.Control aria-label="Value" />
-            </InputGroup>
-          )
-      )}
-    </div>
-  );
+  if (parameters.length > 0) {
+    return (
+      <div className="condition-box">
+        <h4> Set Procedure Parameters </h4>
+        {parameters.map(
+          (item) =>
+            item.direction === 'IN' && (
+              <InputGroup className="mb-2">
+                <InputGroup.Text>{`${item.name} (${item.type})`}</InputGroup.Text>
+                <Form.Control aria-label="Value" />
+              </InputGroup>
+            )
+        )}
+      </div>
+    );
+  }
+  return <div />;
 };
 
 export default ParameterContainer;
