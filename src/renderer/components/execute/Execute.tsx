@@ -8,6 +8,7 @@ import ProcedureDropdown from './ProcedureDropdown';
 import '../../scss/Execute.scss';
 import DBDropdown from './DBDropdown';
 import ConditionContainer from './conditions/ConditionContainer';
+import ParameterContainer from './ParameterContainer';
 
 const Execute = () => {
   const [code, setCode] = useState<string>('');
@@ -50,6 +51,9 @@ const Execute = () => {
               conditionList={conditionList}
               setConditionList={setConditionList}
             />
+            <Row>
+              <ParameterContainer procedure={activeProcedure} />
+            </Row>
           </Row>
         </Container>
         <div className="code-wrapper">

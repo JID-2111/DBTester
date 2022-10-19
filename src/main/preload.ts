@@ -39,6 +39,8 @@ contextBridge.exposeInMainWorld('procedures', {
     fetchTables: () => ipcRenderer.invoke('procedures:getTables'),
     fetchContent: (procedure: string) =>
       ipcRenderer.invoke('procedures:getProcedure', procedure),
+    getProcedureParameters: (procedure: string) =>
+      ipcRenderer.invoke('procedures:getProcedureParameters', procedure),
     fetchColumns: (table: string) =>
       ipcRenderer.invoke('procedures:getColumns', table),
   },
