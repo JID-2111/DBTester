@@ -25,7 +25,7 @@ const ParameterContainer = ({ procedure }: IParameterContainerProps) => {
         {parameters.map(
           (item) =>
             item.direction === 'IN' && (
-              <InputGroup className="mb-2">
+              <InputGroup className="mb-2" key={`SP-parameter-${item.name}`}>
                 <InputGroup.Text>{`${item.name} (${item.type})`}</InputGroup.Text>
                 <Form.Control aria-label="Value" />
               </InputGroup>
