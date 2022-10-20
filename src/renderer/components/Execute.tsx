@@ -28,14 +28,14 @@ const Execute = () => {
       <Modal
         show={alert}
         onHide={() => setAlert(false)}
-        fullscreen
+        size="xl"
         scrollable
         animation={false}
       >
         <Modal.Header closeButton>
           <Modal.Title>Procedure Code</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="code-wrapper">{code}</Modal.Body>
+        <Modal.Body className="code-wrapper procedure-code">{code}</Modal.Body>
       </Modal>
     );
   };
@@ -57,7 +57,7 @@ const Execute = () => {
               setActiveProcedure={setActiveProcedure}
               setCode={setCode}
             />
-            <Button variant="link" size="sm" onClick={() => setAlert(true)}>
+            <Button variant="link" size="sm" onClick={() => setAlert(!!code)}>
               code
             </Button>
           </div>
