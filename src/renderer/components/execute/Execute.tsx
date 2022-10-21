@@ -48,6 +48,9 @@ const Execute = () => {
               Disconnect
             </Button>
           </Link>
+          <Link to="/Results">
+            <Button>Excecute</Button>
+          </Link>
         </div>
       </div>
     </div>
