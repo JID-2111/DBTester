@@ -1,8 +1,6 @@
 import { Form, InputGroup } from 'react-bootstrap';
 import { ProcedureParameter } from 'db/Procedures';
 
-import '../../scss/Parameter.scss';
-
 interface IParameterContainerProps {
   activeParameters: ProcedureParameter[];
   handleInput: (
