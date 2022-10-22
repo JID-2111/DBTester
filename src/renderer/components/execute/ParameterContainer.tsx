@@ -1,28 +1,16 @@
-import { useEffect, useState } from 'react';
-import { ProcedureParameter } from 'db/Procedures';
 import { Form, InputGroup } from 'react-bootstrap';
+import { ProcedureParameter } from 'db/Procedures';
 
 interface IParameterContainerProps {
-  procedure: string;
+  activeParameters: ProcedureParameter[];
 }
 
-const ParameterContainer = ({ procedure }: IParameterContainerProps) => {
-  const [parameters, setParameters] = useState<ProcedureParameter[]>([]);
-  useEffect(() => {
-    const getParams = async () => {
-      const params = await window.procedures.ipcRenderer.getProcedureParameters(
-        procedure
-      );
-      setParameters(params);
-    };
-    getParams();
-  }, [procedure]);
-
-  if (parameters.length > 0) {
+const ParameterContainer = ({ activeParameters }: IParameterContainerProps) => {
+  if (activeParameters.length > 0) {
     return (
       <div className="condition-box">
         <h4> Set Procedure Parameters </h4>
-        {parameters.map(
+        {activeParameters.map(
           (item) =>
             item.direction === 'IN' && (
               <InputGroup className="mb-2" key={`SP-parameter-${item.name}`}>

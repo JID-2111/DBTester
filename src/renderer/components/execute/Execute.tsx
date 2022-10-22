@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { ProcedureParameter } from 'db/Procedures';
 import { Condition } from 'renderer/types';
 import ProcedureDropdown from './ProcedureDropdown';
 
@@ -14,6 +15,9 @@ const Execute = () => {
   const [code, setCode] = useState<string>('');
   const [activeDb, setActiveDb] = useState<string>('React');
   const [activeProcedure, setActiveProcedure] = useState<string>('');
+  const [activeParameters, setActiveParameters] = useState<
+    ProcedureParameter[]
+  >([]);
   const [conditionList, setConditionList] = useState<Condition[]>([]);
 
   const updateDb = (database: string) => {
@@ -43,6 +47,7 @@ const Execute = () => {
                   activeDb={activeDb}
                   activeProcedure={activeProcedure}
                   setActiveProcedure={setActiveProcedure}
+                  setActiveParameters={setActiveParameters}
                   setCode={setCode}
                 />
               </Row>
@@ -52,7 +57,7 @@ const Execute = () => {
               setConditionList={setConditionList}
             />
             <Row>
-              <ParameterContainer procedure={activeProcedure} />
+              <ParameterContainer activeParameters={activeParameters} />
             </Row>
           </Row>
         </Container>
