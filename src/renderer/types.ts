@@ -7,3 +7,7 @@ export type Condition = {
   compare?: string;
   operationType: TestLevel;
 };
+
+export type Parameter = {
+  [key: string]: string;
+};

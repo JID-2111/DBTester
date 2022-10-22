@@ -31,14 +31,10 @@ const Execute = () => {
     await window.connections.ipcRenderer.disconnect();
   };
 
-  const handleInput = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    attribute: string
-  ) => {
+  const handleInput = (inputValue: string, attribute: string) => {
     const p = parameterValues;
-    p[attribute] = e.currentTarget.value;
+    p[attribute] = inputValue;
     setParameterValues(p);
-    console.log(parameterValues);
   };
 
   return (

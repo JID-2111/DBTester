@@ -3,10 +3,7 @@ import { ProcedureParameter } from 'db/Procedures';
 
 interface IParameterContainerProps {
   activeParameters: ProcedureParameter[];
-  handleInput: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    attribute: string
-  ) => void;
+  handleInput: (inputValue: string, attribute: string) => void;
 }
 
 const ParameterContainer = ({
@@ -25,7 +22,9 @@ const ParameterContainer = ({
                   {`${item.name} (${item.type})`}
                 </InputGroup.Text>
                 <Form.Control
-                  onInput={(event) => handleInput(event as any, item.name)}
+                  onChange={(event) =>
+                    handleInput(event.target.value, item.name)
+                  }
                   aria-label="value"
                 />
               </InputGroup>
