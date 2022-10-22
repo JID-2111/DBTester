@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
-import { Condition } from 'renderer/types';
+import { Condition, Parameter } from 'renderer/types';
 import ProcedureDropdown from './ProcedureDropdown';
 
 import '../../scss/Execute.scss';
@@ -18,7 +18,7 @@ const Execute = () => {
   const [activeParameters, setActiveParameters] = useState<
     ProcedureParameter[]
   >([]);
-  const [parameterValues, setParameterValues] = useState<any>({});
+  const [parameterValues, setParameterValues] = useState<Parameter>({});
   const [conditionList, setConditionList] = useState<Condition[]>([]);
 
   const updateDb = (database: string) => {

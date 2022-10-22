@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { ProcedureParameter } from 'db/Procedures';
+import { Parameter } from 'renderer/types';
 
 import '../../scss/Execute.scss';
 import Modal from '../utils/Modal';
@@ -8,7 +9,7 @@ import Modal from '../utils/Modal';
 interface IProcedureDropdownProps {
   activeDb: string;
   activeProcedure: string;
-  setParameterValues: (parameters: any) => void;
+  setParameterValues: (parameters: Parameter) => void;
   setActiveProcedure: (procedure: string) => void;
   setActiveParameters: (parameter: ProcedureParameter[]) => void;
   setCode: (code: string) => void;
@@ -50,7 +51,7 @@ const ProcedureDropdown = ({
 
     setActiveParameters(params);
 
-    const p: any = {};
+    const p: Parameter = {};
     params.forEach((item) => {
       p[item.name] = '';
     });
