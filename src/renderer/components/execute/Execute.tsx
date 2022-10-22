@@ -2,17 +2,23 @@ import { useState } from 'react';
 
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { Condition } from 'renderer/types';
+import { ProcedureParameter } from 'db/Procedures';
+import { Condition, Parameter } from 'renderer/types';
 import ProcedureDropdown from './ProcedureDropdown';
 
 import '../../scss/Execute.scss';
 import DBDropdown from './DBDropdown';
 import ConditionContainer from './conditions/ConditionContainer';
+import ParameterContainer from './ParameterContainer';
 
 const Execute = () => {
   const [code, setCode] = useState<string>('');
   const [activeDb, setActiveDb] = useState<string>('React');
   const [activeProcedure, setActiveProcedure] = useState<string>('');
+  const [activeParameters, setActiveParameters] = useState<
+    ProcedureParameter[]
+  >([]);
+  const [parameterValues, setParameterValues] = useState<Parameter>({});
   const [conditionList, setConditionList] = useState<Condition[]>([]);
 
   const updateDb = (database: string) => {
@@ -23,6 +29,12 @@ const Execute = () => {
 
   const handleClick = async () => {
     await window.connections.ipcRenderer.disconnect();
+  };
+
+  const handleInput = (inputValue: string, attribute: string) => {
+    const p = parameterValues;
+    p[attribute] = inputValue;
+    setParameterValues(p);
   };
 
   return (
@@ -41,7 +53,9 @@ const Execute = () => {
                 <ProcedureDropdown
                   activeDb={activeDb}
                   activeProcedure={activeProcedure}
+                  setParameterValues={setParameterValues}
                   setActiveProcedure={setActiveProcedure}
+                  setActiveParameters={setActiveParameters}
                   setCode={setCode}
                 />
               </Row>
@@ -50,6 +64,12 @@ const Execute = () => {
               conditionList={conditionList}
               setConditionList={setConditionList}
             />
+            <Row>
+              <ParameterContainer
+                activeParameters={activeParameters}
+                handleInput={handleInput}
+              />
+            </Row>
           </Row>
         </Container>
         <div className="code-wrapper">
