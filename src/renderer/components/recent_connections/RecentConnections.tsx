@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import { Button, Table, Form } from 'react-bootstrap';
 import { useState, useEffect, MouseEvent } from 'react';
-import { ConnectionModel } from '../../../db/models/ConnectionModels';
+import { ConnectionModelType } from '../../../db/models/ConnectionModels';
 import ReadRow from './ReadRow';
 import EditRow from './EditRow';
 
 import '../../scss/RecentConnections.scss';
 
 const RecentConnections = () => {
-  const [connect, setConnect] = useState<ConnectionModel[]>([]);
+  const [connect, setConnect] = useState<ConnectionModelType[]>([]);
   const [edit, setEdit] = useState<unknown>();
 
   const getConnections = async () => {
@@ -29,7 +29,7 @@ const RecentConnections = () => {
   };
 
   // changes the state to know which row is being edited
-  const handleEdit = (Event: MouseEvent, Connection: ConnectionModel) => {
+  const handleEdit = (Event: MouseEvent, Connection: ConnectionModelType) => {
     Event.preventDefault();
     setEdit(Connection.id);
   };

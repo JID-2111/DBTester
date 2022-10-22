@@ -1,5 +1,9 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { ConnectionModelType } from '../db/models/ConnectionModels';
+import { ExecutionModelType } from '../db/models/ExecutionModel';
+import {
+  ConnectionInputType,
+  ConnectionModelType,
+} from '../db/models/ConnectionModels';
 
 const log = require('electron-log');
 
@@ -49,7 +53,7 @@ contextBridge.exposeInMainWorld('procedures', {
 contextBridge.exposeInMainWorld('connections', {
   ipcRenderer: {
     fetch: () => ipcRenderer.invoke('connections:fetch'),
-    create: (model: ConnectionModelType) =>
+    create: (model: ConnectionInputType) =>
       ipcRenderer.invoke('connections:create', model),
     select: (id: number) => ipcRenderer.invoke('connections:select', id),
     delete: (id: number) => ipcRenderer.invoke('connections:delete', id),
@@ -59,5 +63,12 @@ contextBridge.exposeInMainWorld('connections', {
     switch: (database: string) =>
       ipcRenderer.invoke('connections:switch', database),
     verify: () => ipcRenderer.invoke('connections:verify'),
+  },
+});
+
+contextBridge.exposeInMainWorld('executions', {
+  ipcRenderer: {
+    checkPassFail: (test: ExecutionModelType) =>
+      ipcRenderer.invoke('executions:checkPassFail', test),
   },
 });

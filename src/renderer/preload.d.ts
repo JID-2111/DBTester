@@ -3,10 +3,10 @@ import { DBColumn } from 'db/clients/PgClient';
 import { ProcedureParameter } from 'db/Procedures';
 import { LogFunctions } from 'electron-log';
 import { Channels } from 'main/preload';
+import { ExecutionModelType } from '../db/models/ExecutionModel';
 import ConnectionEntity from '../db/entity/ConnectionEntity';
 import {
   ConnectionInputType,
-  ConnectionModel,
   ConnectionModelType,
 } from '../db/models/ConnectionModels';
 
@@ -44,8 +44,8 @@ declare global {
     };
     connections: {
       ipcRenderer: {
-        fetch(): Promise<ConnectionModel[]>;
-        create(model: ConnectionInputType): Promise<ConnectionModel>;
+        fetch(): Promise<ConnectionModelType[]>;
+        create(model: ConnectionInputType): Promise<ConnectionModelType>;
         select(id: number): Promise<ConnectionEntity>;
         update(model: ConnectionModelType): Promise<void>;
         delete(id: number): Promise<void>;
@@ -53,6 +53,11 @@ declare global {
         switch(database: string): Promise<boolean>;
         preload(): Promise<boolean>;
         verify(): Promise<boolean>;
+      };
+    };
+    executions: {
+      ipcRenderer: {
+        checkPassFail(test: ExecutionModelType): Promise<void>;
       };
     };
   }
