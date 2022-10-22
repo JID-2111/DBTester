@@ -8,6 +8,7 @@ import Modal from '../utils/Modal';
 interface IProcedureDropdownProps {
   activeDb: string;
   activeProcedure: string;
+  setParameterValues: (parameters: any) => void;
   setActiveProcedure: (procedure: string) => void;
   setActiveParameters: (parameter: ProcedureParameter[]) => void;
   setCode: (code: string) => void;
@@ -16,6 +17,7 @@ interface IProcedureDropdownProps {
 const ProcedureDropdown = ({
   activeDb,
   activeProcedure,
+  setParameterValues,
   setActiveProcedure,
   setActiveParameters,
   setCode,
@@ -45,7 +47,14 @@ const ProcedureDropdown = ({
     const params = await window.procedures.ipcRenderer.getProcedureParameters(
       procedure
     );
+
     setActiveParameters(params);
+
+    const p: any = {};
+    params.forEach((item) => {
+      p[item.name] = '';
+    });
+    setParameterValues(p);
   };
 
   const showAlert = () => {

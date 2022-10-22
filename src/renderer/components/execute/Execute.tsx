@@ -18,6 +18,7 @@ const Execute = () => {
   const [activeParameters, setActiveParameters] = useState<
     ProcedureParameter[]
   >([]);
+  const [parameterValues, setParameterValues] = useState<any>({});
   const [conditionList, setConditionList] = useState<Condition[]>([]);
 
   const updateDb = (database: string) => {
@@ -28,6 +29,16 @@ const Execute = () => {
 
   const handleClick = async () => {
     await window.connections.ipcRenderer.disconnect();
+  };
+
+  const handleInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    attribute: string
+  ) => {
+    const p = parameterValues;
+    p[attribute] = e.currentTarget.value;
+    setParameterValues(p);
+    console.log(parameterValues);
   };
 
   return (
@@ -46,6 +57,7 @@ const Execute = () => {
                 <ProcedureDropdown
                   activeDb={activeDb}
                   activeProcedure={activeProcedure}
+                  setParameterValues={setParameterValues}
                   setActiveProcedure={setActiveProcedure}
                   setActiveParameters={setActiveParameters}
                   setCode={setCode}
@@ -57,7 +69,10 @@ const Execute = () => {
               setConditionList={setConditionList}
             />
             <Row>
-              <ParameterContainer activeParameters={activeParameters} />
+              <ParameterContainer
+                activeParameters={activeParameters}
+                handleInput={handleInput}
+              />
             </Row>
           </Row>
         </Container>
