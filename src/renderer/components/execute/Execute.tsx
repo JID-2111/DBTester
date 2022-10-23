@@ -1,9 +1,15 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { useState } from 'react';
 
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
 import { Condition, Parameter } from 'renderer/types';
+import { ExecutionModelType } from 'db/models/ExecutionModel';
+import { RuleModelType } from 'db/models/RuleModel';
+import { UnitTestType } from 'db/models/UnitTestModels';
+import { OutputFormat, RecordMatches } from 'db/entity/enum';
 import ProcedureDropdown from './ProcedureDropdown';
 
 import '../../scss/Execute.scss';
@@ -35,6 +41,59 @@ const Execute = () => {
     const p = parameterValues;
     p[attribute] = inputValue;
     setParameterValues(p);
+  };
+
+  const formatUnitTests = (rule: RuleModelType) => {
+    const unitTests: UnitTestType[] = conditionList.map(
+      (condition: Condition) => {
+        const unitTest: UnitTestType = {
+          level: condition.level!,
+          name: 'test',
+          expectedRecordMatches: RecordMatches.GREATER_THAN,
+          total: condition.total || false,
+          expectedNumRecords: condition.expectedNumRecords || 0,
+          table: condition.table!,
+          column: condition.column! || 'column',
+          value: condition.value! || 'value',
+          operation: condition.operation!,
+          result: false,
+          format: OutputFormat.JSON,
+          output: '',
+          rule,
+        };
+        return unitTest;
+      }
+    );
+    return unitTests;
+  };
+  const handleExecute = async () => {
+    const execution: ExecutionModelType = {
+      timestamp: new Date(),
+      rules: [],
+    };
+
+    const rule: RuleModelType = {
+      name: 'name',
+      ruleId: 1,
+      database: activeDb,
+      testData: 'testdata',
+      unitTests: [],
+      execution,
+      procedure: activeProcedure,
+      parameters: ['1', '2', '40'],
+    };
+
+    const unitTests = formatUnitTests(rule);
+
+    rule.unitTests = unitTests;
+    execution.rules = [rule];
+
+    const results = await window.executions.ipcRenderer.checkPassFail(
+      execution
+    );
+
+    // display results here or route to other screen
+    return results;
   };
 
   return (
@@ -78,6 +137,11 @@ const Execute = () => {
           <p className="procedure-code">{code}</p>
         </div>
         <div className="home-btn-footer">
+          {activeProcedure && (
+            <Button onClick={() => handleExecute()} className="home-btn">
+              Execute Tests
+            </Button>
+          )}
           <Link to="/">
             <Button onClick={() => handleClick()} className="home-btn">
               Disconnect
