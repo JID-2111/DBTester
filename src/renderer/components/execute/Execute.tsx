@@ -49,7 +49,7 @@ const Execute = () => {
             </Button>
           </Link>
           <Link to="/Results">
-            <Button>Execute</Button>
+            <Button className="execute-btn">Execute</Button>
           </Link>
         </div>
       </div>

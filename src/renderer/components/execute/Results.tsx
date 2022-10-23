@@ -123,7 +123,7 @@ const Results = () => {
   rule1.unitTests = [test1, test2, test3];
   rule2.unitTests = [test4, test5];
   execution.rules = [rule1, rule2];
-  const [execute, setExecute] = useState<ExecutionModelType>();
+  const [execute, setExecute] = useState<ExecutionModelType>(execution);
   const getresults = async (test: ExecutionModelType) => {
     try {
       const results = await window.executions.ipcRenderer.checkPassFail(test);
@@ -137,8 +137,7 @@ const Results = () => {
   });
   const passFail = (Rule: RuleModelType): boolean => {
     let pass = true;
-    // eslint-disable-next-line array-callback-return
-    Rule.unitTests.map((test) => {
+    Rule.unitTests.forEach((test) => {
       if (test.result === false) {
         pass = false;
       }
@@ -148,11 +147,11 @@ const Results = () => {
 
   return (
     <div className="results-screen">
-      <div className="table">
+      <div className="table-div">
         <div>
           <h1>Exectution Results</h1>
         </div>
-        <Table>
+        <Table className="table">
           <thead>
             <tr key={execution.id}>
               <th>Name</th>
@@ -164,7 +163,7 @@ const Results = () => {
             </tr>
           </thead>
           <tbody>
-            {execute?.rules.map((value) => {
+            {execute.rules.map((value) => {
               return (
                 <>
                   {passFail(value) ? (
