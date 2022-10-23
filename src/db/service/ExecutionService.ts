@@ -159,5 +159,6 @@ export default class ExecutionService {
     } catch (e) {
       log.error(e);
     }
+    return test;
   }
 }

@@ -1,5 +1,6 @@
 import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
+import { CheckLg } from 'react-bootstrap-icons';
 
 interface Iprops {
   Rule: RuleModelType;
@@ -31,7 +32,13 @@ const Displaytests = ({ Rule }: Iprops) => {
             <td>{test.id}</td>
             <td>{Rule.database}</td>
             <td>UnitTest</td>
-            <td>{test.result}</td>
+            {test.result ? (
+              <td>
+                <CheckLg />
+              </td>
+            ) : (
+              <td>test failed</td>
+            )}
             {test.result ? (
               <td>test passed</td>
             ) : (

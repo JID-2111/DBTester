@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { TableTestType, RowTestType } from 'db/models/UnitTestModels';
+import { useState, useEffect } from 'react';
 import {
   RowNumberOperations,
   RecordMatches,
@@ -122,11 +123,18 @@ const Results = () => {
   rule1.unitTests = [test1, test2, test3];
   rule2.unitTests = [test4, test5];
   execution.rules = [rule1, rule2];
-  const method = async (value: ExecutionModelType) => {
-    const results = await window.executions.ipcRenderer.checkPassFail(value);
-    console.log(results);
+  const [execute, setExecute] = useState<ExecutionModelType>();
+  const getresults = async (test: ExecutionModelType) => {
+    try {
+      const results = await window.executions.ipcRenderer.checkPassFail(test);
+      setExecute(results);
+    } catch (e) {
+      console.log(e);
+    }
   };
-  method(execution);
+  useEffect(() => {
+    getresults(execution);
+  });
   const passFail = (Rule: RuleModelType): boolean => {
     let pass = true;
     // eslint-disable-next-line array-callback-return
@@ -156,7 +164,7 @@ const Results = () => {
             </tr>
           </thead>
           <tbody>
-            {execution.rules.map((value) => {
+            {execute?.rules.map((value) => {
               return (
                 <>
                   {passFail(value) ? (
