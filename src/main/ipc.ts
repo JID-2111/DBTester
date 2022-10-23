@@ -1,4 +1,5 @@
 import { ipcMain } from 'electron';
+import ExecutionService from '../db/service/ExecutionService';
 import Procedures from '../db/Procedures';
 import ConnectionService from '../db/service/ConnectionService';
 
@@ -58,4 +59,8 @@ ipcMain.handle('connections:switch', (_event, ...args) => {
 
 ipcMain.handle('connections:verify', (_event) => {
   return new ConnectionService().verify();
+});
+
+ipcMain.handle('executions:checkPassFail', (_event, ...args) => {
+  return new ExecutionService().checkPassFail(args[0]);
 });

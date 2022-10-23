@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm';
 import log from 'electron-log';
+import { instanceToPlain } from 'class-transformer';
 import {
   clear,
   change,
@@ -9,11 +10,13 @@ import { store } from '../redux/store';
 import AppDataSource from '../../data-source';
 import {
   ConnectionInputType,
-  ConnectionModel,
   ConnectionModelType,
 } from '../models/ConnectionModels';
 import ConnectionEntity from '../entity/ConnectionEntity';
 
+/**
+ * Service for managing {@link ConnectionEntity}.
+ */
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
 
@@ -21,14 +24,27 @@ export default class ConnectionService {
     this.repository = AppDataSource.getRepository(ConnectionEntity);
   }
 
-  public async fetch(): Promise<ConnectionModel[]> {
+  private entityToModel(entity: ConnectionEntity): ConnectionModelType {
+    return instanceToPlain(entity) as unknown as ConnectionModelType;
+  }
+
+  /**
+   * Get a connection entity by id
+   * @param id id of the connection
+   * @returns Matching ConnectionEntity
+   */
+  public async findById(id: number): Promise<ConnectionEntity | null> {
+    return this.repository.findOneBy({ id });
+  }
+
+  public async fetch(): Promise<ConnectionModelType[]> {
     const entities = await this.repository.find({
       order: {
         lastUsed: 'DESC',
       },
     });
     return entities.map((entity) => {
-      return new ConnectionModel(entity);
+      return this.entityToModel(entity);
     });
   }
 
@@ -36,6 +52,7 @@ export default class ConnectionService {
     model.lastUsed = new Date();
     const parsedEntity = new ConnectionEntity(model);
     const entity = await this.repository.save(parsedEntity);
+    console.log(this.entityToModel(entity));
     try {
       return await this.select(entity.id);
     } catch (e) {
@@ -49,8 +66,7 @@ export default class ConnectionService {
     const entity = await this.repository.findOneBy({ id });
     if (entity !== null) {
       entity.lastUsed = new Date();
-      const model = new ConnectionModel(entity);
-      store.dispatch(change(model));
+      store.dispatch(change(this.entityToModel(entity)));
       if (!(await this.verify())) {
         store.dispatch(clear());
         log.error('Connection is not valid');

@@ -3,6 +3,7 @@ import log from 'electron-log';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import ServerInterface from './ServerInterface';
 import { ProcedureParameter, Direction } from '../Procedures';
+import { RowNumberOperations } from '../entity/enum';
 
 type DBQuery = {
   datname: string;
@@ -33,10 +34,10 @@ export default class PgClient implements ServerInterface {
   constructor(model: ConnectionModelType, database?: string) {
     this.model = model;
     this.pool = new Pool({
-      host: model.connectionConfig.address,
-      port: model.connectionConfig.port,
-      password: model.connectionConfig.password,
-      user: model.connectionConfig.username,
+      host: model.address,
+      port: model.port,
+      password: model.password,
+      user: model.username,
       database: database ?? 'React',
     });
   }
@@ -115,6 +116,117 @@ export default class PgClient implements ServerInterface {
     const client = await this.pool.connect();
     const result = await client.query(
       `CALL ${procedure}(${parameters.join(',')})`
+    );
+    client.release();
+    return result.rows;
+  }
+
+  /**
+   * Check if a table exists through postgres
+   * @param table table to check
+   * @returns whether the table exists or not
+   */
+  public async checkTableExists(table: string) {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `SELECT EXISTS (
+        SELECT FROM
+            pg_tables
+        WHERE
+            schemaname = 'public' AND
+            tablename  = '${table}'
+        );`
+    );
+    return result.rows[0].exists;
+  }
+
+  /**
+   * Find the number of rows in table through postgres
+   * @param table table to check
+   * @returns the number of rows in a table if it exists, zero otherwise
+   */
+  public async numRecordsInTable(table: string) {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `SELECT COUNT(*) as count_rows FROM ${table};`
+    );
+    return result.rows[0].count_rows;
+  }
+
+  /**
+   * Check if a table has rows where column is exactly value through postgres
+   * @param table table to check
+   * @param column attribute to check
+   * @param value value to compare against
+   * @returns list of rows matching condition
+   */
+  public async checkExact(
+    table: string,
+    column: string,
+    value: string
+  ): Promise<unknown[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `select * from ${table} where ${column} = '${value}'`
+    );
+    client.release();
+    return result.rows;
+  }
+
+  /**
+   * Check if a table has rows where column contains value through postgres
+   * @param table table to check
+   * @param column attribute to check
+   * @param value value to compare against
+   * @returns list of rows matching condition
+   */
+  public async checkContains(
+    table: string,
+    column: string,
+    value: string
+  ): Promise<unknown[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `select * from ${table} where ${column} like '${value}'`
+    );
+    client.release();
+    return result.rows;
+  }
+
+  /**
+   * Looks for a row with a IDs from test table through postgres
+   * @param data table with IDS to look for
+   * @param table table to check for IDs
+   */
+  public async checkID(data: string, table: string): Promise<unknown[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `SELECT *
+      FROM   ${table} target
+      WHERE  NOT EXISTS (SELECT 1
+                         FROM   ${data} inputTable
+                         WHERE  inputTable.ID = target.ID)`
+    );
+    client.release();
+    return result.rows;
+  }
+
+  /**
+   * Looks for rows where column contains values that compare to a certain value through postgres
+   * @param table the table to check
+   * @param column attribute to check
+   * @param value value to compare against
+   * @param comparison whether the fields should be less than/ less than equal to/ greater than/greater than equal to/equal to value
+   */
+  public async checkNumber(
+    table: string,
+    column: string,
+    value: number,
+    comparison: RowNumberOperations
+  ): Promise<unknown[]> {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `select * from ${table} where ${column} ${comparison} ${value}`
     );
     client.release();
     return result.rows;
