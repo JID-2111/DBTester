@@ -80,7 +80,7 @@ const Execute = () => {
       unitTests: [],
       execution,
       procedure: activeProcedure,
-      parameters: ['1', '2', '40'],
+      parameters: Object.values(parameterValues),
     };
 
     const unitTests = formatUnitTests(rule);
