@@ -62,7 +62,6 @@ const Execute = () => {
             </Button>
           </div>
         </div>
-        <div> </div>
         <div className="home-btn-footer">
           <Link to="/">
             <Button onClick={() => handleClick()} className="home-btn">
