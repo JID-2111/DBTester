@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ProcedureDropdown from './ProcedureDropdown';
 
@@ -9,6 +9,7 @@ import DBDropdown from './DBDropdown';
 
 const Execute = () => {
   const [code, setCode] = useState<string>('');
+  const [alert, setAlert] = useState<boolean>(false);
   const [activeDb, setActiveDb] = useState<string>('React');
   const [activeProcedure, setActiveProcedure] = useState<string>('');
 
@@ -22,6 +23,23 @@ const Execute = () => {
     await window.connections.ipcRenderer.disconnect();
   };
 
+  const showAlert = () => {
+    return (
+      <Modal
+        show={alert}
+        onHide={() => setAlert(false)}
+        size="xl"
+        scrollable
+        animation={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Procedure Code</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="code-wrapper procedure-code">{code}</Modal.Body>
+      </Modal>
+    );
+  };
+
   return (
     <div className="d-flex justify-content-center align-items-center">
       <div className="execute-wrapper">
@@ -32,15 +50,19 @@ const Execute = () => {
         </div>
         <div>
           <h6>Selected Procedure</h6>
-          <ProcedureDropdown
-            activeDb={activeDb}
-            activeProcedure={activeProcedure}
-            setActiveProcedure={setActiveProcedure}
-            setCode={setCode}
-          />
-        </div>
-        <div className="code-wrapper">
-          <p className="procedure-code">{code}</p>
+          <div className="d-flex flex-direction-column">
+            <ProcedureDropdown
+              activeDb={activeDb}
+              activeProcedure={activeProcedure}
+              setActiveProcedure={setActiveProcedure}
+              setCode={setCode}
+            />
+            {code !== '' && (
+              <Button variant="link" size="sm" onClick={() => setAlert(!!code)}>
+                code
+              </Button>
+            )}
+          </div>
         </div>
         <div className="home-btn-footer">
           <Link to="/">
@@ -49,6 +71,7 @@ const Execute = () => {
             </Button>
           </Link>
         </div>
+        {alert && showAlert()}
       </div>
     </div>
   );
