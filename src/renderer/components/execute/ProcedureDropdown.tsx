@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Button, Dropdown, Modal } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 
-import '../scss/Execute.scss';
+import '../../scss/Execute.scss';
+import Modal from '../utils/Modal';
 
 interface IProcedureDropdownProps {
   activeDb: string;
@@ -42,17 +43,14 @@ const ProcedureDropdown = ({
 
   const showAlert = () => {
     return (
-      <Modal show={alert} onHide={() => setAlert(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Error</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Could not load the procedure.</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setAlert(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <>
+        <Modal
+          show={alert}
+          handleClose={() => setAlert(false)}
+          title="Error"
+          modalBody="Could not load the procedure."
+        />
+      </>
     );
   };
 

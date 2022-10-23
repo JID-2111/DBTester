@@ -4,7 +4,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ProcedureDropdown from './ProcedureDropdown';
 
-import '../scss/Execute.scss';
+import '../../scss/Execute.scss';
 import DBDropdown from './DBDropdown';
 
 const Execute = () => {

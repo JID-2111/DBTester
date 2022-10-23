@@ -1,8 +1,13 @@
 import { IConnectionStringParameters } from 'connection-string-parser';
+import { DBColumn } from 'db/clients/PgClient';
 import { LogFunctions } from 'electron-log';
 import { Channels } from 'main/preload';
+import { ExecutionModelType } from '../db/models/ExecutionModel';
 import ConnectionEntity from '../db/entity/ConnectionEntity';
-import { ConnectionModel, ConnectionModelType } from '../db/Models';
+import {
+  ConnectionInputType,
+  ConnectionModelType,
+} from '../db/models/ConnectionModels';
 
 declare global {
   interface Window {
@@ -28,13 +33,15 @@ declare global {
       ipcRenderer: {
         fetchProcedures(): Promise<Map<string, string[]>>;
         fetchDatabases(): Promise<string[]>;
+        fetchTables(): Promise<string[]>;
         fetchContent(procedure: string): Promise<string>;
+        fetchColumns(table: string): Promise<DBColumn[]>;
       };
     };
     connections: {
       ipcRenderer: {
-        fetch(): Promise<ConnectionModel[]>;
-        create(model: ConnectionModelType): Promise<ConnectionModel>;
+        fetch(): Promise<ConnectionModelType[]>;
+        create(model: ConnectionInputType): Promise<ConnectionModelType>;
         select(id: number): Promise<ConnectionEntity>;
         update(model: ConnectionModelType): Promise<void>;
         delete(id: number): Promise<void>;
@@ -42,6 +49,11 @@ declare global {
         switch(database: string): Promise<boolean>;
         preload(): Promise<boolean>;
         verify(): Promise<boolean>;
+      };
+    };
+    executions: {
+      ipcRenderer: {
+        checkPassFail(test: ExecutionModelType): Promise<void>;
       };
     };
   }

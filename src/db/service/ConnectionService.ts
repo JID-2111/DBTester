@@ -1,17 +1,22 @@
 import { Repository } from 'typeorm';
 import log from 'electron-log';
-import { safeStorage } from 'electron';
+import { instanceToPlain } from 'class-transformer';
 import {
   clear,
   change,
   setDB,
 } from '../redux/ServerConnections/ServerConnection';
 import { store } from '../redux/store';
-import PgClient from '../PgClient';
 import AppDataSource from '../../data-source';
-import { ConnectionModel, ConnectionModelType } from '../Models';
+import {
+  ConnectionInputType,
+  ConnectionModelType,
+} from '../models/ConnectionModels';
 import ConnectionEntity from '../entity/ConnectionEntity';
 
+/**
+ * Service for managing {@link ConnectionEntity}.
+ */
 export default class ConnectionService {
   repository: Repository<ConnectionEntity>;
 
@@ -19,31 +24,39 @@ export default class ConnectionService {
     this.repository = AppDataSource.getRepository(ConnectionEntity);
   }
 
-  public async fetch(): Promise<ConnectionModel[]> {
+  private entityToModel(entity: ConnectionEntity): ConnectionModelType {
+    return instanceToPlain(entity) as unknown as ConnectionModelType;
+  }
+
+  /**
+   * Get a connection entity by id
+   * @param id id of the connection
+   * @returns Matching ConnectionEntity
+   */
+  public async findById(id: number): Promise<ConnectionEntity | null> {
+    return this.repository.findOneBy({ id });
+  }
+
+  public async fetch(): Promise<ConnectionModelType[]> {
     const entities = await this.repository.find({
       order: {
         lastUsed: 'DESC',
       },
     });
     return entities.map((entity) => {
-      return new ConnectionModel(entity);
+      return this.entityToModel(entity);
     });
   }
 
-  public async create(model: ConnectionModelType): Promise<ConnectionEntity> {
+  public async create(model: ConnectionInputType): Promise<ConnectionEntity> {
     model.lastUsed = new Date();
     const parsedEntity = new ConnectionEntity(model);
-    if (safeStorage.isEncryptionAvailable()) {
-      parsedEntity.password = safeStorage
-        .encryptString(parsedEntity.password)
-        .toString('base64');
-    } else {
-      throw new Error('Error Encrypting Password');
-    }
     const entity = await this.repository.save(parsedEntity);
+    console.log(this.entityToModel(entity));
     try {
       return await this.select(entity.id);
     } catch (e) {
+      log.error(e);
       this.delete(entity.id);
       throw new Error('Connection is not valid');
     }
@@ -53,13 +66,7 @@ export default class ConnectionService {
     const entity = await this.repository.findOneBy({ id });
     if (entity !== null) {
       entity.lastUsed = new Date();
-      const model = new ConnectionModel(entity);
-      if (model.connectionConfig.config === 'manual') {
-        model.connectionConfig.password = safeStorage.decryptString(
-          Buffer.from(model.connectionConfig.password, 'base64')
-        );
-      }
-      store.dispatch(change(new PgClient(model))); // TODO instantiate based on model.type
+      store.dispatch(change(this.entityToModel(entity)));
       if (!(await this.verify())) {
         store.dispatch(clear());
         log.error('Connection is not valid');
@@ -78,11 +85,6 @@ export default class ConnectionService {
   }
 
   public async disconnect(): Promise<void> {
-    store
-      .getState()
-      .connection.serverConnection.pool.end()
-      .then(() => log.info('Curr Connection Pool Ended'))
-      .catch(() => log.error('Couldnt end Pool'));
     store.dispatch(clear());
   }
 
@@ -105,9 +107,12 @@ export default class ConnectionService {
   }
 
   public async verify(): Promise<boolean> {
-    // Check if the current connection is marked valid and works
-    return store.getState().connection.valid
-      ? store.getState().connection.serverConnection.verify()
-      : false;
+    const connection = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (connection === undefined) {
+      return false;
+    }
+    return connection.verify();
   }
 }
