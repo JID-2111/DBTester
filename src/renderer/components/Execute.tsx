@@ -57,9 +57,11 @@ const Execute = () => {
               setActiveProcedure={setActiveProcedure}
               setCode={setCode}
             />
-            <Button variant="link" size="sm" onClick={() => setAlert(!!code)}>
-              code
-            </Button>
+            {code !== '' && (
+              <Button variant="link" size="sm" onClick={() => setAlert(!!code)}>
+                code
+              </Button>
+            )}
           </div>
         </div>
         <div> </div>
