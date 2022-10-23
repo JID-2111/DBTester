@@ -1,5 +1,5 @@
-import ConnectionEntity from '../entity/ConnectionEntity';
 import { DBProvider } from '../entity/enum';
+import { ExecutionModelType } from './ExecutionModel';
 
 export type ManualConnectionConfig = {
   config: 'manual';
@@ -38,45 +38,17 @@ export type ConnectionInputType = ConnectionInfo & {
 };
 
 export type ConnectionModelType = ConnectionInfo & {
-  connectionConfig: ManualConnectionConfig;
-};
-
-export class ConnectionModel {
   id: number;
 
-  nickname: string;
+  defaultDatabase: string;
 
-  type: DBProvider;
+  address: string;
 
-  connectionConfig: ManualConnectionConfig;
+  port: number;
 
-  createdDate: Date;
+  username: string;
 
-  lastUsed: Date;
+  password: string;
 
-  constructor(model?: ConnectionEntity) {
-    if (model === undefined) return;
-    const { nickname, id, createdDate, lastUsed, type, defaultDatabase } =
-      model;
-    Object.assign(this, {
-      nickname,
-      id,
-      createdDate,
-      lastUsed,
-      type,
-    });
-    const { username, password, address, port } = model;
-    this.connectionConfig = {
-      config: 'manual',
-      defaultDatabase,
-      username,
-      password,
-      address,
-      port,
-    };
-  }
-}
-
-export class Execution {
-  dummy: string;
-}
+  executions?: ExecutionModelType[];
+};

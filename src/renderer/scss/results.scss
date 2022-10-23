@@ -1,0 +1,10 @@
+@use './utils/colors.scss';
+
+.results-screem {
+  background-color: colors.$snow;
+  color: colors.$jet;
+  width: 90vw;
+  height: auto;
+  overflow: hidden;
+  border-radius: 0.375em;
+}
