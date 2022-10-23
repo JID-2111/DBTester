@@ -1,36 +1,48 @@
-import { TestLevel } from 'db/entity/enum';
 import { Trash } from 'react-bootstrap-icons';
 import { Condition } from 'renderer/types';
 
 import '../../../scss/Condition.scss';
 
 interface IConditionProps {
-  operationType: TestLevel;
-  value: Condition;
+  condition: Condition;
   deleteCondition: (c: Condition) => void;
+  key: string;
 }
 
 const SavedCondition = ({
-  operationType,
-  value,
+  condition,
   deleteCondition,
+  key,
 }: IConditionProps) => {
   // eslint-disable-next-line no-restricted-globals
-  const opString = Object.keys(TestLevel).filter((key) => isNaN(Number(key)))[
-    operationType
-  ];
-
+  const {
+    level,
+    column,
+    operation,
+    value,
+    total,
+    expectedRecordMatches,
+    expectedNumRecords,
+    table,
+  } = condition;
   return (
-    <div className="condition-item">
-      <p>{opString}</p>
-      <p>{value.testItem}</p>
-      <p>{value.condition.toUpperCase()}</p>
-      {value.compare !== '' && <p>{value.compare}</p>}
-      {value.value !== '' && <p>&quot;{value.value}&quot;</p>}
+    <div key={key} className="condition-item">
+      <p>
+        {level && `${level} test: `}
+        {operation === 'exists' ? `table "${table}" ` : ''}
+        {column && `column "${column}" `}
+        {operation && `${operation.toUpperCase()} `}
+        {value && `"${value}", `}
+        {total && `${total} `}
+        {expectedRecordMatches && `${expectedRecordMatches} `}
+        {expectedNumRecords && `${expectedNumRecords} `}
+        {operation !== 'exists' ? `in ${table}` : ''}
+      </p>
+
       <button
         type="button"
         className="deleteButton"
-        onClick={() => deleteCondition(value)}
+        onClick={() => deleteCondition(condition)}
       >
         <Trash />
       </button>

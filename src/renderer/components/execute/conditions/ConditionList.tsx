@@ -18,12 +18,13 @@ const ConditionList = ({
 
   return (
     <div className="condition-list">
-      {conditionList.map((condition: Condition) => {
+      {conditionList.map((condition: Condition, idx: number) => {
+        const key = `cond - ${idx}`;
         return (
           <SavedCondition
-            operationType={condition.operationType}
             deleteCondition={deleteCondition}
-            value={condition}
+            condition={condition}
+            key={key}
           />
         );
       })}

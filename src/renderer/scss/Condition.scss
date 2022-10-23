@@ -1,6 +1,24 @@
 @use './utils/button-variants.scss';
 @use './utils/colors.scss';
 
+.operation-dropdown {
+  button {
+    margin-left: 5px;
+    font-size: 0.8em;
+    padding: 4px;
+  }
+
+  .dropdown-menu {
+    min-width: auto;
+  }
+
+  .dropdown-item {
+    font-size: 0.8em;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+}
+
 .condition-box {
   width: auto;
   margin: 0px 5px;

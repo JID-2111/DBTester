@@ -5,27 +5,6 @@ export enum DBProvider {
   PostgreSQL = 'PostgreSQL',
 }
 
-/// //////////////
-// Remove
-export enum TestLevel {
-  TABLE,
-  COL,
-}
-
-export enum TableOperations {
-  EXISTS = 'Exists',
-  COUNT = 'Count',
-}
-
-export enum RowOperations {
-  CONTAINS = 'Contains', // attribute contains value
-  EXACTLY = 'Is Exactly', // attribute exactly matches value
-  REGEX = 'Matches Regex', // attribute matches regex statement
-  ID_INPUT = 'Input ID', // record ID is in set provided by user
-  ID_TEST = 'Test ID', // record ID is in test dataset
-}
-/// //////////
-
 /**
  * Operations for row tests based on the column type
  */
@@ -41,9 +20,9 @@ export enum UnitTestOperations {
  * How to validate number of records
  */
 export enum RecordMatches {
-  ZERO,
-  GREATER_THAN,
-  TABLE_ROWS,
+  ZERO = '= 0',
+  GREATER_THAN = '> 0',
+  TABLE_ROWS = 'is = to',
 }
 
 export enum TableGenericOperations {

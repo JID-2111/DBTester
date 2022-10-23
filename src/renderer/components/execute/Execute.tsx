@@ -65,10 +65,12 @@ const Execute = () => {
               setConditionList={setConditionList}
             />
             <Row>
-              <ParameterContainer
-                activeParameters={activeParameters}
-                handleInput={handleInput}
-              />
+              {activeProcedure && (
+                <ParameterContainer
+                  activeParameters={activeParameters}
+                  handleInput={handleInput}
+                />
+              )}
             </Row>
           </Row>
         </Container>

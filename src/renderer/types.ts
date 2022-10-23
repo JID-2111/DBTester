@@ -1,11 +1,28 @@
-import { TestLevel } from 'db/entity/enum';
+import {
+  RecordMatches,
+  RowBooleanOperations,
+  RowIDOperations,
+  RowNumberOperations,
+  RowStringOperations,
+  TableGenericOperations,
+  UnitTestOperations,
+} from 'db/entity/enum';
 
 export type Condition = {
-  testItem: string;
-  condition: string;
+  level?: UnitTestOperations;
+  column?: string;
   value?: string;
-  compare?: string;
-  operationType: TestLevel;
+  operation?:
+    | TableGenericOperations
+    | RowStringOperations
+    | RowBooleanOperations
+    | RowNumberOperations
+    | RowIDOperations;
+  result?: boolean;
+  expectedRecordMatches?: RecordMatches;
+  expectedNumRecords?: number;
+  total?: boolean;
+  table?: string;
 };
 
 export type Parameter = {
