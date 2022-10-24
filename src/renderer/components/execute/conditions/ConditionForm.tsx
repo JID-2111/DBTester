@@ -8,9 +8,9 @@ import {
   TableGenericOperations,
   UnitTestOperations,
 } from 'db/entity/enum';
+import { UnitTestType } from 'db/models/UnitTestModels';
 import { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import { Condition } from 'renderer/types';
 
 import '../../../scss/Condition.scss';
 
@@ -22,12 +22,12 @@ interface IConditionErrors {
 }
 
 interface IConditionProps {
-  addCondition: (c: Condition) => void;
+  addCondition: (c: Partial<UnitTestType>) => void;
   table: string;
 }
 
 const ConditionForm = ({ addCondition, table }: IConditionProps) => {
-  const [form, setForm] = useState<Condition>({ table });
+  const [form, setForm] = useState<Partial<UnitTestType>>({ table });
   const [errors, setErrors] = useState<IConditionErrors>({});
   const [opValues, setOpValues] = useState<string[]>([]);
   const [columns, setColumns] = useState<DBColumn[]>([]);

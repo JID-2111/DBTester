@@ -1,12 +1,12 @@
+import { UnitTestType } from 'db/models/UnitTestModels';
 import { useEffect, useState } from 'react';
 import { Col, Dropdown, Row } from 'react-bootstrap';
-import { Condition } from 'renderer/types';
 import ConditionForm from './ConditionForm';
 import ConditionList from './ConditionList';
 
 interface IConditionContainerProps {
-  conditionList: Condition[];
-  setConditionList: (c: Condition[]) => void;
+  conditionList: Partial<UnitTestType>[];
+  setConditionList: (c: Partial<UnitTestType>[]) => void;
 }
 
 const ConditionContainer = ({
@@ -16,7 +16,7 @@ const ConditionContainer = ({
   const [tables, setTables] = useState<string[]>();
   const [currTable, setCurrTable] = useState<string>('select table');
 
-  const addCondition = (condition: Condition) => {
+  const addCondition = (condition: Partial<UnitTestType>) => {
     setConditionList(conditionList.concat(condition));
   };
 

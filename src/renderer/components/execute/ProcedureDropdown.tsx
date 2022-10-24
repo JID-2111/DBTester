@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { ProcedureParameter } from 'db/Procedures';
-import { Parameter } from 'renderer/types';
 
 import '../../scss/Execute.scss';
 import Modal from '../utils/Modal';
+import { Parameter } from './ParameterContainer';
 
 interface IProcedureDropdownProps {
   activeDb: string;

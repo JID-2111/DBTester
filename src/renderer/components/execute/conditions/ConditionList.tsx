@@ -1,24 +1,26 @@
-import { Condition } from 'renderer/types';
+import { UnitTestType } from 'db/models/UnitTestModels';
 import SavedCondition from './SavedCondition';
 
 import '../../../scss/Condition.scss';
 
 interface IConditionListProps {
-  conditionList: Condition[];
-  setConditionList: (c: Condition[]) => void;
+  conditionList: Partial<UnitTestType>[];
+  setConditionList: (c: Partial<UnitTestType>[]) => void;
 }
 const ConditionList = ({
   conditionList,
   setConditionList,
 }: IConditionListProps) => {
-  const deleteCondition = (condition: Condition) => {
-    const newList = conditionList.filter((c: Condition) => c !== condition);
+  const deleteCondition = (condition: Partial<UnitTestType>) => {
+    const newList = conditionList.filter(
+      (c: Partial<UnitTestType>) => c !== condition
+    );
     setConditionList(newList);
   };
 
   return (
     <div className="condition-list">
-      {conditionList.map((condition: Condition, idx: number) => {
+      {conditionList.map((condition: Partial<UnitTestType>, idx: number) => {
         const key = `cond - ${idx}`;
         return (
           <SavedCondition

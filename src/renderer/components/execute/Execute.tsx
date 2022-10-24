@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { Button, Col, Row, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
-import { Condition, Parameter } from 'renderer/types';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
@@ -15,7 +14,7 @@ import ProcedureDropdown from './ProcedureDropdown';
 import '../../scss/Execute.scss';
 import DBDropdown from './DBDropdown';
 import ConditionContainer from './conditions/ConditionContainer';
-import ParameterContainer from './ParameterContainer';
+import ParameterContainer, { Parameter } from './ParameterContainer';
 
 const Execute = () => {
   const [code, setCode] = useState<string>('');
@@ -26,7 +25,9 @@ const Execute = () => {
     ProcedureParameter[]
   >([]);
   const [parameterValues, setParameterValues] = useState<Parameter>({});
-  const [conditionList, setConditionList] = useState<Condition[]>([]);
+  const [conditionList, setConditionList] = useState<Partial<UnitTestType>[]>(
+    []
+  );
 
   const updateDb = (database: string) => {
     setActiveDb(database);
@@ -46,7 +47,7 @@ const Execute = () => {
 
   const formatUnitTests = (rule: RuleModelType) => {
     const unitTests: UnitTestType[] = conditionList.map(
-      (condition: Condition) => {
+      (condition: Partial<UnitTestType>) => {
         const unitTest: UnitTestType = {
           level: condition.level!,
           name: 'test',

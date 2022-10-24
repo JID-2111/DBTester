@@ -1,11 +1,11 @@
+import { UnitTestType } from 'db/models/UnitTestModels';
 import { Trash } from 'react-bootstrap-icons';
-import { Condition } from 'renderer/types';
 
 import '../../../scss/Condition.scss';
 
 interface IConditionProps {
-  condition: Condition;
-  deleteCondition: (c: Condition) => void;
+  condition: Partial<UnitTestType>;
+  deleteCondition: (c: Partial<UnitTestType>) => void;
   key: string;
 }
 

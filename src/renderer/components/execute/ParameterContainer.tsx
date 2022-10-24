@@ -6,6 +6,10 @@ interface IParameterContainerProps {
   handleInput: (inputValue: string, attribute: string) => void;
 }
 
+export type Parameter = {
+  [key: string]: string;
+};
+
 const ParameterContainer = ({
   activeParameters,
   handleInput,
