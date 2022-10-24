@@ -3,7 +3,7 @@
 
 .operation-dropdown {
   button {
-    margin-left: 5px;
+    margin-left: 0px;
     font-size: 0.8em;
     padding: 4px;
   }
@@ -20,10 +20,16 @@
 }
 
 .condition-box {
-  width: auto;
-  margin: 0px 5px;
-  border: 1px black solid;
   padding: 5px;
+  height: 100%;
+
+  .row {
+    margin: 0px 0px 0px 0px;
+  }
+  h4 {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .condition-list {
@@ -33,9 +39,10 @@
   width: auto;
   display: flex;
   margin: 5px 0px;
+  margin-left: calc(var(--bs-gutter-x) * 0.5);
 
   button {
-    margin: 0px 5px;
+    margin: 0px 5px 0px 0px;
     font-size: 0.8em;
     padding: 4px;
   }
@@ -44,6 +51,7 @@
     font-size: 0.8em;
     padding-top: 4px;
     padding-bottom: 4px;
+    margin-right: 5px;
   }
 
   .add-condition-btn {

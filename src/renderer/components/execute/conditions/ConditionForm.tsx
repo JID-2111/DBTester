@@ -115,35 +115,35 @@ const ConditionForm = ({ addCondition, table }: IConditionProps) => {
       const cols = await window.procedures.ipcRenderer.fetchColumns(table);
       setColumns(cols);
     };
+    clearForm();
+    clearErrors();
     getColumns();
   }, [table]);
 
   if (!form.level) {
     return (
-      <Dropdown className="operation-dropdown">
-        <Dropdown.Toggle variant="primary">
-          {form.level || 'op type'}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {Object.values(UnitTestOperations).map((level, idx) => {
-            const key = `level- + ${idx}`;
-            return (
-              <Dropdown.Item key={key} onClick={() => updateLevel(level)}>
-                {level}
-              </Dropdown.Item>
-            );
-          })}
-        </Dropdown.Menu>
-      </Dropdown>
+      <div className="condition-item">
+        <Dropdown className="operation-dropdown">
+          <Dropdown.Toggle variant="primary">op type</Dropdown.Toggle>
+          <Dropdown.Menu>
+            {Object.values(UnitTestOperations).map((level, idx) => {
+              const key = `level- + ${idx}`;
+              return (
+                <Dropdown.Item key={key} onClick={() => updateLevel(level)}>
+                  {level}
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
     );
   }
 
   return (
     <div className="condition-item">
       <Dropdown className="operation-dropdown">
-        <Dropdown.Toggle variant="primary">
-          {form.level || 'op type'}
-        </Dropdown.Toggle>
+        <Dropdown.Toggle variant="primary">{form.level}</Dropdown.Toggle>
         <Dropdown.Menu>
           {Object.values(UnitTestOperations).map((level, idx) => {
             const key = `level- + ${idx}`;
@@ -231,7 +231,7 @@ const ConditionForm = ({ addCondition, table }: IConditionProps) => {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-          <Dropdown className="operation-dropdown">
+          <Dropdown className="condition-dropdown">
             <Dropdown.Toggle variant="primary">
               {form.expectedRecordMatches}
             </Dropdown.Toggle>

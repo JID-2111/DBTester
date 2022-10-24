@@ -12,13 +12,13 @@ const ParameterContainer = ({
 }: IParameterContainerProps) => {
   if (activeParameters.length > 0) {
     return (
-      <div className="condition-box">
+      <div className="parameter-box">
         <h4> Set Procedure Parameters </h4>
         {activeParameters.map(
           (item) =>
             item.direction === 'IN' && (
               <InputGroup className="mb-2" key={`${item.name}`}>
-                <InputGroup.Text bsPrefix="paramater-text">
+                <InputGroup.Text>
                   {`${item.name} (${item.type})`}
                 </InputGroup.Text>
                 <Form.Control

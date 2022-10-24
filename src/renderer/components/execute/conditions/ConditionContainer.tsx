@@ -36,28 +36,23 @@ const ConditionContainer = ({
         </Col>
         <Col md="auto">
           <Row>
-            <Col>
-              <p>Table:</p>
-            </Col>
-            <Col>
-              <Dropdown className="operation-dropdown">
-                <Dropdown.Toggle variant="primary">{currTable}</Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {tables &&
-                    tables.map((table) => {
-                      const tableKey = `table- + ${table}`;
-                      return (
-                        <Dropdown.Item
-                          key={tableKey}
-                          onClick={() => setCurrTable(table)}
-                        >
-                          {table}
-                        </Dropdown.Item>
-                      );
-                    })}
-                </Dropdown.Menu>
-              </Dropdown>
-            </Col>
+            <Dropdown className="operation-dropdown">
+              <Dropdown.Toggle variant="primary">{currTable}</Dropdown.Toggle>
+              <Dropdown.Menu>
+                {tables &&
+                  tables.map((table) => {
+                    const tableKey = `table- + ${table}`;
+                    return (
+                      <Dropdown.Item
+                        key={tableKey}
+                        onClick={() => setCurrTable(table)}
+                      >
+                        {table}
+                      </Dropdown.Item>
+                    );
+                  })}
+              </Dropdown.Menu>
+            </Dropdown>
           </Row>
         </Col>
       </Row>

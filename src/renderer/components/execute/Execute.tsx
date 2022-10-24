@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
 import { Condition, Parameter } from 'renderer/types';
@@ -100,29 +100,23 @@ const Execute = () => {
     <div className="d-flex justify-content-center align-items-center">
       <div className="execute-wrapper">
         <h1>Execute Stored Procedures</h1>
-        <Container>
-          <Row>
-            <Col>
-              <Row>
-                <h6>Selected Database</h6>
-                <DBDropdown activeDb={activeDb} updateDb={updateDb} />
-              </Row>
-              <Row>
-                <h6>Selected Procedure</h6>
-                <ProcedureDropdown
-                  activeDb={activeDb}
-                  activeProcedure={activeProcedure}
-                  setParameterValues={setParameterValues}
-                  setActiveProcedure={setActiveProcedure}
-                  setActiveParameters={setActiveParameters}
-                  setCode={setCode}
-                />
-              </Row>
-            </Col>
-            <ConditionContainer
-              conditionList={conditionList}
-              setConditionList={setConditionList}
-            />
+        <Row>
+          <Col md="4">
+            <Row>
+              <h6>Selected Database</h6>
+              <DBDropdown activeDb={activeDb} updateDb={updateDb} />
+            </Row>
+            <Row>
+              <h6>Selected Procedure</h6>
+              <ProcedureDropdown
+                activeDb={activeDb}
+                activeProcedure={activeProcedure}
+                setParameterValues={setParameterValues}
+                setActiveProcedure={setActiveProcedure}
+                setActiveParameters={setActiveParameters}
+                setCode={setCode}
+              />
+            </Row>
             <Row>
               {activeProcedure && (
                 <ParameterContainer
@@ -131,8 +125,14 @@ const Execute = () => {
                 />
               )}
             </Row>
-          </Row>
-        </Container>
+          </Col>
+          <Col>
+            <ConditionContainer
+              conditionList={conditionList}
+              setConditionList={setConditionList}
+            />
+          </Col>
+        </Row>
         <div className="code-wrapper">
           <p className="procedure-code">{code}</p>
         </div>
