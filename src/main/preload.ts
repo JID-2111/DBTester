@@ -1,5 +1,9 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { ConnectionModelType } from '../db/Models';
+import { ExecutionModelType } from '../db/models/ExecutionModel';
+import {
+  ConnectionInputType,
+  ConnectionModelType,
+} from '../db/models/ConnectionModels';
 
 const log = require('electron-log');
 
@@ -36,15 +40,20 @@ contextBridge.exposeInMainWorld('procedures', {
   ipcRenderer: {
     fetchProcedures: () => ipcRenderer.invoke('procedures:listProcedures'),
     fetchDatabases: () => ipcRenderer.invoke('procedures:listDatabases'),
+    fetchTables: () => ipcRenderer.invoke('procedures:getTables'),
     fetchContent: (procedure: string) =>
       ipcRenderer.invoke('procedures:getProcedure', procedure),
+    getProcedureParameters: (procedure: string) =>
+      ipcRenderer.invoke('procedures:getProcedureParameters', procedure),
+    fetchColumns: (table: string) =>
+      ipcRenderer.invoke('procedures:getColumns', table),
   },
 });
 
 contextBridge.exposeInMainWorld('connections', {
   ipcRenderer: {
     fetch: () => ipcRenderer.invoke('connections:fetch'),
-    create: (model: ConnectionModelType) =>
+    create: (model: ConnectionInputType) =>
       ipcRenderer.invoke('connections:create', model),
     select: (id: number) => ipcRenderer.invoke('connections:select', id),
     delete: (id: number) => ipcRenderer.invoke('connections:delete', id),
@@ -54,5 +63,12 @@ contextBridge.exposeInMainWorld('connections', {
     switch: (database: string) =>
       ipcRenderer.invoke('connections:switch', database),
     verify: () => ipcRenderer.invoke('connections:verify'),
+  },
+});
+
+contextBridge.exposeInMainWorld('executions', {
+  ipcRenderer: {
+    checkPassFail: (test: ExecutionModelType) =>
+      ipcRenderer.invoke('executions:checkPassFail', test),
   },
 });

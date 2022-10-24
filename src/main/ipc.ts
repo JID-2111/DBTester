@@ -1,16 +1,12 @@
 import { ipcMain } from 'electron';
+import ExecutionService from '../db/service/ExecutionService';
 import Procedures from '../db/Procedures';
 import ConnectionService from '../db/service/ConnectionService';
-import { parseConnectionString } from './util';
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
-});
-
-ipcMain.handle('util:parse', async (_event, ...args) => {
-  return parseConnectionString(args[0]);
 });
 
 ipcMain.handle('procedures:listProcedures', () => {
@@ -23,6 +19,18 @@ ipcMain.handle('procedures:listDatabases', () => {
 
 ipcMain.handle('procedures:getProcedure', async (_event, ...args) => {
   return new Procedures().fetchContent(args[0]);
+});
+
+ipcMain.handle('procedures:getProcedureParameters', async (_event, ...args) => {
+  return new Procedures().getProcedureParameters(args[0]);
+});
+
+ipcMain.handle('procedures:getColumns', async (_event, ...args) => {
+  return new Procedures().fetchColumns(args[0]);
+});
+
+ipcMain.handle('procedures:getTables', () => {
+  return new Procedures().fetchTables();
 });
 
 ipcMain.handle('connections:fetch', () => {
@@ -55,4 +63,8 @@ ipcMain.handle('connections:switch', (_event, ...args) => {
 
 ipcMain.handle('connections:verify', (_event) => {
   return new ConnectionService().verify();
+});
+
+ipcMain.handle('executions:checkPassFail', (_event, ...args) => {
+  return new ExecutionService().checkPassFail(args[0]);
 });

@@ -1,17 +1,23 @@
 @use './utils/colors.scss';
 
-.recent-wrapper {
+.results-screen {
   background-color: colors.$snow;
   color: colors.$jet;
   width: 90vw;
   height: auto;
   overflow: hidden;
   border-radius: 0.375em;
+  margin: auto;
+}
+
+.table-div {
+  text-align: center;
+  width: 80%;
+  margin: auto;
 }
 
 .table {
-  text-align: center;
-  width: 80%;
+  margin: auto;
 }
 
 thead {
@@ -33,32 +39,14 @@ td {
   border: 3px solid;
 }
 
-.buttonSelect {
-  border: 5px;
-  border-radius: 5px;
-  margin: 0;
+.homeButton {
+  margin: 1em;
+  float: right;
 }
-
-.buttonSelect:hover {
-  background-color: lightgreen;
-}
-
-.deleteButton {
-  border: 5px;
-  border-radius: 5px;
-  margin: 0;
-}
-
-.deleteButton:hover {
-  background-color: rgb(247, 68, 68);
-}
-
-.edit-button {
-  background-color: inherit;
-  border: 5px;
+.viewtest {
+  border: none;
   border-radius: 5px;
 }
-
-.edit-button:hover {
+.viewtest:hover {
   background-color: lightgreen;
 }

@@ -3,10 +3,11 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './scss/App.scss';
 
-import Execute from './components/Execute';
+import Execute from './components/execute/Execute';
 import Home from './components/Home';
-import NewConnections from './components/NewConnections';
-import RecentConnections from './components/RecentConnections';
+import NewConnections from './components/new_connections/NewConnections';
+import RecentConnections from './components/recent_connections/RecentConnections';
+import Results from './components/execute/Results';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/execute" element={<Execute />} />
         <Route path="/newconnection" element={<NewConnections />} />
         <Route path="/RecentConnection" element={<RecentConnections />} />
+        <Route path="/Results" element={<Results />} />
       </Routes>
     </Router>
   );

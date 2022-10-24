@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { Archive, BarChartFill, Link45deg, Plus } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
-import RecentList from './Recent';
+import RecentList from './recent_connections/Recent';
 
 import '../scss/Home.scss';
 
