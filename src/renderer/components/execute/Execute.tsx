@@ -174,6 +174,9 @@ const Execute = () => {
               Disconnect
             </Button>
           </Link>
+          <Link to="/Results">
+            <Button className="execute-btn">Execute</Button>
+          </Link>
         </div>
         {alert && showAlert()}
       </div>

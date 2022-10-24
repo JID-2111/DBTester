@@ -1,0 +1,52 @@
+@use './utils/colors.scss';
+
+.results-screen {
+  background-color: colors.$snow;
+  color: colors.$jet;
+  width: 90vw;
+  height: auto;
+  overflow: hidden;
+  border-radius: 0.375em;
+  margin: auto;
+}
+
+.table-div {
+  text-align: center;
+  width: 80%;
+  margin: auto;
+}
+
+.table {
+  margin: auto;
+}
+
+thead {
+  background-color: colors.$sand;
+}
+
+th {
+  border: 5px solid;
+  text-align: center;
+  font-weight: bold;
+  font-size: large;
+}
+
+tr {
+  border: 5px solid;
+}
+
+td {
+  border: 3px solid;
+}
+
+.homeButton {
+  margin: 1em;
+  float: right;
+}
+.viewtest {
+  border: none;
+  border-radius: 5px;
+}
+.viewtest:hover {
+  background-color: lightgreen;
+}
