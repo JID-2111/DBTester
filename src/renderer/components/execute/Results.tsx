@@ -2,139 +2,120 @@ import { Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
-import { TableTestType, RowTestType } from 'db/models/UnitTestModels';
-import { useState, useEffect } from 'react';
+import { UnitTestType } from 'db/models/UnitTestModels';
 import {
-  RowNumberOperations,
-  RecordMatches,
+  TableGenericOperations,
   UnitTestOperations,
   OutputFormat,
-  TableGenericOperations,
 } from 'db/entity/enum';
 import AllPass from './AllPass';
 import Displaytests from './Displaytests';
 import '../../scss/results.scss';
 
-const Results = () => {
-  const execution: ExecutionModelType = {
+interface Iprops {
+  result: ExecutionModelType;
+}
+const Results = ({ result }: Iprops) => {
+  // eslint-disable-next-line no-param-reassign
+  result = {
+    id: 1,
     timestamp: new Date(),
     rules: [],
   };
-  const rule1: RuleModelType = {
-    name: 'rule1',
+  const Rule1: RuleModelType = {
+    name: 'Rule 1',
     ruleId: 0,
-    database: 'React',
+    database: 'react',
     testData: '',
     unitTests: [],
-    execution,
+    execution: result,
     procedure: '',
     parameters: [],
   };
-
-  const rule2: RuleModelType = {
-    name: 'rule2',
+  const Rule2: RuleModelType = {
+    name: 'Rule 2',
     ruleId: 1,
-    database: 'React',
+    database: 'react',
     testData: '',
     unitTests: [],
-    execution,
+    execution: result,
     procedure: '',
     parameters: [],
   };
-  const test1: TableTestType = {
-    operation: TableGenericOperations.EXISTS,
+  const test1: UnitTestType = {
+    id: 111,
+    name: 'testInsert',
+    result: true,
     level: UnitTestOperations.TableGenericOperations,
-    name: 'test1',
-    id: 1,
     expectedRecordMatches: 0,
     total: false,
     expectedNumRecords: 0,
-    table: 'accounts',
-    result: true,
-    format: OutputFormat.PLAIN,
+    table: '',
+    operation: TableGenericOperations.EXISTS,
+    format: OutputFormat.JSON,
     output: '',
-    rule: rule1,
+    rule: Rule1,
   };
-
-  const test2: TableTestType = {
-    operation: TableGenericOperations.COUNT,
-    level: UnitTestOperations.TableGenericOperations,
-    name: 'test2',
-    id: 2,
-    expectedRecordMatches: RecordMatches.TABLE_ROWS,
-    total: true,
-    expectedNumRecords: 10,
-    table: 'accounts',
+  const test2: UnitTestType = {
+    id: 222,
+    name: 'testDelete',
     result: true,
-    format: OutputFormat.PLAIN,
-    output: '',
-    rule: rule1,
-  };
-
-  const test3: TableTestType = {
-    operation: TableGenericOperations.COUNT,
     level: UnitTestOperations.TableGenericOperations,
-    name: 'test3',
-    id: 3,
-    expectedRecordMatches: RecordMatches.TABLE_ROWS,
+    expectedRecordMatches: 0,
     total: false,
-    expectedNumRecords: 2,
-    table: 'accounts',
-    result: true,
-    format: OutputFormat.PLAIN,
+    expectedNumRecords: 0,
+    table: '',
+    operation: TableGenericOperations.EXISTS,
+    format: OutputFormat.JSON,
     output: '',
-    rule: rule1,
+    rule: Rule1,
   };
-
-  const test4: RowTestType = {
-    operation: RowNumberOperations.LT,
-    level: UnitTestOperations.RowNumberOperations,
-    name: 'test4',
-    id: 4,
-    expectedRecordMatches: RecordMatches.TABLE_ROWS,
-    total: true,
-    column: 'balance',
-    expectedNumRecords: 2,
-    table: 'accounts',
+  const test3: UnitTestType = {
+    id: 333,
+    name: 'testCall',
     result: false,
-    format: OutputFormat.PLAIN,
+    level: UnitTestOperations.TableGenericOperations,
+    expectedRecordMatches: 0,
+    total: false,
+    expectedNumRecords: 0,
+    table: '',
+    operation: TableGenericOperations.EXISTS,
+    format: OutputFormat.JSON,
     output: '',
-    value: '200',
-    rule: rule2,
+    rule: Rule2,
   };
-
-  const test5: RowTestType = {
-    operation: RowNumberOperations.EQ,
-    level: UnitTestOperations.RowNumberOperations,
-    name: 'test5',
-    id: 5,
-    expectedRecordMatches: RecordMatches.ZERO,
-    total: true,
-    column: 'balance',
-    expectedNumRecords: 2,
-    table: 'accounts',
+  const test4: UnitTestType = {
+    id: 444,
+    name: 'testUpdate',
+    result: false,
+    level: UnitTestOperations.TableGenericOperations,
+    expectedRecordMatches: 0,
+    total: false,
+    expectedNumRecords: 0,
+    table: '',
+    operation: TableGenericOperations.EXISTS,
+    format: OutputFormat.JSON,
+    output: '',
+    rule: Rule2,
+  };
+  const test5: UnitTestType = {
+    id: 555,
+    name: 'testUpdate',
     result: true,
-    format: OutputFormat.PLAIN,
+    level: UnitTestOperations.TableGenericOperations,
+    expectedRecordMatches: 0,
+    total: false,
+    expectedNumRecords: 0,
+    table: '',
+    operation: TableGenericOperations.EXISTS,
+    format: OutputFormat.JSON,
     output: '',
-    value: '100',
-    rule: rule2,
+    rule: Rule2,
   };
+  result.rules = [Rule1, Rule2];
+  Rule1.unitTests = [test1, test2];
+  Rule2.unitTests = [test3, test4, test5];
 
-  rule1.unitTests = [test1, test2, test3];
-  rule2.unitTests = [test4, test5];
-  execution.rules = [rule1, rule2];
-  const [execute, setExecute] = useState<ExecutionModelType>(execution);
-  const getresults = async (test: ExecutionModelType) => {
-    try {
-      const results = await window.executions.ipcRenderer.checkPassFail(test);
-      setExecute(results);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  useEffect(() => {
-    getresults(execution);
-  });
   const passFail = (Rule: RuleModelType): boolean => {
     let pass = true;
     Rule.unitTests.forEach((test) => {
@@ -149,11 +130,11 @@ const Results = () => {
     <div className="results-screen">
       <div className="table-div">
         <div>
-          <h1>Exectution Results</h1>
+          <h1>Execution Results</h1>
         </div>
         <Table className="table">
           <thead>
-            <tr key={execution.id}>
+            <tr key={result.id}>
               <th>Name</th>
               <th>ID</th>
               <th>Database</th>
@@ -163,7 +144,7 @@ const Results = () => {
             </tr>
           </thead>
           <tbody>
-            {execute.rules.map((value) => {
+            {result.rules.map((value) => {
               return (
                 <>
                   {passFail(value) ? (
