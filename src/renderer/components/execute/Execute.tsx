@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { Button, Col, Row, Modal } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
@@ -28,6 +28,8 @@ const Execute = () => {
   const [conditionList, setConditionList] = useState<Partial<UnitTestType>[]>(
     []
   );
+
+  const navigate = useNavigate();
 
   const updateDb = (database: string) => {
     setActiveDb(database);
@@ -96,6 +98,7 @@ const Execute = () => {
     );
 
     // display results here or route to other screen
+    navigate('/Results', { state: { results } });
     return results;
   };
 
@@ -173,9 +176,6 @@ const Execute = () => {
             <Button onClick={() => handleClick()} className="home-btn">
               Disconnect
             </Button>
-          </Link>
-          <Link to="/Results">
-            <Button className="execute-btn">Execute</Button>
           </Link>
         </div>
         {alert && showAlert()}
