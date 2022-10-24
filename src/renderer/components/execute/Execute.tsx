@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
 import { Condition, Parameter } from 'renderer/types';
@@ -19,6 +19,7 @@ import ParameterContainer from './ParameterContainer';
 
 const Execute = () => {
   const [code, setCode] = useState<string>('');
+  const [alert, setAlert] = useState<boolean>(false);
   const [activeDb, setActiveDb] = useState<string>('React');
   const [activeProcedure, setActiveProcedure] = useState<string>('');
   const [activeParameters, setActiveParameters] = useState<
@@ -66,6 +67,7 @@ const Execute = () => {
     );
     return unitTests;
   };
+
   const handleExecute = async () => {
     const execution: ExecutionModelType = {
       timestamp: new Date(),
@@ -96,6 +98,23 @@ const Execute = () => {
     return results;
   };
 
+  const showAlert = () => {
+    return (
+      <Modal
+        show={alert}
+        onHide={() => setAlert(false)}
+        size="xl"
+        scrollable
+        animation={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Procedure Code</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="code-wrapper procedure-code">{code}</Modal.Body>
+      </Modal>
+    );
+  };
+
   return (
     <div className="d-flex justify-content-center align-items-center">
       <div className="execute-wrapper">
@@ -116,6 +135,16 @@ const Execute = () => {
                 setActiveParameters={setActiveParameters}
                 setCode={setCode}
               />
+              {code !== '' && (
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="code-button"
+                  onClick={() => setAlert(!!code)}
+                >
+                  code
+                </Button>
+              )}
             </Row>
             <Row>
               {activeProcedure && (
@@ -133,9 +162,6 @@ const Execute = () => {
             />
           </Col>
         </Row>
-        <div className="code-wrapper">
-          <p className="procedure-code">{code}</p>
-        </div>
         <div className="home-btn-footer">
           {activeProcedure && (
             <Button onClick={() => handleExecute()} className="home-btn">
@@ -148,6 +174,7 @@ const Execute = () => {
             </Button>
           </Link>
         </div>
+        {alert && showAlert()}
       </div>
     </div>
   );

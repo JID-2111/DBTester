@@ -9,6 +9,10 @@
 
   .row {
     margin: 4px 10px;
+
+    .code-button {
+      margin-left: 0.75rem;
+    }
   }
 
   h6 {
@@ -17,11 +21,9 @@
 }
 
 .code-wrapper {
-  height: auto;
   min-height: 40vh;
   display: flex;
   justify-content: center;
-  align-items: center;
   vertical-align: middle;
 }
 
