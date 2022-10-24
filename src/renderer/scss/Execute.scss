@@ -6,20 +6,30 @@
   width: 90vw;
   height: auto;
   border-radius: 0.375em;
+
+  .row {
+    margin: 4px 10px;
+
+    .code-button {
+      margin-left: 0.75rem;
+    }
+  }
+
+  h6 {
+    margin: 0px;
+  }
 }
 
 .code-wrapper {
-  height: auto;
   min-height: 40vh;
   display: flex;
   justify-content: center;
-  align-items: center;
   vertical-align: middle;
 }
 
 .dropdown button {
   margin: 5px;
-  margin-left: 10vw;
+  margin-left: 0px;
   min-width: 5em;
 }
 
@@ -27,8 +37,18 @@
   white-space: break-spaces;
 }
 
-h6 {
-  margin-left: 10vw;
+.parameter-box {
+  h4 {
+    margin-bottom: 10px;
+  }
+  span {
+    font-size: 0.8em;
+    padding: 0px 5px;
+  }
+
+  .form-control {
+    padding: 0 0.375rem 0;
+  }
 }
 
 .execute-btn {

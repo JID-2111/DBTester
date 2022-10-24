@@ -20,9 +20,9 @@ export enum UnitTestOperations {
  * How to validate number of records
  */
 export enum RecordMatches {
-  ZERO,
-  GREATER_THAN,
-  TABLE_ROWS,
+  ZERO = '= 0',
+  GREATER_THAN = '> 0',
+  TABLE_ROWS = 'is = to',
 }
 
 export enum TableGenericOperations {
