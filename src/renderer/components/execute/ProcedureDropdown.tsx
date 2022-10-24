@@ -1,20 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
+import { ProcedureParameter } from 'db/Procedures';
 
 import '../../scss/Execute.scss';
 import Modal from '../utils/Modal';
+import { Parameter } from './ParameterContainer';
 
 interface IProcedureDropdownProps {
   activeDb: string;
   activeProcedure: string;
+  setParameterValues: (parameters: Parameter) => void;
   setActiveProcedure: (procedure: string) => void;
+  setActiveParameters: (parameter: ProcedureParameter[]) => void;
   setCode: (code: string) => void;
 }
 
 const ProcedureDropdown = ({
   activeDb,
   activeProcedure,
+  setParameterValues,
   setActiveProcedure,
+  setActiveParameters,
   setCode,
 }: IProcedureDropdownProps) => {
   const proceduresDefault = ['test1', 'test2', 'test3'];
@@ -39,6 +45,17 @@ const ProcedureDropdown = ({
     } catch (e) {
       setAlert(true);
     }
+    const params = await window.procedures.ipcRenderer.getProcedureParameters(
+      procedure
+    );
+
+    setActiveParameters(params);
+
+    const p: Parameter = {};
+    params.forEach((item) => {
+      p[item.name] = '';
+    });
+    setParameterValues(p);
   };
 
   const showAlert = () => {
