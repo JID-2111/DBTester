@@ -9,7 +9,29 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Release Notes
 
+## Version 0.3.0
+
+> [GitHub Release](https://github.com/JID-2111/JID-2111/releases/tag/v0.3.0)
+
+### New Features
+
+- Ability to customize multiple unit tests to run on a database
+- View outcome of executing multiple unit tests on the database
+- Pass custom parameters to the procedure for testing
+- All unit testing data is stored locally on execution
+
+### Known Issues
+
+- Running the unit tests multiple times results in inconsistent behavior
+- You can add incomplete unit test conditions
+
+### Bug Fixes
+
+- Verified Postgres password behavior is intended
+
 ## Version 0.2.0
+
+> [GitHub Release](https://github.com/JID-2111/JID-2111/releases/tag/v0.2.0)
 
 ### New Features
 
@@ -54,10 +76,7 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Pre requisites
 
-- Node Install: [Bundled](https://nodejs.org/en/download/), [Homebrew](https://formulae.brew.sh/formula/node)
-- [ODBC Binaries](https://www.npmjs.com/package/odbc)
-  - Setup [Guide](https://exploratory.io/note/exploratory/How-to-set-up-ODBC-in-Mac-unixodbc-lQz2Fnp7)
-  - [Postgres ODBC Driver](https://formulae.brew.sh/formula/psqlodbc)
+- Node.JS: [Bundled](https://nodejs.org/en/download/), [Homebrew](https://formulae.brew.sh/formula/node)
 
 ### VS Code Extensions
 
@@ -96,7 +115,7 @@ See documentation [here](https://electron-react-boilerplate.js.org/docs/adding-d
 
 ## Packaging for Production
 
-To package apps for the local platform:
+> Building for current OS
 
 ```
 npm run package
@@ -112,17 +131,11 @@ npm run package
 - `npm run lint:fix` - runs ESLint and reports all linting errors, attempting to fix any auto-fixable ones
 - `npm run format` - runs Prettier and automatically formats the entire codebase
 - `npm run format:check` - runs Prettier and reports formatting errors without fixing them
+- `npm run typecheck` - Quickly compile the code to check type errors
 
 ## Docs
 
 See boilerplate [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation)
-
-# Links
-
-- Electron
-  - Reload Script [docs](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts)
-  - IPC Renderer [Documentation](https://www.electronjs.org/docs/latest/api/ipc-renderer)
-  - IPC two way usage [docs](https://www.electronjs.org/docs/latest/tutorial/ipc#pattern-2-renderer-to-main-two-way)
 
 ## IPC Renderer
 
@@ -141,9 +154,25 @@ src/renderer/preload.d.ts
 - ![#1589F0](https://via.placeholder.com/15/339989ff/339989ff.png) `#339989ff: Persian Green`
 - ![#1589F0](https://via.placeholder.com/15/7de2d1ff/7de2d1ff.png) `#7de2d1ff: Middle Blue Green`
 - ![#1589F0](https://via.placeholder.com/15/fffafbff/fffafbff.png) `#fffafbff: Snow`
-- ![#1589F0](https://via.placeholder.com/15/e4c3ad/e4c3ad.png) `#e4c3ad: Sand`
+- ![#1589F0](https://via.placeholder.com/15/e4c3ad/e4c3ad.png) `#e4c3adff: Sand`
 
-[github-actions-status]: https://github.com/JID-2111/JID-2111/workflows/Test/badge.svg
+[github-actions-status]: https://github.com/JID-2111/JID-2111/workflows/CI/badge.svg
 [github-actions-url]: https://github.com/JID-2111/JID-2111/actions
 [github-tag-image]: https://img.shields.io/github/v/tag/JID-2111/JID-2111.svg?label=version&sort=semver
 [github-tag-url]: https://github.com/JID-2111/JID-2111/releases/latest
+
+# License
+
+Copyright 2022 KPMG
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
