@@ -10,6 +10,7 @@ import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
 import { OutputFormat, RecordMatches } from 'db/entity/enum';
 import ProcedureDropdown from './ProcedureDropdown';
+import TableDropdown from './TableDropdown';
 
 import '../../scss/Execute.scss';
 import DBDropdown from './DBDropdown';
@@ -149,6 +150,10 @@ const Execute = () => {
                   code
                 </Button>
               )}
+            </Row>
+            <Row>
+              <h6>Selected Table</h6>
+              <TableDropdown activeDb={activeDb} />
             </Row>
             <Row>
               {activeProcedure && (
