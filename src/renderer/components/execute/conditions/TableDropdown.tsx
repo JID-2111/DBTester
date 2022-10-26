@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-import '../../scss/Execute.scss';
+import '../../../scss/Execute.scss';
 
 interface ITableDropdownProps {
   activeDb: string;
 }
 
 const TableDropdown = ({ activeDb }: ITableDropdownProps) => {
-  const tablesDefault = ['test1', 'test2', 'test3'];
+  const tablesDefault = ['no tables found'];
   const [tables, setTables] = useState<string[]>();
   const [activeTable, setActiveTable] = useState<string>('Select Table');
   useEffect(() => {
