@@ -9,9 +9,10 @@
   border-radius: 0.375em;
 }
 
-.table {
+#Recents-table {
   text-align: center;
   width: 80%;
+  border: 5px solid;
 }
 
 thead {
@@ -25,11 +26,11 @@ th {
   font-size: large;
 }
 
-tr {
+#Recents-table tr {
   border: 5px solid;
 }
 
-td {
+#Recents-table td {
   border: 3px solid;
 }
 

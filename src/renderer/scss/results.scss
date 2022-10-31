@@ -16,27 +16,28 @@
   margin: auto;
 }
 
-.table {
+.Results-Table {
   margin: auto;
-}
-
-thead {
-  background-color: colors.$sand;
-}
-
-th {
-  border: 5px solid;
   text-align: center;
-  font-weight: bold;
-  font-size: large;
+  vertical-align: middle;
 }
 
-tr {
-  border: 5px solid;
-}
-
-td {
+.Results-Table tr {
   border: 3px solid;
+  border-left: none;
+  border-right: none;
+  text-align: center;
+  vertical-align: middle;
+  padding: 5px;
+}
+
+.Results-Table td {
+  border: 3px solid;
+  border-right: none;
+  border-left: none;
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px;
 }
 
 .homeButton {
