@@ -28,6 +28,7 @@ class ExecutionEntity {
    */
   @OneToMany((_type) => RuleEntity, (rule) => rule.execution, {
     cascade: true,
+    eager: true,
   })
   @Type(() => RuleEntity)
   rules: RuleEntity[];
@@ -40,6 +41,7 @@ class ExecutionEntity {
     (connection) => connection.executions,
     {
       onDelete: 'CASCADE',
+      eager: true,
     }
   )
   @Type(() => ConnectionEntity)

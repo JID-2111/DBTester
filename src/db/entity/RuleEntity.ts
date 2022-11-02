@@ -77,6 +77,7 @@ class RuleEntity {
 
   @OneToMany((_type) => UnitTestEntity, (unitTest) => unitTest.rule, {
     cascade: true,
+    eager: true,
   })
   @Type(() => UnitTestEntity, {
     discriminator: {
