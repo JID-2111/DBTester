@@ -4,12 +4,10 @@ import { ProcedureParameter } from 'db/Procedures';
 
 import '../../scss/Execute.scss';
 import Modal from '../utils/Modal';
-import { Parameter } from './ParameterContainer';
 
 interface IProcedureDropdownProps {
   activeDb: string;
   activeProcedure: string;
-  setParameterValues: (parameters: Parameter) => void;
   setActiveProcedure: (procedure: string) => void;
   setActiveParameters: (parameter: ProcedureParameter[]) => void;
   setCode: (code: string) => void;
@@ -18,7 +16,6 @@ interface IProcedureDropdownProps {
 const ProcedureDropdown = ({
   activeDb,
   activeProcedure,
-  setParameterValues,
   setActiveProcedure,
   setActiveParameters,
   setCode,
@@ -50,12 +47,6 @@ const ProcedureDropdown = ({
     );
 
     setActiveParameters(params);
-
-    const p: Parameter = {};
-    params.forEach((item) => {
-      p[item.name] = '';
-    });
-    setParameterValues(p);
   };
 
   const showAlert = () => {
