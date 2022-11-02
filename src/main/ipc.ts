@@ -65,6 +65,14 @@ ipcMain.handle('connections:verify', (_event) => {
   return new ConnectionService().verify();
 });
 
+ipcMain.handle('executions:fetchAll', (_event) => {
+  return new ExecutionService().fetch();
+});
+
+ipcMain.handle('executions:fetchMostRecent', (_event) => {
+  return new ExecutionService().getMostRecent();
+});
+
 ipcMain.handle('executions:checkPassFail', (_event, ...args) => {
   return new ExecutionService().checkPassFail(args[0]);
 });
