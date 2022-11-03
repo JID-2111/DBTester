@@ -22,6 +22,8 @@ interface ILocationState {
 const Results = () => {
   const location = useLocation();
   const state = location.state as ILocationState;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // disable for now until execute is finished
   const { results } = state;
   const execution: ExecutionModelType = {
     timestamp: new Date(),
