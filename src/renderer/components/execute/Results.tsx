@@ -146,8 +146,14 @@ const Results = () => {
           return (
             <Accordion className="accordionClass">
               <AccordionItem eventKey="0">
-                <AccordionHeader>
-                  {passFail(rule) ? (rule.name, (<CheckLg />)) : rule.name}
+                <AccordionHeader id="header">
+                  {passFail(rule) ? (
+                    <>
+                      {rule.name} <CheckLg className="Check" />
+                    </>
+                  ) : (
+                    rule.name
+                  )}
                 </AccordionHeader>
                 <AccordionBody>
                   {rule.unitTests.map((Test) => {
