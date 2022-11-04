@@ -1,63 +1,80 @@
 import { useEffect, useState } from 'react';
-import { Button, Accordion } from 'react-bootstrap';
+import { Accordion, Button, Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import '../../scss/History.scss';
 
 const History = () => {
-  const [filter, setFilter] = useState('');
-  const [history, setHistory] = useState([]);
+  const databases = [''];
+  const [searchFilter, setSearchFilter] = useState<string>('');
+  const [dbFilter, setDbFilter] = useState<string>('');
+  const [dateFilter, setDateFilter] = useState<string>('');
 
   useEffect(() => {}, []); // Update procedure history based on filter
 
-  const showHistory = () => {
-    return (
-      <Accordion defaultActiveKey="0" className="history-list">
-        {history.map((procedure, id) => {
-          return (
-            <Accordion.Item eventKey="0">
-              <Accordion.Header>{procedure.name}</Accordion.Header>
-              <Accordion.Body>
-                <p>{procedure.description}</p>
-                <p>{procedure.date}</p>
-                <p>{procedure.time}</p>
-                <p>{procedure.user}</p>
-                <p>{procedure.database}</p>
-                <p>{procedure.query}</p>
-              </Accordion.Body>
-            </Accordion.Item>
-          );
-        })}
-      </Accordion>
-    );
+  const handleDbFilter = (db: string) => {
+    setDbFilter(db);
   };
 
+  const dbDropdown = (
+    <Dropdown className="dropdown">
+      <Dropdown.Toggle variant="primary">{dbFilter}</Dropdown.Toggle>
+      <Dropdown.Menu>
+        {databases?.map((database: string) => {
+          const dbKey = `database- + ${database}`;
+          return (
+            <Dropdown.Item key={dbKey} onClick={() => handleDbFilter(database)}>
+              {database}
+            </Dropdown.Item>
+          );
+        })}
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+
+  const exampleHistory = (
+    <Accordion>
+      {Array.from({ length: 10 }).map((_, index) => {
+        const key = `procedure-${index}`;
+        return (
+          <Accordion.Item eventKey={key} key={key}>
+            <Accordion.Header>Procedure {index}</Accordion.Header>
+            <Accordion.Body>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem
+              tempore omnis, explicabo sint quae nobis mollitia quis minima
+              laboriosam necessitatibus dignissimos dolore ipsum cum ab
+              asperiores facere culpa eum saepe!
+            </Accordion.Body>
+          </Accordion.Item>
+        );
+      })}
+    </Accordion>
+  );
+
   return (
-    <>
-      <div className="history-header">
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="history-wrapper">
         <h1>History</h1>
-      </div>
-      <div className="history-filter">
         <div className="history-filter">
           <h6>Search</h6>
           <input
             type="text"
             placeholder="Filter"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            value={searchFilter}
+            onChange={(e) => setSearchFilter(e.target.value)}
           />
-          <div className="history-filter">
-            {/* Filter / Sort by db, date, or type */}
-          </div>
+          <h6>Database</h6>
+          {dbDropdown}
+          <h6>Date</h6>
+        </div>
+        <div className="history-list">{exampleHistory}</div>
+        <div className="homeButton">
+          <Link to="/">
+            <Button type="button">Home</Button>
+          </Link>
         </div>
       </div>
-      <div className="history-list">{showHistory()}</div>
-      <div className="homeButton">
-        <Link to="/">
-          <Button type="button">Home</Button>
-        </Link>
-      </div>
-    </>
+    </div>
   );
 };
 
