@@ -3,24 +3,40 @@
 .history-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
+  justify-content: center;
+  padding: 10px;
+  width: 90vw;
+  height: auto;
   overflow: hidden;
+  background-color: colors.$snow;
+  border-radius: 0.375em;
+
+  h1 {
+    margin: 1vh;
+  }
 }
 
 .history-filter {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  height: 50px;
+  flex-direction: column;
+  align-items: left;
+  width: 25vw;
+  height: auto;
+
+  h6 {
+    margin: 0px;
+  }
 }
 
 .history-list {
-  display: flex;
-  flex-direction: column;
+  justify-content: center;
+  flex-direction: row;
   flex: 1;
   overflow: auto;
-  padding: 0 20px;
+}
+
+.home-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }

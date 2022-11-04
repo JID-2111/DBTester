@@ -56,7 +56,7 @@ const History = () => {
       <div className="history-wrapper">
         <h1>History</h1>
         <div className="history-filter">
-          <h6>Search</h6>
+          <h6>Filter By</h6>
           <input
             type="text"
             placeholder="Filter"
