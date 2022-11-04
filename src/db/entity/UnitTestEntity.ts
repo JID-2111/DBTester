@@ -79,6 +79,10 @@ export abstract class UnitTestEntity {
   })
   @Type(() => RuleEntity)
   rule: RuleEntity;
+
+  constructor(entity: UnitTestEntity) {
+    Object.assign(this, entity);
+  }
 }
 
 @ChildEntity()
