@@ -39,7 +39,7 @@ const rule1: RuleModelType = {
 const rule2: RuleModelType = {
   name: 'rule2',
   ruleId: 1,
-  database: 'React',
+  database: 'KPMG',
   testData: '',
   unitTests: [],
   execution,
@@ -197,12 +197,12 @@ const History = () => {
   const [activeDb, setActiveDb] = useState<string>('All');
   const [allDatabases, setallDatabases] = useState<string[]>([]);
   const [successFilter, setSuccessFilter] = useState<string>('All');
-  // const [executions, setExecutions] = useState<ExecutionModelType[]>([]);
   const [executions, setExecutions] = useState<ExecutionModelType[]>([]);
   const [rows, setRows] = useState<Flattened[]>([]);
+  const [showRows, setShowRows] = useState<Flattened[]>([]);
 
   useEffect(() => {
-    setallDatabases(['All', 'Test1', 'Test2', 'Test3']);
+    setallDatabases(['All', 'Test1', 'Test2', 'Test3', 'React', 'KPMG']);
     setExecutions([execution]);
   }, []); // Update procedure history based on filter
 
@@ -223,7 +223,27 @@ const History = () => {
       });
     });
     setRows(result);
+    setShowRows(result);
   }, [executions]);
+
+  useEffect(() => {
+    let tempRows: Flattened[] = rows;
+
+    if (activeQuery) {
+      tempRows = tempRows.filter((row) => row.procedure.includes(activeQuery));
+    }
+    if (activeDb !== 'All') {
+      tempRows = tempRows.filter((row) => row.database.includes(activeDb));
+    }
+    if (successFilter !== 'All') {
+      if (successFilter === 'Success') {
+        tempRows = tempRows.filter((row) => row.response);
+      } else if (successFilter === 'Fail') {
+        tempRows = tempRows.filter((row) => !row.response);
+      }
+    }
+    setShowRows(tempRows);
+  }, [activeQuery, activeDb, successFilter, rows]);
 
   const updateDb = (database: string) => {
     setActiveDb(database);
@@ -231,6 +251,10 @@ const History = () => {
 
   const handleStatusFilter = (status: string) => {
     setSuccessFilter(status);
+  };
+
+  const handleQueryString = (query: string) => {
+    setActiveQuery(query);
   };
 
   return (
@@ -242,7 +266,7 @@ const History = () => {
             type="text"
             placeholder="Search for a procedure"
             value={activeQuery}
-            onChange={(e) => setActiveQuery(e.target.value)}
+            onChange={(e) => handleQueryString(e.target.value)}
           />
         </div>
         <div className="filters">
@@ -280,7 +304,7 @@ const History = () => {
               </tr>
             </thead>
             <tbody>
-              {rows.map((row: Flattened) => {
+              {showRows.map((row: Flattened) => {
                 const d = new Date(row.timestamp);
                 const date = `${d.getMonth()}-${d.getDay()}-${d.getFullYear()}`;
                 const time = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
