@@ -151,6 +151,15 @@ export default class ExecutionService {
         );
       })
     );
+    // Cleanup
+    await Promise.all(
+      test.rules.map(async (rule: RuleModelType) => {
+        await this.getClient(rule.database)?.deleteFromTablesQuery(
+          rule.testData,
+          rule.cleanupTables
+        );
+      })
+    );
     try {
       const res = plainToInstance(ExecutionEntity, test, {
         enableCircularCheck: true,

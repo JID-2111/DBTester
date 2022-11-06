@@ -68,7 +68,7 @@ export default class Procedures {
     return res.fetchProcedureParametersQuery(procedure);
   }
 
-  public async fetchContent(procedure: string): Promise<string[]> {
+  public async fetchContent(procedure: string): Promise<string> {
     const res = store
       .getState()
       .connection.database.get(store.getState().connection.currentDatabase);
