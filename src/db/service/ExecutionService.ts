@@ -154,10 +154,13 @@ export default class ExecutionService {
     // Cleanup
     await Promise.all(
       test.rules.map(async (rule: RuleModelType) => {
-        await this.getClient(rule.database)?.deleteFromTablesQuery(
-          rule.testData,
-          rule.cleanupTables
-        );
+        if (rule.cleanupTables !== undefined) {
+          return this.getClient(rule.database)?.deleteFromTablesQuery(
+            rule.testData,
+            rule.cleanupTables
+          );
+        }
+        return null;
       })
     );
     try {

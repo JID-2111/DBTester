@@ -265,7 +265,7 @@ export default class PgClient implements ServerInterface {
       JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE C
       ON C.CONSTRAINT_NAME=T.CONSTRAINT_NAME
       WHERE
-      C.TABLE_NAME='${table}'
+      C.TABLE_NAME='${table.toLowerCase()}'
       and T.CONSTRAINT_TYPE='PRIMARY KEY'`
     );
     client.release();

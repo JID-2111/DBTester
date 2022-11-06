@@ -45,7 +45,7 @@ class RuleEntity {
   @Column()
   testData: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Exclude({ toPlainOnly: true })
   cleanupTableList: string;
 
