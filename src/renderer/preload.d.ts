@@ -58,6 +58,8 @@ declare global {
     executions: {
       ipcRenderer: {
         checkPassFail(test: ExecutionModelType): Promise<ExecutionModelType>;
+        fetchAll(): Promise<ExecutionModelType[]>;
+        fetchMostRecent(): Promise<ExecutionModelType>;
       };
     };
   }
