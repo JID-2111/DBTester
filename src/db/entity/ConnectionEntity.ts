@@ -25,10 +25,10 @@ class ConnectionEntity {
   id: number;
 
   @Column()
-  nickname: string;
+  defaultDatabase: string;
 
-  @Column({ nullable: true })
-  testDataTable: string;
+  @Column()
+  nickname: string;
 
   @Column({ nullable: true })
   address: string;
