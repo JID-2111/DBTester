@@ -6,7 +6,7 @@ import { IRuleGroupErrors } from './rules/AddRuleGroupModal';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface IParameterContainerProps {
   activeParameters: ProcedureParameter[];
-  setField: (f: string, v: any) => void;
+  setField: (field: string, value: any) => void;
   errors: Partial<IRuleGroupErrors>;
 }
 

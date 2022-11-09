@@ -52,7 +52,7 @@ const UnitTest = ({ condition, deleteCondition }: IConditionProps) => {
         </div>
       </Row>
       <Row>
-        <span>test level: {level}</span>
+        <span>test type: {level}</span>
       </Row>
       <Row>
         <span>description: {getDescription()}</span>

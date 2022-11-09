@@ -101,7 +101,7 @@ const AddUnitTestModal = ({ isOpen, toggle, addCondition }: IModalProps) => {
     if (!table) {
       newErrors.table = 'Please select a table.';
     } else if (!level) {
-      newErrors.level = 'Please select a test level.';
+      newErrors.level = 'Please select a test type.';
     } else {
       if (!operation) {
         newErrors.operation = 'Please select an operation to perform.';
@@ -236,7 +236,7 @@ const AddUnitTestModal = ({ isOpen, toggle, addCondition }: IModalProps) => {
 
           {form.table && (
             <Form.Group className="form-group" controlId="level">
-              <Form.Label className="form-label-sm"> Test Level</Form.Label>
+              <Form.Label className="form-label-sm"> Test Type</Form.Label>
               <Form.Select
                 className="form-control-sm"
                 isInvalid={!!errors.level}
