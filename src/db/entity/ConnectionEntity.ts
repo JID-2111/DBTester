@@ -31,6 +31,9 @@ class ConnectionEntity {
   nickname: string;
 
   @Column({ nullable: true })
+  testDataTable: string;
+
+  @Column({ nullable: true })
   address: string;
 
   @Column({ nullable: true })

@@ -40,6 +40,8 @@ export type ConnectionInputType = ConnectionInfo & {
 export type ConnectionModelType = ConnectionInfo & {
   id: number;
 
+  testDataTable?: string;
+
   defaultDatabase: string;
 
   address: string;

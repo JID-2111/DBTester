@@ -1,9 +1,12 @@
 import { Pool } from 'pg';
+import fs from 'fs';
 import log from 'electron-log';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import ServerInterface from './ServerInterface';
 import { ProcedureParameter, Direction } from '../Procedures';
 import { RowNumberOperations } from '../entity/enum';
+
+const copyFrom = require('pg-copy-streams').from;
 
 type DBQuery = {
   datname: string;
@@ -56,6 +59,25 @@ export default class PgClient implements ServerInterface {
     }
     client.release();
     return true;
+  }
+
+  public async importTestDataTable(file: string, table: string): Promise<void> {
+    const client = await this.pool.connect();
+    const stream = client.query(copyFrom(`COPY ${table} FROM STDIN`));
+    const fileStream = fs.createReadStream(file);
+    fileStream.on('error', () => {
+      client.release();
+      log.error('FileStream error');
+    });
+    stream.on('error', () => {
+      client.release();
+      log.error('FileStream error');
+    });
+    stream.on('finish', () => {
+      client.release();
+      log.error('FileStream error');
+    });
+    fileStream.pipe(stream);
   }
 
   public async getDatabasesQuery(): Promise<unknown> {

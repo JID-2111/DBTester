@@ -1,5 +1,6 @@
 import { DBColumn } from './clients/PgClient';
 import { store } from './redux/store';
+import ConnectionService from './service/ConnectionService';
 
 export enum Direction {
   IN = 'IN',
@@ -24,6 +25,22 @@ export default class Procedures {
       })
     );
     return res;
+  }
+
+  public async createTestData(file: string, table: string): Promise<void> {
+    const res = store
+      .getState()
+      .connection.database.get(store.getState().connection.currentDatabase);
+    if (res === undefined) {
+      throw new Error('Database does not exist/is not connected');
+    }
+    const connection = store.getState().connection.serverConnectionModel;
+    if (connection === null) {
+      throw new Error('Connection Model does not exist');
+    }
+    connection.testDataTable = table;
+    await new ConnectionService().update(connection);
+    return res.importTestDataTable(file, table);
   }
 
   public async getDatabases() {
