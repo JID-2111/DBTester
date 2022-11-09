@@ -34,12 +34,12 @@ export default class Procedures {
     if (res === undefined) {
       throw new Error('Database does not exist/is not connected');
     }
-    const connection = store.getState().connection.serverConnectionModel;
-    if (connection === null) {
-      throw new Error('Connection Model does not exist');
-    }
-    connection.testDataTable = table;
-    await new ConnectionService().update(connection);
+    // const connection = new ConnectionModel(store.getState().connection.serverConnectionModel);
+    // if (connection === null) {
+    //   throw new Error('Connection Model does not exist');
+    // }
+    // connection.testDataTable = table;
+    // await new ConnectionService().update(connection);
     return res.importTestDataTable(file, table);
   }
 

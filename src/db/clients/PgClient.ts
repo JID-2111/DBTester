@@ -63,19 +63,22 @@ export default class PgClient implements ServerInterface {
 
   public async importTestDataTable(file: string, table: string): Promise<void> {
     const client = await this.pool.connect();
-    const stream = client.query(copyFrom(`COPY ${table} FROM STDIN`));
+    const stream = client.query(
+      copyFrom(`COPY ${table} FROM STDIN DELIMITER ',' CSV HEADER;`)
+    );
     const fileStream = fs.createReadStream(file);
-    fileStream.on('error', () => {
+    log.error(fileStream);
+    fileStream.on('error', (e) => {
       client.release();
-      log.error('FileStream error');
+      log.error(`FileStream error ${e}`);
     });
-    stream.on('error', () => {
+    stream.on('error', (e: unknown) => {
       client.release();
-      log.error('FileStream error');
+      log.error(`Stream error ${e}`);
     });
     stream.on('finish', () => {
       client.release();
-      log.error('FileStream error');
+      log.error('FileStream finished');
     });
     fileStream.pipe(stream);
   }
