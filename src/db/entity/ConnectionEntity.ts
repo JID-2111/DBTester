@@ -25,9 +25,6 @@ class ConnectionEntity {
   id: number;
 
   @Column()
-  defaultDatabase: string;
-
-  @Column()
   nickname: string;
 
   @Column({ nullable: true })
