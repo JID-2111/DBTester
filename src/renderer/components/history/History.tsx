@@ -5,184 +5,10 @@ import Table from 'react-bootstrap/Table';
 import '../../scss/History.scss';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
-import {
-  TableTestType,
-  RowTestType,
-  UnitTestType,
-} from 'db/models/UnitTestModels';
-import {
-  TableGenericOperations,
-  UnitTestOperations,
-  OutputFormat,
-  RecordMatches,
-  RowNumberOperations,
-} from 'db/entity/enum';
+import { UnitTestType } from 'db/models/UnitTestModels';
+
 import StatusDropdown from './StatusDropdown';
 import DBDropdown from './DBDropdown';
-
-const execution: ExecutionModelType = {
-  timestamp: new Date(),
-  rules: [],
-};
-
-const rule1: RuleModelType = {
-  name: 'rule1',
-  ruleId: 0,
-  database: 'React',
-  testData: '',
-  unitTests: [],
-  execution,
-  procedure: 'procedure2',
-  parameters: [],
-};
-
-const rule2: RuleModelType = {
-  name: 'rule2',
-  ruleId: 1,
-  database: 'KPMG',
-  testData: '',
-  unitTests: [],
-  execution,
-  procedure: 'procedure1',
-  parameters: [],
-};
-const test1: TableTestType = {
-  operation: TableGenericOperations.EXISTS,
-  level: UnitTestOperations.TableGenericOperations,
-  name: 'test1',
-  expectedRecordMatches: RecordMatches.TABLE_ROWS,
-  total: false,
-  expectedNumRecords: 0,
-  table: 'accounts',
-  result: true,
-  format: OutputFormat.PLAIN,
-  output: '',
-  rule: rule1,
-};
-
-const test2: TableTestType = {
-  operation: TableGenericOperations.COUNT,
-  level: UnitTestOperations.TableGenericOperations,
-  name: 'test2',
-  expectedRecordMatches: RecordMatches.TABLE_ROWS,
-  total: true,
-  expectedNumRecords: 10,
-  table: 'accounts',
-  result: false,
-  format: OutputFormat.PLAIN,
-  output: '',
-  rule: rule1,
-};
-
-const test3: TableTestType = {
-  operation: TableGenericOperations.COUNT,
-  level: UnitTestOperations.TableGenericOperations,
-  name: 'test3',
-  expectedRecordMatches: RecordMatches.TABLE_ROWS,
-  total: false,
-  expectedNumRecords: 2,
-  table: 'accounts',
-  result: false,
-  format: OutputFormat.PLAIN,
-  output: '',
-  rule: rule1,
-};
-
-const test4: RowTestType = {
-  operation: RowNumberOperations.LT,
-  level: UnitTestOperations.RowNumberOperations,
-  name: 'test4',
-  expectedRecordMatches: RecordMatches.TABLE_ROWS,
-  total: true,
-  column: 'balance',
-  expectedNumRecords: 2,
-  table: 'accounts',
-  result: true,
-  format: OutputFormat.PLAIN,
-  output: '',
-  value: '200',
-  rule: rule2,
-};
-
-const test5: RowTestType = {
-  operation: RowNumberOperations.EQ,
-  level: UnitTestOperations.RowNumberOperations,
-  name: 'test5',
-  expectedRecordMatches: RecordMatches.ZERO,
-  total: true,
-  column: 'balance',
-  expectedNumRecords: 2,
-  table: 'accounts',
-  result: true,
-  format: OutputFormat.PLAIN,
-  output: '',
-  value: '100',
-  rule: rule2,
-};
-
-const test9: RowTestType = {
-  operation: RowNumberOperations.EQ,
-  level: UnitTestOperations.RowNumberOperations,
-  name: 'test5',
-  expectedRecordMatches: RecordMatches.ZERO,
-  total: true,
-  column: 'balance',
-  expectedNumRecords: 2,
-  table: 'accounts',
-  result: true,
-  format: OutputFormat.PLAIN,
-  output: '',
-  value: '100',
-  rule: rule2,
-};
-const test6: RowTestType = {
-  operation: RowNumberOperations.EQ,
-  level: UnitTestOperations.RowNumberOperations,
-  name: 'test5',
-  expectedRecordMatches: RecordMatches.ZERO,
-  total: true,
-  column: 'balance',
-  expectedNumRecords: 2,
-  table: 'accounts',
-  result: true,
-  format: OutputFormat.PLAIN,
-  output: '',
-  value: '100',
-  rule: rule2,
-};
-const test7: RowTestType = {
-  operation: RowNumberOperations.EQ,
-  level: UnitTestOperations.RowNumberOperations,
-  name: 'test5',
-  expectedRecordMatches: RecordMatches.ZERO,
-  total: true,
-  column: 'balance',
-  expectedNumRecords: 2,
-  table: 'accounts',
-  result: true,
-  format: OutputFormat.PLAIN,
-  output: '',
-  value: '100',
-  rule: rule2,
-};
-const test8: RowTestType = {
-  operation: RowNumberOperations.EQ,
-  level: UnitTestOperations.RowNumberOperations,
-  name: 'test5',
-  expectedRecordMatches: RecordMatches.ZERO,
-  total: true,
-  column: 'balance',
-  expectedNumRecords: 2,
-  table: 'accounts',
-  result: true,
-  format: OutputFormat.PLAIN,
-  output: '',
-  value: '100',
-  rule: rule2,
-};
-rule1.unitTests = [test1, test2, test3];
-rule2.unitTests = [test4, test5, test6, test7, test8, test9];
-execution.rules = [rule1, rule2];
 
 interface Flattened {
   timestamp: Date;
@@ -203,7 +29,12 @@ const History = () => {
 
   useEffect(() => {
     setallDatabases(['All', 'Test1', 'Test2', 'Test3', 'React', 'KPMG']);
-    setExecutions([execution]);
+    const fetchExecutions = async () => {
+      const execution: ExecutionModelType[] =
+        await window.executions.ipcRenderer.fetchAll();
+      setExecutions(execution);
+    };
+    fetchExecutions();
   }, []); // Update procedure history based on filter
 
   useEffect(() => {
@@ -319,7 +150,7 @@ const History = () => {
                     <td>{row.response ? 'Success' : 'Fail'}</td>
                     <td>5 mins</td>
                     <Button size="sm" type="button" className="rerun-button">
-                      run
+                      load
                     </Button>
                   </tr>
                 );
