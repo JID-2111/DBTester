@@ -1,19 +1,14 @@
-import { Table, Button } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Table } from 'react-bootstrap';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import AllPass from './AllPass';
 import Displaytests from './Displaytests';
 import '../../scss/results.scss';
 
-interface ILocationState {
+interface IResultsProps {
   results: ExecutionModelType;
 }
-const Results = () => {
-  const location = useLocation();
-  const state = location.state as ILocationState;
-  const { results } = state;
-
+const Results = ({ results }: IResultsProps) => {
   const passFail = (Rule: RuleModelType): boolean => {
     let pass = true;
     Rule.unitTests.forEach((test) => {
@@ -32,7 +27,7 @@ const Results = () => {
         </div>
         <Table className="table">
           <thead>
-            <tr key={results.id}>
+            <tr key={results ? results.id : 0}>
               <th>Name</th>
               <th>ID</th>
               <th>Database</th>
@@ -42,24 +37,20 @@ const Results = () => {
             </tr>
           </thead>
           <tbody>
-            {results.rules.map((value) => {
-              return (
-                <>
-                  {passFail(value) ? (
-                    <AllPass Rule={value} />
-                  ) : (
-                    <Displaytests Rule={value} />
-                  )}
-                </>
-              );
-            })}
+            {results &&
+              results.rules.map((value) => {
+                return (
+                  <>
+                    {passFail(value) ? (
+                      <AllPass Rule={value} />
+                    ) : (
+                      <Displaytests Rule={value} />
+                    )}
+                  </>
+                );
+              })}
           </tbody>
         </Table>
-      </div>
-      <div className="homeButton">
-        <Link to="/">
-          <Button type="button">Home</Button>
-        </Link>
       </div>
     </div>
   );

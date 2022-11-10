@@ -94,6 +94,7 @@ class RuleEntity {
 
   @OneToMany((_type) => UnitTestEntity, (unitTest) => unitTest.rule, {
     cascade: true,
+    eager: true,
   })
   @Type(() => UnitTestEntity, {
     discriminator: {
@@ -123,7 +124,33 @@ class RuleEntity {
     },
     keepDiscriminatorProperty: true,
   })
-  unitTests: UnitTestEntity[];
+  unitTests: (
+    | TableTestEntity
+    | RowStringEntity
+    | RowIDEntity
+    | RowNumberEntity
+    | RowBooleanEntity
+  )[];
+
+  @AfterLoad()
+  castUnitTests() {
+    this.unitTests = this.unitTests.map((unitTest) => {
+      switch (unitTest.level) {
+        case UnitTestOperations.TableGenericOperations:
+          return new TableTestEntity(unitTest);
+        case UnitTestOperations.RowStringOperations:
+          return new RowStringEntity(unitTest);
+        case UnitTestOperations.RowIDOperations:
+          return new RowIDEntity(unitTest);
+        case UnitTestOperations.RowNumberOperations:
+          return new RowNumberEntity(unitTest);
+        case UnitTestOperations.RowBooleanOperations:
+          return new RowBooleanEntity(unitTest);
+        default:
+          throw new Error(`Unknown unit test`);
+      }
+    });
+  }
 }
 
 export default RuleEntity;
