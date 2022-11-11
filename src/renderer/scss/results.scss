@@ -11,44 +11,27 @@
 }
 
 .table-div {
-  text-align: center;
   width: 80%;
   margin: auto;
 }
 
 .Results-Table {
   margin: auto;
-  text-align: center;
-  vertical-align: middle;
+  border-top: solid;
 }
 
 .Results-Table tr {
-  border: 3px solid;
+  border-bottom: 3px solid;
   border-left: none;
   border-right: none;
   text-align: center;
-  vertical-align: middle;
-  padding: 5px;
 }
 
 .Results-Table td {
-  border: 3px solid;
-  border-right: none;
-  border-left: none;
-  text-align: center;
-  justify-items: center;
-  vertical-align: middle;
   padding: 10px;
 }
 
 .homeButton {
   margin: 1em;
   float: right;
-}
-.viewtest {
-  border: none;
-  border-radius: 5px;
-}
-.viewtest:hover {
-  background-color: lightgreen;
 }

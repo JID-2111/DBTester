@@ -61,7 +61,7 @@ const Results = () => {
     table: 'accounts',
     result: true,
     format: OutputFormat.PLAIN,
-    output: '',
+    output: 'good job',
     rule: rule1,
   };
 
@@ -75,7 +75,7 @@ const Results = () => {
     table: 'accounts',
     result: false,
     format: OutputFormat.PLAIN,
-    output: '',
+    output: 'this test did not pass',
     rule: rule1,
   };
 
@@ -89,7 +89,7 @@ const Results = () => {
     table: 'accounts',
     result: false,
     format: OutputFormat.PLAIN,
-    output: '',
+    output: 'test could use some work',
     rule: rule1,
   };
 
@@ -104,7 +104,7 @@ const Results = () => {
     table: 'accounts',
     result: true,
     format: OutputFormat.PLAIN,
-    output: '',
+    output: 'output goes here',
     value: '200',
     rule: rule2,
   };
@@ -120,7 +120,7 @@ const Results = () => {
     table: 'accounts',
     result: true,
     format: OutputFormat.PLAIN,
-    output: '',
+    output: 'this is an output',
     value: '100',
     rule: rule2,
   };
@@ -158,22 +158,32 @@ const Results = () => {
                   )}
                 </AccordionHeader>
                 <AccordionBody>
-                  {rule.unitTests.map((Test) => {
-                    return (
-                      <Table className="Results-Table">
-                        <tr key={Test.id}>
-                          <td>{Test.name}</td>
-                          {Test.result ? (
-                            <td> test Passed </td>
-                          ) : (
-                            <td> Test Failed</td>
-                          )}
-                          {Test.result ? <CheckLg /> : <XLg />}
-                          <td> {Test.output}</td>
-                        </tr>
-                      </Table>
-                    );
-                  })}
+                  <Table className="Results-Table">
+                    {rule.unitTests.map((Test) => {
+                      return (
+                        <tbody>
+                          <tr key={Test.id}>
+                            <td>{Test.name}</td>
+                            {Test.result ? (
+                              <td> Test Passed </td>
+                            ) : (
+                              <td> Test Failed</td>
+                            )}
+                            {Test.result ? (
+                              <td>
+                                <CheckLg className="Check" />
+                              </td>
+                            ) : (
+                              <td>
+                                <XLg className="X" />
+                              </td>
+                            )}
+                            <td> {Test.output}</td>
+                          </tr>
+                        </tbody>
+                      );
+                    })}
+                  </Table>
                 </AccordionBody>
               </AccordionItem>
             </Accordion>
