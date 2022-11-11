@@ -146,19 +146,40 @@ const AddRuleGroupModal = ({
             setField={setField}
             errors={errors}
           />
-          <Form.Label className="form-label-sm">Cleanup Tables</Form.Label>
-          <Select
-            isMulti
-            options={tables}
-            components={animatedComponents}
-            className="form-control-sm"
-            onChange={(e) => {
-              setField(
-                'cleanupTables',
-                e.map((t) => (t as ListOption).value)
-              );
-            }}
-          />
+          <Form.Group className="form-group">
+            <Form.Label variant="primary">Data Table</Form.Label>
+            <Form.Select
+              onChange={(e) => {
+                setField('testData', e.target.value);
+              }}
+            >
+              {!form.testData && <option aria-label="empty-option" />}
+              {tables &&
+                tables.map((table: ListOption) => {
+                  const tableKey = `table- + ${table}`;
+                  return (
+                    <option key={tableKey} value={table.value}>
+                      {table.value}
+                    </option>
+                  );
+                })}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="form-group" controlId="cleanup">
+            <Form.Label className="form-label-sm">Cleanup Tables</Form.Label>
+            <Select
+              isMulti
+              options={tables}
+              components={animatedComponents}
+              className="form-control-sm"
+              onChange={(e) => {
+                setField(
+                  'cleanupTables',
+                  e.map((t) => (t as ListOption).value)
+                );
+              }}
+            />
+          </Form.Group>
         </Form>
       }
       submit={handleSubmit}

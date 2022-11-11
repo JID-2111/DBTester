@@ -96,7 +96,7 @@ const Execute = () => {
       name: rule.name || 'name',
       database: activeDb,
       procedure: activeProcedure,
-      testData: 'testdata',
+      testData: rule.testData || '',
       ruleId:
         execution.rules.length > 0
           ? execution.rules[execution.rules.length - 1].ruleId + 1
