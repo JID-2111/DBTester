@@ -6,7 +6,6 @@ import '../../scss/History.scss';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
-import log from 'electron-log';
 
 import StatusDropdown from './StatusDropdown';
 import ConnectionDropdown from './ConnectionDropdown';
@@ -104,13 +103,9 @@ const History = () => {
   };
 
   const handleLoadClick = async (ex: ExecutionModelType) => {
-    try {
-      if (ex.connection) {
-        await window.connections.ipcRenderer.select(ex.connection.id);
-        navigate('/execute', { state: ex });
-      }
-    } catch (e) {
-      log.error(e);
+    if (ex.connection) {
+      await window.connections.ipcRenderer.select(ex.connection.id);
+      navigate('/execute', { state: ex });
     }
   };
 

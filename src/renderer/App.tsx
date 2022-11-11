@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/execute" element={<Execute />} />
         <Route path="/newconnection" element={<NewConnections />} />
         <Route path="/RecentConnection" element={<RecentConnections />} />
-        <Route path="/History" element={<History connection={undefined} />} />
+        <Route path="/History" element={<History />} />
       </Routes>
     </Router>
   );
