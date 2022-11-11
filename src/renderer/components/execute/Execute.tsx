@@ -10,6 +10,7 @@ import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
 import { OutputFormat, RecordMatches } from 'db/entity/enum';
 import { ConnectionModelType } from 'db/models/ConnectionModels';
+import History from '../history/History';
 import ProcedureDropdown from './ProcedureDropdown';
 
 import '../../scss/Execute.scss';
@@ -242,6 +243,9 @@ const Execute = () => {
           </Tab>
           <Tab eventKey="results" title="Results">
             <Results results={execution!} />
+          </Tab>
+          <Tab eventKey="history" title="History">
+            {connection && <History connection={connection} />}
           </Tab>
         </Tabs>
       </Col>

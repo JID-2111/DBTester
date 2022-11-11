@@ -6,6 +6,7 @@ import '../../scss/History.scss';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
+import { ConnectionModelType } from 'db/models/ConnectionModels';
 
 import StatusDropdown from './StatusDropdown';
 import DBDropdown from './DBDropdown';
@@ -18,44 +19,77 @@ interface Flattened {
   response: boolean;
 }
 
-const History = () => {
+interface IHistoryProps {
+  connection?: ConnectionModelType;
+}
+
+const History = ({ connection }: IHistoryProps) => {
   const [activeQuery, setActiveQuery] = useState<string>('');
+  const [activeConnection, setActiveConnection] = useState<string>('');
   const [activeDb, setActiveDb] = useState<string>('All');
-  const [allDatabases, setallDatabases] = useState<string[]>([]);
+  const [allDatabases, setAllDatabases] = useState<string[]>([]);
   const [successFilter, setSuccessFilter] = useState<string>('All');
   const [executions, setExecutions] = useState<ExecutionModelType[]>([]);
   const [rows, setRows] = useState<Flattened[]>([]);
   const [showRows, setShowRows] = useState<Flattened[]>([]);
 
   useEffect(() => {
-    setallDatabases(['All', 'Test1', 'Test2', 'Test3', 'React', 'KPMG']);
+    setActiveConnection(connection ? connection.nickname : '');
     const fetchExecutions = async () => {
       const execution: ExecutionModelType[] =
         await window.executions.ipcRenderer.fetchAll();
       setExecutions(execution);
     };
     fetchExecutions();
-  }, []); // Update procedure history based on filter
+  }, [connection]); // Update procedure history based on filter
 
   useEffect(() => {
-    const result: Flattened[] = [];
-    executions.forEach((ex: ExecutionModelType) => {
-      ex.rules.forEach((rule: RuleModelType) => {
-        rule.unitTests.forEach((test: UnitTestType) => {
-          const flat: Flattened = {
-            timestamp: ex.timestamp,
-            procedure: rule.procedure,
-            database: rule.database,
-            dbType: ex.connection?.type,
-            response: test.result,
-          };
-          result.push(flat);
+    if (activeConnection === '') {
+      const result: Flattened[] = [];
+      const tempDBs: Set<string> = new Set();
+      executions.forEach((ex: ExecutionModelType) => {
+        ex.rules.forEach((rule: RuleModelType) => {
+          rule.unitTests.forEach((test: UnitTestType) => {
+            tempDBs.add(rule.database);
+            const flat: Flattened = {
+              timestamp: ex.timestamp,
+              procedure: rule.procedure,
+              database: rule.database,
+              dbType: ex.connection?.type,
+              response: test.result,
+            };
+            result.push(flat);
+          });
         });
       });
-    });
-    setRows(result);
-    setShowRows(result);
-  }, [executions]);
+      setRows(result);
+      setShowRows(result);
+      setAllDatabases([...tempDBs]);
+    } else {
+      const result: Flattened[] = [];
+      const tempDBs: Set<string> = new Set();
+      executions.forEach((ex: ExecutionModelType) => {
+        if (ex.connection?.nickname === activeConnection) {
+          ex.rules.forEach((rule: RuleModelType) => {
+            rule.unitTests.forEach((test: UnitTestType) => {
+              tempDBs.add(rule.database);
+              const flat: Flattened = {
+                timestamp: ex.timestamp,
+                procedure: rule.procedure,
+                database: rule.database,
+                dbType: ex.connection?.type,
+                response: test.result,
+              };
+              result.push(flat);
+            });
+          });
+        }
+      });
+      setRows(result);
+      setShowRows(result);
+      setAllDatabases([...tempDBs]);
+    }
+  }, [executions, activeConnection]);
 
   useEffect(() => {
     let tempRows: Flattened[] = rows;
@@ -166,6 +200,10 @@ const History = () => {
       </div>
     </div>
   );
+};
+
+History.defaultProps = {
+  connection: '',
 };
 
 export default History;
