@@ -103,6 +103,7 @@ const Execute = () => {
           : 0,
       unitTests: [],
       execution,
+      cleanupTables: rule.cleanupTables,
       parameters: rule.parameters || [],
     };
 

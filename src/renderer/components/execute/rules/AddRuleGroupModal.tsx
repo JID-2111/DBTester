@@ -1,9 +1,18 @@
 import { RuleModelType } from 'db/models/RuleModel';
 import { ProcedureParameter } from 'db/Procedures';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 import Modal from '../../utils/Modal';
 import ParameterContainer from '../ParameterContainer';
+
+const animatedComponents = makeAnimated();
+
+type ListOption = {
+  value: string;
+  label: string;
+};
 
 interface IModalProps {
   isOpen: boolean;
@@ -27,6 +36,22 @@ const AddRuleGroupModal = ({
 }: IModalProps) => {
   const [form, setForm] = useState<Partial<RuleModelType>>({});
   const [errors, setErrors] = useState<Partial<IRuleGroupErrors>>({});
+  const [tables, setTables] = useState<ListOption[]>([]);
+
+  useEffect(() => {
+    const getTables = async () => {
+      const resp = await window.procedures.ipcRenderer.fetchTables();
+      setTables(
+        resp.map((t) => {
+          return {
+            value: t,
+            label: t,
+          };
+        })
+      );
+    };
+    getTables();
+  }, []);
 
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const setField = (field: string, value: any) => {
@@ -120,6 +145,19 @@ const AddRuleGroupModal = ({
             activeParameters={activeParameters}
             setField={setField}
             errors={errors}
+          />
+          <Form.Label className="form-label-sm">Cleanup Tables</Form.Label>
+          <Select
+            isMulti
+            options={tables}
+            components={animatedComponents}
+            className="form-control-sm"
+            onChange={(e) => {
+              setField(
+                'cleanupTables',
+                e.map((t) => (t as ListOption).value)
+              );
+            }}
           />
         </Form>
       }
