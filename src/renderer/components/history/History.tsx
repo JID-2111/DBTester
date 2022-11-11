@@ -1,94 +1,73 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import '../../scss/History.scss';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
-import { ConnectionModelType } from 'db/models/ConnectionModels';
+import log from 'electron-log';
 
 import StatusDropdown from './StatusDropdown';
-import DBDropdown from './DBDropdown';
+import ConnectionDropdown from './ConnectionDropdown';
 
-interface Flattened {
+export interface Flattened {
   timestamp: Date;
   procedure: string;
   database: string;
+  connection?: string;
   dbType?: string;
   response: boolean;
+  execution: ExecutionModelType;
+  parameters: string[];
 }
 
-interface IHistoryProps {
-  connection?: ConnectionModelType;
-}
-
-const History = ({ connection }: IHistoryProps) => {
+const History = () => {
   const [activeQuery, setActiveQuery] = useState<string>('');
-  const [activeConnection, setActiveConnection] = useState<string>('');
-  const [activeDb, setActiveDb] = useState<string>('All');
-  const [allDatabases, setAllDatabases] = useState<string[]>([]);
+  const [activeConnection, setActiveConnection] = useState<string>('All');
+  const [allConnections, setAllConnections] = useState<string[]>(['All']);
   const [successFilter, setSuccessFilter] = useState<string>('All');
   const [executions, setExecutions] = useState<ExecutionModelType[]>([]);
   const [rows, setRows] = useState<Flattened[]>([]);
   const [showRows, setShowRows] = useState<Flattened[]>([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    setActiveConnection(connection ? connection.nickname : '');
     const fetchExecutions = async () => {
       const execution: ExecutionModelType[] =
         await window.executions.ipcRenderer.fetchAll();
       setExecutions(execution);
     };
     fetchExecutions();
-  }, [connection]); // Update procedure history based on filter
+  }, []); // Update procedure history based on filter
 
   useEffect(() => {
-    if (activeConnection === '') {
-      const result: Flattened[] = [];
-      const tempDBs: Set<string> = new Set();
-      executions.forEach((ex: ExecutionModelType) => {
-        ex.rules.forEach((rule: RuleModelType) => {
-          rule.unitTests.forEach((test: UnitTestType) => {
-            tempDBs.add(rule.database);
-            const flat: Flattened = {
-              timestamp: ex.timestamp,
-              procedure: rule.procedure,
-              database: rule.database,
-              dbType: ex.connection?.type,
-              response: test.result,
-            };
-            result.push(flat);
-          });
+    const result: Flattened[] = [];
+    const tempConnections: Set<string> = new Set(['All']);
+    executions.forEach((ex: ExecutionModelType) => {
+      ex.rules.forEach((rule: RuleModelType) => {
+        rule.unitTests.forEach((test: UnitTestType) => {
+          if (ex.connection) {
+            tempConnections.add(ex.connection?.nickname);
+          }
+          const flat: Flattened = {
+            timestamp: ex.timestamp,
+            procedure: rule.procedure,
+            database: rule.database,
+            connection: ex.connection?.nickname,
+            dbType: ex.connection?.type,
+            response: test.result,
+            execution: ex,
+            parameters: rule.parameters,
+          };
+          result.push(flat);
         });
       });
-      setRows(result);
-      setShowRows(result);
-      setAllDatabases([...tempDBs]);
-    } else {
-      const result: Flattened[] = [];
-      const tempDBs: Set<string> = new Set();
-      executions.forEach((ex: ExecutionModelType) => {
-        if (ex.connection?.nickname === activeConnection) {
-          ex.rules.forEach((rule: RuleModelType) => {
-            rule.unitTests.forEach((test: UnitTestType) => {
-              tempDBs.add(rule.database);
-              const flat: Flattened = {
-                timestamp: ex.timestamp,
-                procedure: rule.procedure,
-                database: rule.database,
-                dbType: ex.connection?.type,
-                response: test.result,
-              };
-              result.push(flat);
-            });
-          });
-        }
-      });
-      setRows(result);
-      setShowRows(result);
-      setAllDatabases([...tempDBs]);
-    }
+    });
+    setRows(result);
+    setShowRows(result);
+    setAllConnections([...tempConnections]);
   }, [executions, activeConnection]);
 
   useEffect(() => {
@@ -97,8 +76,10 @@ const History = ({ connection }: IHistoryProps) => {
     if (activeQuery) {
       tempRows = tempRows.filter((row) => row.procedure.includes(activeQuery));
     }
-    if (activeDb !== 'All') {
-      tempRows = tempRows.filter((row) => row.database.includes(activeDb));
+    if (activeConnection !== 'All') {
+      tempRows = tempRows.filter(
+        (row) => row.connection && row.connection.includes(activeConnection)
+      );
     }
     if (successFilter !== 'All') {
       if (successFilter === 'Success') {
@@ -108,10 +89,10 @@ const History = ({ connection }: IHistoryProps) => {
       }
     }
     setShowRows(tempRows);
-  }, [activeQuery, activeDb, successFilter, rows]);
+  }, [activeQuery, activeConnection, successFilter, rows]);
 
-  const updateDb = (database: string) => {
-    setActiveDb(database);
+  const updateActiveConnection = (database: string) => {
+    setActiveConnection(database);
   };
 
   const handleStatusFilter = (status: string) => {
@@ -120,6 +101,17 @@ const History = ({ connection }: IHistoryProps) => {
 
   const handleQueryString = (query: string) => {
     setActiveQuery(query);
+  };
+
+  const handleLoadClick = async (ex: ExecutionModelType) => {
+    try {
+      if (ex.connection) {
+        await window.connections.ipcRenderer.select(ex.connection.id);
+        navigate('/execute', { state: ex });
+      }
+    } catch (e) {
+      log.error(e);
+    }
   };
 
   return (
@@ -136,12 +128,12 @@ const History = ({ connection }: IHistoryProps) => {
         </div>
         <div className="filters">
           <div className="filter">
-            <h5>Filter by database</h5>
+            <h5>Filter by connection</h5>
             <div className="search-button">
-              <DBDropdown
-                allDatabases={allDatabases}
-                activeDb={activeDb}
-                updateDb={updateDb}
+              <ConnectionDropdown
+                allConnections={allConnections}
+                activeConnection={activeConnection}
+                setActiveConnection={updateActiveConnection}
               />
             </div>
           </div>
@@ -161,8 +153,8 @@ const History = ({ connection }: IHistoryProps) => {
               <tr>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Procedure Name</th>
-                <th>Database</th>
+                <th>Procedure</th>
+                <th>Connection</th>
                 <th>Type</th>
                 <th>Response</th>
                 <th>Duration</th>
@@ -179,11 +171,16 @@ const History = ({ connection }: IHistoryProps) => {
                     <td>{date}</td>
                     <td>{time}</td>
                     <td>{row.procedure}</td>
-                    <td>{row.database}</td>
+                    <td>{row.connection}</td>
                     <td>{row.dbType}</td>
                     <td>{row.response ? 'Success' : 'Fail'}</td>
                     <td>5 mins</td>
-                    <Button size="sm" type="button" className="rerun-button">
+                    <Button
+                      size="sm"
+                      type="button"
+                      className="rerun-button"
+                      onClick={() => handleLoadClick(row.execution)}
+                    >
                       load
                     </Button>
                   </tr>

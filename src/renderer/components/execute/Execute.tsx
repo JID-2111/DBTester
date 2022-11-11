@@ -3,14 +3,13 @@
 import { useEffect, useState } from 'react';
 
 import { Button, Col, Row, Modal, Container, Tabs, Tab } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
 import { OutputFormat, RecordMatches } from 'db/entity/enum';
 import { ConnectionModelType } from 'db/models/ConnectionModels';
-import History from '../history/History';
 import ProcedureDropdown from './ProcedureDropdown';
 
 import '../../scss/Execute.scss';
@@ -48,6 +47,7 @@ const Execute = () => {
   const [key, setKey] = useState<string>('rule-groups');
 
   const navigate = useNavigate();
+  const data = useLocation().state as ExecutionModelType;
 
   useEffect(() => {
     const getConnection = async () => {
@@ -55,7 +55,8 @@ const Execute = () => {
       setConnection(conn[0]);
     };
     getConnection();
-  }, []);
+    setExecution(data);
+  }, [data]);
 
   const updateDb = (database: string) => {
     setActiveDb(database);
@@ -243,9 +244,6 @@ const Execute = () => {
           </Tab>
           <Tab eventKey="results" title="Results">
             <Results results={execution!} />
-          </Tab>
-          <Tab eventKey="history" title="History">
-            {connection && <History connection={connection} />}
           </Tab>
         </Tabs>
       </Col>
