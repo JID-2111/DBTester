@@ -7,8 +7,18 @@ import { useNavigate } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
-import { UnitTestType } from 'db/models/UnitTestModels';
-import { OutputFormat, RecordMatches } from 'db/entity/enum';
+import {
+  RowTestType,
+  TableTestType,
+  UnitTestType,
+} from 'db/models/UnitTestModels';
+import {
+  OutputFormat,
+  RecordMatches,
+  RowNumberOperations,
+  TableGenericOperations,
+  UnitTestOperations,
+} from 'db/entity/enum';
 import { ConnectionModelType } from 'db/models/ConnectionModels';
 import ProcedureDropdown from './ProcedureDropdown';
 
@@ -120,13 +130,13 @@ const Execute = () => {
   };
 
   const handleExecute = async (execName: string) => {
-    const newExecution = {
+    const newExecution: ExecutionModelType = {
       name: execName,
       timestamp: new Date(),
-      rules: execution.rules,
+      rules: [],
     };
 
-    const rule: RuleModelType = {
+    const rule1: RuleModelType = {
       name: 'name',
       ruleId: 1,
       database: activeDb,
@@ -137,10 +147,23 @@ const Execute = () => {
       parameters: [],
     };
 
-    const unitTests = formatUnitTests(rule);
+    const test1: TableTestType = {
+      operation: TableGenericOperations.EXISTS,
+      level: UnitTestOperations.TableGenericOperations,
+      name: 'test1',
+      expectedRecordMatches: RecordMatches.TABLE_ROWS,
+      total: false,
+      expectedNumRecords: 0,
+      table: 'accounts',
+      result: true,
+      format: OutputFormat.PLAIN,
+      output: '',
+      rule: rule1,
+    };
 
-    rule.unitTests = unitTests;
-    newExecution.rules.push(rule);
+    rule1.unitTests = [test1];
+
+    newExecution.rules = [rule1];
 
     const results = await window.executions.ipcRenderer.checkPassFail(
       newExecution
@@ -232,6 +255,7 @@ const Execute = () => {
               rules={execution ? execution.rules : []}
               activeParameters={activeParameters}
               activeProcedure={activeProcedure}
+              conditionList={conditionList}
             />
           </Tab>
           <Tab eventKey="unit-tests" title="Unit Tests">

@@ -1,6 +1,7 @@
 import { RuleModelType } from 'db/models/RuleModel';
+import { UnitTestType } from 'db/models/UnitTestModels';
 import { ProcedureParameter } from 'db/Procedures';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Modal from '../../utils/Modal';
 import ParameterContainer from '../ParameterContainer';
@@ -28,6 +29,16 @@ const AddRuleGroupModal = ({
   const [form, setForm] = useState<Partial<RuleModelType>>({});
   const [errors, setErrors] = useState<Partial<IRuleGroupErrors>>({});
 
+  const [unitTests, setUnitTests] = useState<Partial<UnitTestType>[]>([]);
+
+  useEffect(() => {
+    const fetchTests = async () => {
+      const t = await window.unittests.ipcRenderer.fetchAll();
+      setUnitTests(t);
+    };
+    fetchTests();
+  }, []);
+  console.log(unitTests);
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const setField = (field: string, value: any) => {
     setForm({
@@ -121,6 +132,9 @@ const AddRuleGroupModal = ({
             setField={setField}
             errors={errors}
           />
+          <Form.Group className="form-group">
+            <Form.Label className="form-label-sm">Add Unit Tests</Form.Label>
+          </Form.Group>
         </Form>
       }
       submit={handleSubmit}

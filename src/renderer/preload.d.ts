@@ -9,6 +9,7 @@ import {
   ConnectionInputType,
   ConnectionModelType,
 } from '../db/models/ConnectionModels';
+import { UnitTestType } from '../db/models/UnitTestModels';
 
 declare global {
   interface Window {
@@ -60,6 +61,11 @@ declare global {
         checkPassFail(test: ExecutionModelType): Promise<ExecutionModelType>;
         fetchAll(): Promise<ExecutionModelType[]>;
         fetchMostRecent(): Promise<ExecutionModelType>;
+      };
+    };
+    unittests: {
+      ipcRenderer: {
+        fetchAll(): Promise<UnitTestType[]>;
       };
     };
   }

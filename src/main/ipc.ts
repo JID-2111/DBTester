@@ -2,6 +2,7 @@ import { ipcMain } from 'electron';
 import ExecutionService from '../db/service/ExecutionService';
 import Procedures from '../db/Procedures';
 import ConnectionService from '../db/service/ConnectionService';
+import UnitTestService from '../db/service/UnitTestService';
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -75,4 +76,8 @@ ipcMain.handle('executions:fetchMostRecent', (_event) => {
 
 ipcMain.handle('executions:checkPassFail', (_event, ...args) => {
   return new ExecutionService().checkPassFail(args[0]);
+});
+
+ipcMain.handle('unittests:fetchAll', (_event) => {
+  return new UnitTestService().fetch();
 });

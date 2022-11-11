@@ -1,4 +1,5 @@
 import { RuleModelType } from 'db/models/RuleModel';
+import { UnitTestType } from 'db/models/UnitTestModels';
 import { ProcedureParameter } from 'db/Procedures';
 import { Button, Container, Row } from 'react-bootstrap';
 import useModal from 'renderer/hooks/useModal';
@@ -11,6 +12,7 @@ interface IRuleGroupsProps {
   deleteRule: (r: RuleModelType) => void;
   activeParameters: ProcedureParameter[];
   activeProcedure: string;
+  conditionList: Partial<UnitTestType>[];
 }
 
 const RuleGroupTab = ({
@@ -19,6 +21,7 @@ const RuleGroupTab = ({
   deleteRule,
   activeParameters,
   activeProcedure,
+  conditionList,
 }: IRuleGroupsProps) => {
   const { isOpen, toggle } = useModal();
 
