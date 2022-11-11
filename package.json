@@ -117,14 +117,12 @@
     "electron-log": "^4.4.8",
     "electron-updater": "^5.2.1",
     "node-abi": "3.24",
-    "pg": "^8.8.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-bootstrap-icons": "^1.8.4",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.4",
-    "react-router-dom": "^6.3.0",
-    "sqlite3": "^5.1.2"
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
