@@ -88,32 +88,6 @@ const Results = ({ results }: IResultsProps) => {
           <Button>Back</Button>
         </Link>
       </div>
-      {/* <Table className="table">
-        <thead>
-          <tr key={results ? results.id : 0}>
-            <th>Name</th>
-            <th>ID</th>
-            <th>Database</th>
-            <th>Type</th>
-            <th>Result</th>
-            <th> Message </th>
-          </tr>
-        </thead>
-        <tbody>
-          {results &&
-            results.rules.map((value) => {
-              return (
-                <>
-                  {passFail(value) ? (
-                    <AllPass Rule={value} />
-                  ) : (
-                    <Displaytests Rule={value} />
-                  )}
-                </>
-              );
-            })}
-        </tbody>
-      </Table> */}
     </div>
   );
 };
