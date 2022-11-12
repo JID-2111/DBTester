@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ConnectionModelType } from '../../../db/models/ConnectionModels';
 import ServerConnectionErrorModal from '../modals/ServerConnectionErrorModal';
+import { formatConnectionString } from '../utils/helpers';
 
 const RecentList = () => {
   const navigate = useNavigate();
@@ -31,11 +32,7 @@ const RecentList = () => {
     <>
       <div className="recent-list">
         {recent?.map((connection: ConnectionModelType) => {
-          let connectionString = '';
-          connectionString =
-            `${connection.type}://${connection.username}:` +
-            `****` +
-            `@${connection.address}:${connection.port}`;
+          const connectionString = formatConnectionString(connection);
           return (
             <>
               <button

@@ -3,9 +3,9 @@
 .execute-wrapper {
   background-color: colors.$snow;
   color: colors.$jet;
-  width: 90vw;
-  height: auto;
-  border-radius: 0.375em;
+  padding: 0;
+  display: flex;
+  height: 100vh;
 
   .row {
     margin: 4px 10px;
@@ -17,6 +17,10 @@
 
   h6 {
     margin: 0px;
+  }
+
+  .side-label {
+    margin: auto 5px auto 0px;
   }
 }
 
@@ -47,11 +51,99 @@
   }
 
   .form-control {
-    padding: 0 0.375rem 0;
+    font-size: 0.8em;
+    padding: 0.1rem 0.375rem;
+  }
+}
+
+.sidebar {
+  flex: 0 0 300px;
+  background-color: colors.$jet;
+
+  color: colors.$snow;
+
+  .disconnect-btn {
+    margin: 5px;
+    width: auto;
+    justify-content: center;
+  }
+}
+
+.content-area {
+  width: calc(100vw - 300px);
+  background-color: colors.$snow;
+  overflow-y: scroll;
+}
+
+.tab-content {
+  padding-top: 10px;
+}
+
+.recent-item {
+  transition: none;
+  stroke: none;
+  text-align: left;
+  background-color: inherit;
+  color: colors.$snow;
+  border: none;
+  width: 100%;
+  padding: 5px 0px;
+
+  .recent-item-info {
+    font-size: 12px;
+    color: colors.$sand;
+    overflow: hidden;
+  }
+  & span {
+    display: block;
+  }
+}
+
+.count-label {
+  font-size: 0.8em;
+  margin: 0 0 0 auto;
+}
+
+.rule-container {
+  color: colors.$jet;
+  padding: 10px 0px;
+  margin: 10px 0px;
+  border: 1px solid colors.$jet;
+  flex-grow: 1;
+}
+
+.edit-icons {
+  margin: 0 0 0 auto !important;
+}
+
+.form-modal {
+  font-size: 0.9em;
+
+  .form-label {
+    margin-bottom: 5px;
+  }
+
+  .form-group {
+    margin-bottom: 5px;
+  }
+
+  .form-select {
+    font-size: 0.9em;
+    padding: 0.1rem 0.5rem;
+  }
+
+  .form-control {
+    font-size: 0.9em;
+    padding: 0.1rem 0.5rem;
+  }
+
+  option {
+    font-size: 0.9em;
   }
 }
 
 .execute-btn {
-  margin: 1em;
-  margin-left: 0%;
+  margin: 5px;
+  width: auto;
+  justify-content: center;
 }
