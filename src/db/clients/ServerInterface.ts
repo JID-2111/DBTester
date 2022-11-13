@@ -17,6 +17,8 @@ interface ServerInterface {
 
   fetchContentQuery(procedure: string): Promise<string[]>;
 
+  importTestDataTable(file: string, table: string): Promise<void>;
+
   fetchProcedureParametersQuery(
     procedure: string
   ): Promise<ProcedureParameter[]>;
