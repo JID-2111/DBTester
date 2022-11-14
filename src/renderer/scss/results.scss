@@ -11,23 +11,37 @@
 }
 
 .table-div {
-  text-align: center;
   width: 80%;
   margin: auto;
 }
 
-.table {
+.Results-Table {
   margin: auto;
+  border-top: solid;
+}
+
+.Results-Table tr {
+  border-bottom: 3px solid;
+  border-left: none;
+  border-right: none;
+  text-align: center;
+}
+
+.Results-Table td {
+  padding: 10px;
 }
 
 .homeButton {
   margin: 1em;
   float: right;
 }
-.viewtest {
-  border: none;
-  border-radius: 5px;
+
+.Check {
+  color: darkgreen;
+  width: 2em;
 }
-.viewtest:hover {
-  background-color: lightgreen;
+
+.X {
+  fill: red;
+  width: 2em;
 }
