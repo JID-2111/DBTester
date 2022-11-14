@@ -1,19 +1,13 @@
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { Container } from 'react-bootstrap';
-import { Parameter } from '../ParameterContainer';
 import Rule from './Rule';
 
 interface IRuleGroupListProps {
   execution: ExecutionModelType;
   setExecution: (execution: ExecutionModelType) => void;
-  activeParameters: Parameter[];
 }
 
-const RuleGroupList = ({
-  execution,
-  setExecution,
-  activeParameters,
-}: IRuleGroupListProps) => {
+const RuleGroupList = ({ execution, setExecution }: IRuleGroupListProps) => {
   const { rules } = execution;
   return (
     <Container
@@ -30,7 +24,6 @@ const RuleGroupList = ({
               rule={rule}
               execution={execution}
               setExecution={setExecution}
-              activeParameters={activeParameters}
             />
           );
         })

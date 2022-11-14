@@ -20,7 +20,7 @@ import RuleGroupTab from './rules/RuleGroupTab';
 
 const Execute = () => {
   const defaultExecutionModel: ExecutionModelType = {
-    name: 'default',
+    name: '',
     timestamp: new Date(),
     rules: [],
   };

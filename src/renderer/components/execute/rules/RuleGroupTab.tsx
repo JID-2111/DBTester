@@ -34,11 +34,7 @@ const RuleGroupTab = ({
       </Row>
       <hr />
       <Row>
-        <RuleGroupList
-          execution={execution}
-          setExecution={setExecution}
-          activeParameters={activeParameters}
-        />
+        <RuleGroupList execution={execution} setExecution={setExecution} />
       </Row>
       {isOpen && (
         <AddRuleGroupModal
