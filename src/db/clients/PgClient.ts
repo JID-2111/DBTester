@@ -27,10 +27,9 @@ export type DBColumn = {
 };
 
 export type DBParameter = {
-  pronamespace: string;
-  proname: string;
-  args_def: string;
-  arg: string;
+  parameter_mode: string;
+  parameter_name: string;
+  data_type: string;
 };
 
 export default class PgClient implements ServerInterface {
@@ -125,15 +124,30 @@ export default class PgClient implements ServerInterface {
   ): Promise<ProcedureParameter[]> {
     const client = await this.pool.connect();
     const result = await client.query(
-      `SELECT pronamespace::regnamespace, proname, pg_get_function_arguments(oid) AS args_def, UNNEST(string_to_array(pg_get_function_identity_arguments(oid), ',' )) AS arg FROM pg_proc where proname='${procedure}'`
+      `SELECT proc.specific_schema as procedure_schema,
+       proc.specific_name,
+       proc.routine_name as procedure_name,
+       args.parameter_name,
+       args.parameter_mode,
+       args.data_type
+       from information_schema.routines proc
+       left join information_schema.parameters args
+          on proc.specific_schema = args.specific_schema
+          and proc.specific_name = args.specific_name
+        where proc.routine_schema not in ('pg_catalog', 'information_schema')
+        and proc.routine_type = 'PROCEDURE'
+        and proc.routine_name='${procedure}'
+        order by procedure_schema,
+         specific_name,
+         procedure_name,
+         args.ordinal_position`
     );
     client.release();
     return result.rows.map((row: DBParameter) => {
-      const parts = row.arg.trim().split(' ');
       return {
-        direction: <Direction>parts[0],
-        name: parts[1],
-        type: parts[2],
+        direction: <Direction>row.parameter_mode,
+        name: row.parameter_name,
+        type: row.data_type,
       };
     });
   }
