@@ -4,11 +4,8 @@ import { Container } from 'react-bootstrap';
 import UnitTest from './UnitTest';
 
 interface IUnitTestListProps {
-  conditionList: Partial<UnitTestType>[];
-  deleteCondition: (
-    condition: Partial<UnitTestType>,
-    rule: RuleModelType
-  ) => void;
+  conditionList: UnitTestType[];
+  deleteCondition: (condition: UnitTestType, rule: RuleModelType) => void;
 }
 
 const UnitTestList = ({

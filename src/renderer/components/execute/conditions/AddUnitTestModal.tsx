@@ -121,7 +121,22 @@ const AddUnitTestModal = ({
         newErrors.operation = 'Please select an operation to perform.';
       }
 
-      if (!isTableOp() || operation !== 'exists') {
+      if (operation !== 'exists') {
+        if (!total) {
+          newErrors.total = 'Please select new or total records.';
+        }
+
+        if (!expectedRecordMatches) {
+          newErrors.expectedRecordMatches = 'Please select a comparison type.';
+        }
+
+        if (form.expectedRecordMatches === 'is = to' && !expectedNumRecords) {
+          newErrors.expectedNumRecords =
+            'Please select the expected number of records.';
+        }
+      }
+
+      if (!isTableOp()) {
         if (!isRowBooleanOp() && !value) {
           newErrors.value = 'Please enter a value.';
         }

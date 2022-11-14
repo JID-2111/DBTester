@@ -2,6 +2,7 @@ import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { Accordion, Container, Row } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
+import { getUnitTestDescription } from 'renderer/components/utils/helpers';
 import { Parameter } from '../ParameterContainer';
 
 interface IRuleProps {
@@ -43,9 +44,16 @@ const Rule = ({
           <Accordion.Item eventKey="0">
             <Accordion.Header>unit tests</Accordion.Header>
             <Accordion.Body>
-              {rule.unitTests.map((unitTest) => {
-                return <span key={unitTest.name}>{unitTest.name}</span>;
-              })}
+              <Row>
+                {rule.unitTests.map((unitTest, idx) => {
+                  return (
+                    <span key={unitTest.name}>
+                      {idx + 1}. {unitTest.name}:{' '}
+                      {getUnitTestDescription(unitTest)}{' '}
+                    </span>
+                  );
+                })}
+              </Row>
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
