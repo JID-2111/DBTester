@@ -1,3 +1,4 @@
+import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
 import { Container, Row } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
@@ -6,7 +7,10 @@ import '../../../scss/Condition.scss';
 
 interface IConditionProps {
   condition: Partial<UnitTestType>;
-  deleteCondition: (c: Partial<UnitTestType>) => void;
+  deleteCondition: (
+    condition: Partial<UnitTestType>,
+    rule: RuleModelType
+  ) => void;
 }
 
 const UnitTest = ({ condition, deleteCondition }: IConditionProps) => {
@@ -37,6 +41,13 @@ const UnitTest = ({ condition, deleteCondition }: IConditionProps) => {
       </span>
     );
   };
+
+  const handleDelete = () => {
+    if (!condition.rule) {
+      return;
+    }
+    deleteCondition(condition, condition.rule);
+  };
   return (
     <Container fluid className="rule-container">
       <Row>
@@ -45,7 +56,7 @@ const UnitTest = ({ condition, deleteCondition }: IConditionProps) => {
           <button
             type="button"
             className="deleteButton edit-icons"
-            onClick={() => deleteCondition(condition)}
+            onClick={handleDelete}
           >
             <Trash />
           </button>

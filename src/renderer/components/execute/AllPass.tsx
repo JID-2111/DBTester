@@ -6,9 +6,9 @@ interface Iprops {
 }
 const AllPass = ({ Rule }: Iprops) => {
   return (
-    <tr key={Rule.ruleId}>
+    <tr key={Rule.id}>
       <td>{Rule.name}</td>
-      <td>{Rule.ruleId}</td>
+      <td>{Rule.id}</td>
       <td>{Rule.database}</td>
       <td>Rule</td>
       <td>All Tests Pass</td>

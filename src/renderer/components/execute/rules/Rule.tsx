@@ -1,3 +1,4 @@
+import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { Accordion, Container, Row } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
@@ -5,11 +6,24 @@ import { Parameter } from '../ParameterContainer';
 
 interface IRuleProps {
   rule: RuleModelType;
-  deleteRule: (r: RuleModelType) => void;
+  execution: ExecutionModelType;
+  setExecution: (execution: ExecutionModelType) => void;
   activeParameters: Parameter[];
 }
 
-const Rule = ({ rule, deleteRule, activeParameters }: IRuleProps) => {
+const Rule = ({
+  rule,
+  execution,
+  setExecution,
+  activeParameters,
+}: IRuleProps) => {
+  const deleteRule = async (ruleToDelete: RuleModelType) => {
+    setExecution({
+      ...execution,
+      rules: execution.rules.filter((r) => r !== ruleToDelete),
+    });
+  };
+
   return (
     <Container fluid className="rule-container">
       <Row>

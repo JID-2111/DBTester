@@ -74,9 +74,3 @@ contextBridge.exposeInMainWorld('executions', {
     fetchMostRecent: () => ipcRenderer.invoke('executions:fetchMostRecent'),
   },
 });
-
-contextBridge.exposeInMainWorld('unittests', {
-  ipcRenderer: {
-    fetchAll: () => ipcRenderer.invoke('unittests:fetchAll'),
-  },
-});

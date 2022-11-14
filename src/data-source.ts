@@ -22,7 +22,6 @@ const AppDataSource = new DataSource({
     ExecutionEntity,
   ],
   synchronize: true, // TODO might need to remove for production
-  logging: ['query', 'error'],
 });
 
 export default AppDataSource;

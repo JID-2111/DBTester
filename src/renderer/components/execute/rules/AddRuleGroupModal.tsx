@@ -1,7 +1,7 @@
+import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
-import { UnitTestType } from 'db/models/UnitTestModels';
 import { ProcedureParameter } from 'db/Procedures';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Modal from '../../utils/Modal';
 import ParameterContainer from '../ParameterContainer';
@@ -9,9 +9,10 @@ import ParameterContainer from '../ParameterContainer';
 interface IModalProps {
   isOpen: boolean;
   toggle: () => void;
-  addRule: (r: Partial<RuleModelType>) => void;
   activeParameters: ProcedureParameter[];
   activeProcedure: string;
+  execution: ExecutionModelType;
+  setExecution: (execution: ExecutionModelType) => void;
 }
 
 export interface IRuleGroupErrors {
@@ -22,23 +23,14 @@ export interface IRuleGroupErrors {
 const AddRuleGroupModal = ({
   isOpen,
   toggle,
-  addRule,
   activeParameters,
   activeProcedure,
+  execution,
+  setExecution,
 }: IModalProps) => {
   const [form, setForm] = useState<Partial<RuleModelType>>({});
   const [errors, setErrors] = useState<Partial<IRuleGroupErrors>>({});
 
-  const [unitTests, setUnitTests] = useState<Partial<UnitTestType>[]>([]);
-
-  useEffect(() => {
-    const fetchTests = async () => {
-      const t = await window.unittests.ipcRenderer.fetchAll();
-      setUnitTests(t);
-    };
-    fetchTests();
-  }, []);
-  console.log(unitTests);
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const setField = (field: string, value: any) => {
     setForm({
@@ -82,14 +74,28 @@ const AddRuleGroupModal = ({
     return newErrors;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
     }
 
-    addRule(form);
+    const conn = await window.connections.ipcRenderer.fetch();
+
+    const rule: RuleModelType = {
+      name: form.name || 'default',
+      database: conn[0].defaultDatabase,
+      testData: '',
+      unitTests: [],
+      execution,
+      procedure: activeProcedure,
+      parameters: form.parameters || [],
+    };
+
+    execution.rules.push(rule);
+    setExecution(execution);
+
     clearForm();
     toggle();
   };
@@ -132,9 +138,6 @@ const AddRuleGroupModal = ({
             setField={setField}
             errors={errors}
           />
-          <Form.Group className="form-group">
-            <Form.Label className="form-label-sm">Add Unit Tests</Form.Label>
-          </Form.Group>
         </Form>
       }
       submit={handleSubmit}

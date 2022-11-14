@@ -1,31 +1,36 @@
+import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { useState } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 
 interface IExecuteCellProps {
-  handleExecute: (executionName: string) => void;
+  handleExecute: () => void;
+  execution: ExecutionModelType;
+  setExecution: (execution: ExecutionModelType) => void;
 }
 
-const ExecuteCell = ({ handleExecute }: IExecuteCellProps) => {
-  const [executionName, setExecutionName] = useState<string>('');
+const ExecuteCell = ({
+  handleExecute,
+  execution,
+  setExecution,
+}: IExecuteCellProps) => {
   const [errorMsg, setErrorMsg] = useState<string>('');
 
   const checkForm = () => {
-    if (executionName === '') {
+    if (execution.name === '') {
       setErrorMsg('Add a Title to Execution!');
       return;
     }
 
-    handleExecute(executionName);
-    setExecutionName('');
+    handleExecute();
   };
 
   return (
     <Row className="justify-content-center">
       <Form.Control
         className="form-control-sm"
-        value={executionName}
+        value={execution.name}
         onChange={(e) => {
-          setExecutionName(e.target.value);
+          setExecution({ ...execution, name: e.target.value });
           setErrorMsg('');
         }}
         type="text"

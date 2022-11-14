@@ -30,9 +30,6 @@ class RuleEntity {
   @Column()
   name: string;
 
-  @Column()
-  ruleId: number;
-
   /**
    * The database to run the unit tests on
    */
@@ -117,6 +114,9 @@ class RuleEntity {
 
   @AfterLoad()
   castUnitTests() {
+    if (!this.unitTests) {
+      return;
+    }
     this.unitTests = this.unitTests.map((unitTest) => {
       switch (unitTest.level) {
         case UnitTestOperations.TableGenericOperations:
@@ -130,7 +130,8 @@ class RuleEntity {
         case UnitTestOperations.RowBooleanOperations:
           return new RowBooleanEntity(unitTest);
         default:
-          throw new Error(`Unknown unit test`);
+          console.log('unit test not yet filled out');
+          return unitTest;
       }
     });
   }

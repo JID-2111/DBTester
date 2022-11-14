@@ -180,11 +180,9 @@ export default class ExecutionService {
       const res = plainToInstance(ExecutionEntity, test, {
         enableCircularCheck: true,
       });
-      console.log(res);
       await this.repository.save(res);
       return test;
     } catch (e) {
-      console.log('error');
       log.error(e);
     }
     return test;
