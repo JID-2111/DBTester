@@ -1,10 +1,11 @@
+import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
 import { Container } from 'react-bootstrap';
 import UnitTest from './UnitTest';
 
 interface IUnitTestListProps {
-  conditionList: Partial<UnitTestType>[];
-  deleteCondition: (c: Partial<UnitTestType>) => void;
+  conditionList: UnitTestType[];
+  deleteCondition: (condition: UnitTestType, rule: RuleModelType) => void;
 }
 
 const UnitTestList = ({

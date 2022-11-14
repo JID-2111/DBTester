@@ -1,3 +1,4 @@
+import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { ProcedureParameter } from 'db/Procedures';
 import { useEffect, useState } from 'react';
@@ -17,9 +18,10 @@ type ListOption = {
 interface IModalProps {
   isOpen: boolean;
   toggle: () => void;
-  addRule: (r: Partial<RuleModelType>) => void;
   activeParameters: ProcedureParameter[];
   activeProcedure: string;
+  execution: ExecutionModelType;
+  setExecution: (execution: ExecutionModelType) => void;
 }
 
 export interface IRuleGroupErrors {
@@ -30,9 +32,10 @@ export interface IRuleGroupErrors {
 const AddRuleGroupModal = ({
   isOpen,
   toggle,
-  addRule,
   activeParameters,
   activeProcedure,
+  execution,
+  setExecution,
 }: IModalProps) => {
   const [form, setForm] = useState<Partial<RuleModelType>>({});
   const [errors, setErrors] = useState<Partial<IRuleGroupErrors>>({});
@@ -96,14 +99,29 @@ const AddRuleGroupModal = ({
     return newErrors;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
     }
 
-    addRule(form);
+    const conn = await window.connections.ipcRenderer.fetch();
+
+    const rule: RuleModelType = {
+      name: form.name || 'default',
+      database: conn[0].defaultDatabase,
+      testData: form.testData || '',
+      unitTests: [],
+      execution,
+      procedure: activeProcedure,
+      parameters: form.parameters || [],
+      cleanupTables: form.cleanupTables,
+    };
+
+    execution.rules.push(rule);
+    setExecution(execution);
+
     clearForm();
     toggle();
   };

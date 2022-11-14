@@ -1,4 +1,4 @@
-import { RuleModelType } from 'db/models/RuleModel';
+import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { ProcedureParameter } from 'db/Procedures';
 import { Button, Container, Row } from 'react-bootstrap';
 import useModal from 'renderer/hooks/useModal';
@@ -6,21 +6,21 @@ import AddRuleGroupModal from './AddRuleGroupModal';
 import RuleGroupList from './RuleGroupList';
 
 interface IRuleGroupsProps {
-  rules: RuleModelType[];
-  addRule: (r: Partial<RuleModelType>) => void;
-  deleteRule: (r: RuleModelType) => void;
   activeParameters: ProcedureParameter[];
   activeProcedure: string;
+  execution: ExecutionModelType;
+  setExecution: (execution: ExecutionModelType) => void;
 }
 
 const RuleGroupTab = ({
-  rules,
-  addRule,
-  deleteRule,
   activeParameters,
   activeProcedure,
+  execution,
+  setExecution,
 }: IRuleGroupsProps) => {
   const { isOpen, toggle } = useModal();
+
+  const { rules } = execution;
 
   return (
     <Container>
@@ -34,19 +34,16 @@ const RuleGroupTab = ({
       </Row>
       <hr />
       <Row>
-        <RuleGroupList
-          rules={rules}
-          deleteRule={deleteRule}
-          activeParameters={activeParameters}
-        />
+        <RuleGroupList execution={execution} setExecution={setExecution} />
       </Row>
       {isOpen && (
         <AddRuleGroupModal
           isOpen={isOpen}
           toggle={toggle}
-          addRule={addRule}
           activeProcedure={activeProcedure}
           activeParameters={activeParameters}
+          execution={execution}
+          setExecution={setExecution}
         />
       )}
     </Container>

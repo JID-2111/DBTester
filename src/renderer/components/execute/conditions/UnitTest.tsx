@@ -1,41 +1,25 @@
+import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
 import { Container, Row } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
+import { getUnitTestDescription } from 'renderer/components/utils/helpers';
 
 import '../../../scss/Condition.scss';
 
 interface IConditionProps {
-  condition: Partial<UnitTestType>;
-  deleteCondition: (c: Partial<UnitTestType>) => void;
+  condition: UnitTestType;
+  deleteCondition: (condition: UnitTestType, rule: RuleModelType) => void;
 }
 
 const UnitTest = ({ condition, deleteCondition }: IConditionProps) => {
   // eslint-disable-next-line no-restricted-globals
-  const {
-    level,
-    name,
-    column,
-    operation,
-    value,
-    total,
-    expectedRecordMatches,
-    expectedNumRecords,
-    table,
-  } = condition;
+  const { level, name, rule } = condition;
 
-  const getDescription = () => {
-    return (
-      <span>
-        {operation === 'exists' ? `table "${table}" ` : ''}
-        {column && `column "${column}" `}
-        {operation && `${operation.toUpperCase()} `}
-        {value && `"${value}", `}
-        {total && `${total} `}
-        {expectedRecordMatches && `${expectedRecordMatches} `}
-        {expectedNumRecords && `${expectedNumRecords} `}
-        {operation !== 'exists' ? `in ${table}` : ''}
-      </span>
-    );
+  const handleDelete = () => {
+    if (!condition.rule) {
+      return;
+    }
+    deleteCondition(condition, condition.rule);
   };
   return (
     <Container fluid className="rule-container">
@@ -45,7 +29,7 @@ const UnitTest = ({ condition, deleteCondition }: IConditionProps) => {
           <button
             type="button"
             className="deleteButton edit-icons"
-            onClick={() => deleteCondition(condition)}
+            onClick={handleDelete}
           >
             <Trash />
           </button>
@@ -55,7 +39,10 @@ const UnitTest = ({ condition, deleteCondition }: IConditionProps) => {
         <span>test type: {level}</span>
       </Row>
       <Row>
-        <span>description: {getDescription()}</span>
+        <span>rule group: {rule.name}</span>
+      </Row>
+      <Row>
+        <span>description: {getUnitTestDescription(condition)}</span>
       </Row>
     </Container>
   );

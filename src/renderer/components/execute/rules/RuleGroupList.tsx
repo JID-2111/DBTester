@@ -1,19 +1,14 @@
-import { RuleModelType } from 'db/models/RuleModel';
+import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { Container } from 'react-bootstrap';
-import { Parameter } from '../ParameterContainer';
 import Rule from './Rule';
 
 interface IRuleGroupListProps {
-  rules: RuleModelType[];
-  deleteRule: (r: RuleModelType) => void;
-  activeParameters: Parameter[];
+  execution: ExecutionModelType;
+  setExecution: (execution: ExecutionModelType) => void;
 }
 
-const RuleGroupList = ({
-  rules,
-  deleteRule,
-  activeParameters,
-}: IRuleGroupListProps) => {
+const RuleGroupList = ({ execution, setExecution }: IRuleGroupListProps) => {
+  const { rules } = execution;
   return (
     <Container
       fluid
@@ -27,8 +22,8 @@ const RuleGroupList = ({
             <Rule
               key={rule.name}
               rule={rule}
-              deleteRule={deleteRule}
-              activeParameters={activeParameters}
+              execution={execution}
+              setExecution={setExecution}
             />
           );
         })

@@ -6,9 +6,6 @@ import { Button, Col, Row, Modal, Container, Tabs, Tab } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
-import { RuleModelType } from 'db/models/RuleModel';
-import { UnitTestType } from 'db/models/UnitTestModels';
-import { OutputFormat, RecordMatches } from 'db/entity/enum';
 import { ConnectionModelType } from 'db/models/ConnectionModels';
 import ProcedureDropdown from './ProcedureDropdown';
 
@@ -23,7 +20,7 @@ import RuleGroupTab from './rules/RuleGroupTab';
 
 const Execute = () => {
   const defaultExecutionModel: ExecutionModelType = {
-    name: 'default',
+    name: '',
     timestamp: new Date(),
     rules: [],
   };
@@ -35,9 +32,6 @@ const Execute = () => {
   const [activeParameters, setActiveParameters] = useState<
     ProcedureParameter[]
   >([]);
-  const [conditionList, setConditionList] = useState<Partial<UnitTestType>[]>(
-    []
-  );
   const [connection, setConnection] = useState<ConnectionModelType | undefined>(
     undefined
   );
@@ -71,84 +65,9 @@ const Execute = () => {
     navigate('/');
   };
 
-  const formatUnitTests = (rule: RuleModelType) => {
-    const unitTests: UnitTestType[] = conditionList.map(
-      (condition: Partial<UnitTestType>) => {
-        const unitTest: UnitTestType = {
-          level: condition.level!,
-          name: 'test',
-          expectedRecordMatches: RecordMatches.GREATER_THAN,
-          total: condition.total || false,
-          expectedNumRecords: condition.expectedNumRecords || 0,
-          table: condition.table!,
-          column: condition.column! || 'column',
-          value: condition.value! || 'value',
-          operation: condition.operation!,
-          result: false,
-          format: OutputFormat.JSON,
-          output: '',
-          rule,
-        };
-        return unitTest;
-      }
-    );
-    return unitTests;
-  };
-
-  const addRule = (rule: Partial<RuleModelType>) => {
-    const newRule: RuleModelType = {
-      name: rule.name || 'name',
-      database: activeDb,
-      procedure: activeProcedure,
-      testData: rule.testData || '',
-      ruleId:
-        execution.rules.length > 0
-          ? execution.rules[execution.rules.length - 1].ruleId + 1
-          : 0,
-      unitTests: [],
-      execution,
-      cleanupTables: rule.cleanupTables,
-      parameters: rule.parameters || [],
-    };
-
-    setExecution({
-      ...execution,
-      rules: [...execution.rules, newRule],
-    });
-  };
-
-  const deleteRule = (rule: RuleModelType) => {
-    setExecution({
-      ...execution,
-      rules: execution.rules.filter((r) => r !== rule),
-    });
-  };
-
-  const handleExecute = async (execName: string) => {
-    const newExecution = {
-      name: execName,
-      timestamp: new Date(),
-      rules: execution.rules,
-    };
-
-    const rule: RuleModelType = {
-      name: 'name',
-      ruleId: 1,
-      database: activeDb,
-      testData: 'testdata',
-      unitTests: [],
-      execution,
-      procedure: activeProcedure,
-      parameters: [],
-    };
-
-    const unitTests = formatUnitTests(rule);
-
-    rule.unitTests = unitTests;
-    newExecution.rules.push(rule);
-
+  const handleExecute = async () => {
     const results = await window.executions.ipcRenderer.checkPassFail(
-      newExecution
+      execution
     );
 
     // set tab to results
@@ -222,7 +141,13 @@ const Execute = () => {
           )}
         </Row>
         <hr />
-        {activeProcedure && <ExecuteCell handleExecute={handleExecute} />}
+        {activeProcedure && (
+          <ExecuteCell
+            handleExecute={handleExecute}
+            execution={execution}
+            setExecution={setExecution}
+          />
+        )}
       </Col>
       <Col className="content-area">
         <Tabs
@@ -232,21 +157,17 @@ const Execute = () => {
         >
           <Tab eventKey="rule-groups" title="Rule Groups">
             <RuleGroupTab
-              addRule={addRule}
-              deleteRule={deleteRule}
-              rules={execution ? execution.rules : []}
               activeParameters={activeParameters}
               activeProcedure={activeProcedure}
+              execution={execution}
+              setExecution={setExecution}
             />
           </Tab>
           <Tab eventKey="unit-tests" title="Unit Tests">
-            <UnitTestTab
-              conditionList={conditionList}
-              setConditionList={setConditionList}
-            />
+            <UnitTestTab execution={execution} setExecution={setExecution} />
           </Tab>
           <Tab eventKey="results" title="Results">
-            <Results results={execution!} />
+            <Results results={execution} />
           </Tab>
         </Tabs>
       </Col>

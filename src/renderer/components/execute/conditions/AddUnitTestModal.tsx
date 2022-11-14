@@ -8,6 +8,8 @@ import {
   TableGenericOperations,
   UnitTestOperations,
 } from 'db/entity/enum';
+import { ExecutionModelType } from 'db/models/ExecutionModel';
+import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
 import { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -16,7 +18,8 @@ import Modal from '../../utils/Modal';
 interface IModalProps {
   isOpen: boolean;
   toggle: () => void;
-  addCondition: (r: Partial<UnitTestType>) => void;
+  execution: ExecutionModelType;
+  addCondition: (condition: UnitTestType, rule: RuleModelType) => void;
 }
 
 interface IUnitTestFormErrors {
@@ -29,9 +32,15 @@ interface IUnitTestFormErrors {
   total: string;
   expectedRecordMatches: string;
   expectedNumRecords: string;
+  rule: string;
 }
 
-const AddUnitTestModal = ({ isOpen, toggle, addCondition }: IModalProps) => {
+const AddUnitTestModal = ({
+  isOpen,
+  toggle,
+  execution,
+  addCondition,
+}: IModalProps) => {
   const [form, setForm] = useState<Partial<UnitTestType>>({});
   const [errors, setErrors] = useState<Partial<IUnitTestFormErrors>>({});
 
@@ -92,10 +101,15 @@ const AddUnitTestModal = ({ isOpen, toggle, addCondition }: IModalProps) => {
       total,
       expectedRecordMatches,
       expectedNumRecords,
+      rule,
     } = form;
 
     if (!name) {
       newErrors.name = 'Please type a name.';
+    }
+
+    if (!rule) {
+      newErrors.rule = 'Please select a rule group.';
     }
 
     if (!table) {
@@ -107,7 +121,22 @@ const AddUnitTestModal = ({ isOpen, toggle, addCondition }: IModalProps) => {
         newErrors.operation = 'Please select an operation to perform.';
       }
 
-      if (!isTableOp() || operation !== 'exists') {
+      if (operation !== 'exists') {
+        if (!total) {
+          newErrors.total = 'Please select new or total records.';
+        }
+
+        if (!expectedRecordMatches) {
+          newErrors.expectedRecordMatches = 'Please select a comparison type.';
+        }
+
+        if (form.expectedRecordMatches === 'is = to' && !expectedNumRecords) {
+          newErrors.expectedNumRecords =
+            'Please select the expected number of records.';
+        }
+      }
+
+      if (!isTableOp()) {
         if (!isRowBooleanOp() && !value) {
           newErrors.value = 'Please enter a value.';
         }
@@ -134,6 +163,25 @@ const AddUnitTestModal = ({ isOpen, toggle, addCondition }: IModalProps) => {
     return newErrors;
   };
 
+  const constructUnitTest = () => {
+    const newUnitTest: UnitTestType = {
+      level: form.level || UnitTestOperations.TableGenericOperations,
+      name: form.name || 'Default Name',
+      expectedRecordMatches: form.expectedRecordMatches,
+      total: form.total,
+      expectedNumRecords: form.expectedNumRecords,
+      table: form.table || 'Default Table',
+      column: form.column,
+      value: form.value,
+      operation: form.operation || TableGenericOperations.EXISTS,
+      result: form.result,
+      format: form.format,
+      output: form.output,
+      rule: form.rule || execution.rules[0],
+    };
+    return newUnitTest;
+  };
+
   useEffect(() => {
     const getColumns = async () => {
       if (currTable) {
@@ -157,9 +205,17 @@ const AddUnitTestModal = ({ isOpen, toggle, addCondition }: IModalProps) => {
       return;
     }
 
-    addCondition(form);
+    const unitTest = constructUnitTest();
+
+    addCondition(unitTest, unitTest.rule);
+
     clearForm();
     toggle();
+  };
+
+  const handleRuleSelect = (ruleName: string) => {
+    const rule = execution.rules.find((r) => r.name === ruleName);
+    setField('rule', rule);
   };
 
   const updateLevel = (level: UnitTestOperations) => {
@@ -229,6 +285,23 @@ const AddUnitTestModal = ({ isOpen, toggle, addCondition }: IModalProps) => {
             </Form.Select>
             <Form.Control.Feedback type="invalid">
               {errors.table}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group className="form-group">
+            <Form.Label variant="primary">Rule Group</Form.Label>
+            <Form.Select
+              onChange={(e) => handleRuleSelect(e.target.value)}
+              isInvalid={!!errors.rule}
+            >
+              {!form.rule && <option aria-label="empty-option" />}
+              {execution.rules.map((rule) => {
+                const ruleName = rule.name;
+                const ruleKey = rule.id;
+                return <option key={ruleKey}>{ruleName}</option>;
+              })}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              {errors.rule}
             </Form.Control.Feedback>
           </Form.Group>
 

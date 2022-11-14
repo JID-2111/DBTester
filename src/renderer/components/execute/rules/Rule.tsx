@@ -1,15 +1,40 @@
+import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
+import { ProcedureParameter } from 'db/Procedures';
+import { useEffect, useState } from 'react';
 import { Accordion, Container, Row } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
-import { Parameter } from '../ParameterContainer';
+import {
+  formatCleanupTables,
+  getUnitTestDescription,
+} from 'renderer/components/utils/helpers';
 
 interface IRuleProps {
   rule: RuleModelType;
-  deleteRule: (r: RuleModelType) => void;
-  activeParameters: Parameter[];
+  execution: ExecutionModelType;
+  setExecution: (execution: ExecutionModelType) => void;
 }
 
-const Rule = ({ rule, deleteRule, activeParameters }: IRuleProps) => {
+const Rule = ({ rule, execution, setExecution }: IRuleProps) => {
+  const [procParameters, setProcParameters] = useState<ProcedureParameter[]>();
+
+  useEffect(() => {
+    const fetchParams = async () => {
+      const params = await window.procedures.ipcRenderer.getProcedureParameters(
+        rule.procedure
+      );
+      setProcParameters(params);
+    };
+    fetchParams();
+  }, [rule]);
+
+  const deleteRule = async (ruleToDelete: RuleModelType) => {
+    setExecution({
+      ...execution,
+      rules: execution.rules.filter((r) => r !== ruleToDelete),
+    });
+  };
+
   return (
     <Container fluid className="rule-container">
       <Row>
@@ -29,9 +54,16 @@ const Rule = ({ rule, deleteRule, activeParameters }: IRuleProps) => {
           <Accordion.Item eventKey="0">
             <Accordion.Header>unit tests</Accordion.Header>
             <Accordion.Body>
-              {rule.unitTests.map((unitTest) => {
-                return <span key={unitTest.name}>{unitTest.name}</span>;
-              })}
+              <Row>
+                {rule.unitTests.map((unitTest, idx) => {
+                  return (
+                    <span key={unitTest.name}>
+                      {idx + 1}. {unitTest.name}:{' '}
+                      {getUnitTestDescription(unitTest)}{' '}
+                    </span>
+                  );
+                })}
+              </Row>
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
@@ -44,18 +76,25 @@ const Rule = ({ rule, deleteRule, activeParameters }: IRuleProps) => {
           <Accordion.Item eventKey="0">
             <Accordion.Header>parameters</Accordion.Header>
             <Accordion.Body>
-              {activeParameters.map((param, idx) => {
-                return (
-                  <Row key={param.name}>
-                    <span>
-                      {param.name} ({param.type}): {rule.parameters[idx]}
-                    </span>
-                  </Row>
-                );
-              })}
+              {procParameters &&
+                procParameters.map((param, idx) => {
+                  return (
+                    <Row key={param.name}>
+                      <span>
+                        {param.name} ({param.type}): {rule.parameters[idx]}
+                      </span>
+                    </Row>
+                  );
+                })}
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
+      </Row>
+      <Row>
+        <span>data table: {rule.testData}</span>
+      </Row>
+      <Row>
+        <span>cleanup tables: {formatCleanupTables(rule)}</span>
       </Row>
     </Container>
   );
