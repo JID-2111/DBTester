@@ -15,7 +15,9 @@ interface ServerInterface {
 
   fetchProceduresQuery(): Promise<string[]>;
 
-  fetchContentQuery(procedure: string): Promise<string[]>;
+  fetchContentQuery(procedure: string): Promise<string>;
+
+  importTestDataTable(file: string, table: string): Promise<void>;
 
   fetchProcedureParametersQuery(
     procedure: string
@@ -86,6 +88,8 @@ interface ServerInterface {
     value: number,
     comparison: RowNumberOperations
   ): Promise<unknown[]>;
+
+  deleteFromTablesQuery(idTable: string, targets: string[]): Promise<void>;
 }
 
 export default ServerInterface;

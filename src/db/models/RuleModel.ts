@@ -10,4 +10,5 @@ export type RuleModelType = {
   execution: ExecutionModelType;
   procedure: string;
   parameters: string[];
+  cleanupTables?: string[];
 };
