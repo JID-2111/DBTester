@@ -62,7 +62,6 @@ class RuleEntity {
    * The name of the procedure to trigger
    */
   @Column()
-  @Exclude({ toPlainOnly: true })
   procedure: string;
 
   parameters: string[];
@@ -71,6 +70,7 @@ class RuleEntity {
    * JSON string with list of parameters for the procedure.
    */
   @Column()
+  @Exclude({ toPlainOnly: true })
   parameterList: string;
 
   @BeforeInsert()
