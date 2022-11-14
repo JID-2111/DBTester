@@ -47,7 +47,8 @@ const Execute = () => {
   const [key, setKey] = useState<string>('rule-groups');
 
   const navigate = useNavigate();
-  const data = useLocation().state as ExecutionModelType;
+  const data =
+    (useLocation().state as ExecutionModelType) ?? defaultExecutionModel;
 
   useEffect(() => {
     const getConnection = async () => {
@@ -56,7 +57,8 @@ const Execute = () => {
     };
     getConnection();
     setExecution(data);
-  }, [data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const updateDb = (database: string) => {
     setActiveDb(database);
