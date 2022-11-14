@@ -273,7 +273,7 @@ const AddUnitTestModal = ({
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="form-group">
-            <Form.Label variant="primary">Rule</Form.Label>
+            <Form.Label variant="primary">Rule Group</Form.Label>
             <Form.Select
               onChange={(e) => handleRuleSelect(e.target.value)}
               isInvalid={!!errors.rule}
