@@ -111,11 +111,12 @@ const AddRuleGroupModal = ({
     const rule: RuleModelType = {
       name: form.name || 'default',
       database: conn[0].defaultDatabase,
-      testData: '',
+      testData: form.testData || '',
       unitTests: [],
       execution,
       procedure: activeProcedure,
       parameters: form.parameters || [],
+      cleanupTables: form.cleanupTables,
     };
 
     execution.rules.push(rule);

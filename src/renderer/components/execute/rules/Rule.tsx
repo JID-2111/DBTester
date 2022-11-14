@@ -4,7 +4,10 @@ import { ProcedureParameter } from 'db/Procedures';
 import { useEffect, useState } from 'react';
 import { Accordion, Container, Row } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
-import { getUnitTestDescription } from 'renderer/components/utils/helpers';
+import {
+  formatCleanupTables,
+  getUnitTestDescription,
+} from 'renderer/components/utils/helpers';
 
 interface IRuleProps {
   rule: RuleModelType;
@@ -86,6 +89,12 @@ const Rule = ({ rule, execution, setExecution }: IRuleProps) => {
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
+      </Row>
+      <Row>
+        <span>data table: {rule.testData}</span>
+      </Row>
+      <Row>
+        <span>cleanup tables: {formatCleanupTables(rule)}</span>
       </Row>
     </Container>
   );

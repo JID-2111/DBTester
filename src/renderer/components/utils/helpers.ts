@@ -1,5 +1,6 @@
 /* eslint import/prefer-default-export: off */
 import { ConnectionModelType } from 'db/models/ConnectionModels';
+import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
 
 export function formatConnectionString(connection: ConnectionModelType) {
@@ -31,4 +32,18 @@ export function getUnitTestDescription(test: UnitTestType) {
     ${expectedRecordMatches ? `${expectedRecordMatches} ` : ''}
     ${expectedNumRecords ? `${expectedNumRecords} ` : ''}
     ${operation !== 'exists' ? `in ${table}` : ''}`;
+}
+
+export function formatCleanupTables(rule: RuleModelType) {
+  let string = '';
+  if (rule.cleanupTables) {
+    rule.cleanupTables.forEach((table, idx) => {
+      if (idx === 0) {
+        string += table;
+      } else {
+        string += `, ${table}`;
+      }
+    });
+  }
+  return string;
 }
