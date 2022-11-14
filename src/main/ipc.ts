@@ -29,6 +29,10 @@ ipcMain.handle('procedures:getColumns', async (_event, ...args) => {
   return new Procedures().fetchColumns(args[0]);
 });
 
+ipcMain.handle('procedures:createTestData', async (_event, ...args) => {
+  return new Procedures().createTestData(args[0], args[1]);
+});
+
 ipcMain.handle('procedures:getTables', () => {
   return new Procedures().fetchTables();
 });

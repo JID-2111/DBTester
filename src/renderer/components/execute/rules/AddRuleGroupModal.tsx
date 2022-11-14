@@ -1,10 +1,19 @@
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { ProcedureParameter } from 'db/Procedures';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 import Modal from '../../utils/Modal';
 import ParameterContainer from '../ParameterContainer';
+
+const animatedComponents = makeAnimated();
+
+type ListOption = {
+  value: string;
+  label: string;
+};
 
 interface IModalProps {
   isOpen: boolean;
@@ -30,6 +39,22 @@ const AddRuleGroupModal = ({
 }: IModalProps) => {
   const [form, setForm] = useState<Partial<RuleModelType>>({});
   const [errors, setErrors] = useState<Partial<IRuleGroupErrors>>({});
+  const [tables, setTables] = useState<ListOption[]>([]);
+
+  useEffect(() => {
+    const getTables = async () => {
+      const resp = await window.procedures.ipcRenderer.fetchTables();
+      setTables(
+        resp.map((t) => {
+          return {
+            value: t,
+            label: t,
+          };
+        })
+      );
+    };
+    getTables();
+  }, []);
 
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const setField = (field: string, value: any) => {
@@ -138,6 +163,40 @@ const AddRuleGroupModal = ({
             setField={setField}
             errors={errors}
           />
+          <Form.Group className="form-group">
+            <Form.Label variant="primary">Data Table</Form.Label>
+            <Form.Select
+              onChange={(e) => {
+                setField('testData', e.target.value);
+              }}
+            >
+              {!form.testData && <option aria-label="empty-option" />}
+              {tables &&
+                tables.map((table: ListOption) => {
+                  const tableKey = `table- + ${table}`;
+                  return (
+                    <option key={tableKey} value={table.value}>
+                      {table.value}
+                    </option>
+                  );
+                })}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="form-group" controlId="cleanup">
+            <Form.Label className="form-label-sm">Cleanup Tables</Form.Label>
+            <Select
+              isMulti
+              options={tables}
+              components={animatedComponents}
+              className="form-control-sm"
+              onChange={(e) => {
+                setField(
+                  'cleanupTables',
+                  e.map((t) => (t as ListOption).value)
+                );
+              }}
+            />
+          </Form.Group>
         </Form>
       }
       submit={handleSubmit}

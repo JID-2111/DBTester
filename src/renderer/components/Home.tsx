@@ -27,7 +27,7 @@ const Home = () => {
               <h4>Connect to Existing</h4>
             </Button>
           </Link>
-          <Link to="/">
+          <Link to="/History">
             <Button variant="link" className="launch-button">
               <Archive className="icon" height="2em" width="2em" />
               <h4>View History</h4>

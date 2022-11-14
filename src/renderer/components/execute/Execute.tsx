@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { Button, Col, Row, Modal, Container, Tabs, Tab } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { ConnectionModelType } from 'db/models/ConnectionModels';
@@ -41,6 +41,8 @@ const Execute = () => {
   const [key, setKey] = useState<string>('rule-groups');
 
   const navigate = useNavigate();
+  const data =
+    (useLocation().state as ExecutionModelType) ?? defaultExecutionModel;
 
   useEffect(() => {
     const getConnection = async () => {
@@ -48,6 +50,8 @@ const Execute = () => {
       setConnection(conn[0]);
     };
     getConnection();
+    setExecution(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updateDb = (database: string) => {

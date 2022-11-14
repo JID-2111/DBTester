@@ -1,0 +1,91 @@
+@use './utils/colors.scss';
+
+.history-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+  width: 90vw;
+  height: 90vh;
+  overflow: hidden;
+  background-color: colors.$snow;
+  border-radius: 0.375em;
+
+  h1 {
+    margin: 1vh;
+  }
+}
+
+.history-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: 25vw;
+  height: auto;
+
+  h6 {
+    margin: 0px;
+  }
+}
+
+.history-list {
+  justify-content: center;
+  flex-direction: row;
+  flex: 1;
+  overflow: auto;
+}
+
+.home-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 1em;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin: 1.5em 0;
+
+  input {
+    padding: 0.3em 1em;
+    border-radius: 25px;
+    border: 2px solid #ddd;
+    box-shadow: 0 0.1em 5pt 0.5pt #d3d3d3;
+  }
+  input:focus {
+    box-shadow: none;
+  }
+
+  button {
+    position: absolute;
+    margin-left: 20em;
+  }
+}
+
+.filters {
+  display: flex;
+  flex-direction: row;
+
+  .filter {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-top: 1em;
+    .search-button {
+      margin: auto;
+    }
+    .pass-fail-switch {
+      margin: auto;
+    }
+  }
+}
+
+.table-container {
+  margin: 2em 0 4em 0;
+  overflow-y: auto;
+}
+
+.rerun-button {
+  margin: 1em;
+}

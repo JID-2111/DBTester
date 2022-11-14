@@ -12,7 +12,7 @@ interface IProps {
 const EditRow = ({ value, toggleReadOnly, handleSubmit }: IProps) => {
   const [name, setName] = useState<string>('');
   return (
-    <tr key={value.id}>
+    <tr className="Rows" key={value.id}>
       <td>
         <input
           type="text"

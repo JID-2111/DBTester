@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -42,10 +42,27 @@ class RuleEntity {
   @Column()
   testData: string;
 
+  @Column({ nullable: true })
+  @Exclude({ toPlainOnly: true })
+  cleanupTableList: string;
+
+  cleanupTables: string[];
+
+  @BeforeInsert()
+  parseTables() {
+    this.cleanupTableList = JSON.stringify(this.cleanupTables);
+  }
+
+  @AfterLoad()
+  loadTables() {
+    this.cleanupTables = JSON.parse(this.cleanupTableList);
+  }
+
   /**
    * The name of the procedure to trigger
    */
   @Column()
+  @Exclude({ toPlainOnly: true })
   procedure: string;
 
   parameters: string[];

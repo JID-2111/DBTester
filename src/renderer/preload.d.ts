@@ -40,6 +40,7 @@ declare global {
         ): Promise<ProcedureParameter[]>;
         fetchContent(procedure: string): Promise<string>;
         fetchColumns(table: string): Promise<DBColumn[]>;
+        createTestData(file: string, table: string): Promise<void>;
       };
     };
     connections: {
