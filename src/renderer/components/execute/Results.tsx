@@ -1,10 +1,9 @@
-import { Accordion, Button, Table } from 'react-bootstrap';
+import { Accordion, Table } from 'react-bootstrap';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import {
   CheckCircle,
   CheckCircleFill,
-  Link,
   XCircle,
   XCircleFill,
 } from 'react-bootstrap-icons';
@@ -79,14 +78,6 @@ const Results = ({ results }: IResultsProps) => {
             </Accordion>
           );
         })}
-      </div>
-      <div className="homeButton">
-        <Link to="/">
-          <Button type="button">Home</Button>
-        </Link>
-        <Link to="/Execute">
-          <Button>Back</Button>
-        </Link>
       </div>
     </div>
   );

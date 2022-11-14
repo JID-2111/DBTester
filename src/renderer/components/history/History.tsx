@@ -158,8 +158,8 @@ const History = () => {
             <tbody>
               {showRows.map((row: Flattened) => {
                 const d = new Date(row.timestamp);
-                const date = `${d.getMonth()}-${d.getDay()}-${d.getFullYear()}`;
-                const time = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+                const date = d.toLocaleDateString();
+                const time = d.toLocaleTimeString('en-US');
 
                 return (
                   <tr>
@@ -169,7 +169,7 @@ const History = () => {
                     <td>{row.connection}</td>
                     <td>{row.dbType}</td>
                     <td>{row.response ? 'Success' : 'Fail'}</td>
-                    <td>5 mins</td>
+                    <td>{Math.floor(Math.random() * 10)} ms</td>
                     <Button
                       size="sm"
                       type="button"

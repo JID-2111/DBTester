@@ -29,7 +29,15 @@ export default class ExecutionService {
   }
 
   private entityToModel(entity: ExecutionEntity): ExecutionModelType {
-    return instanceToPlain(entity) as unknown as ExecutionModelType;
+    const execution = instanceToPlain(entity) as unknown as ExecutionModelType;
+    execution.rules = execution.rules.map((rule) => {
+      rule.unitTests = rule.unitTests.map((unitTest) => {
+        unitTest.rule = rule;
+        return unitTest;
+      });
+      return rule;
+    });
+    return execution;
   }
 
   public async fetch(): Promise<ExecutionModelType[]> {
