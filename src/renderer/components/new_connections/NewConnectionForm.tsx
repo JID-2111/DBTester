@@ -19,7 +19,7 @@ interface INewConnectionForm {
   port?: number;
   username?: string;
   password?: string;
-  remember: boolean;
+  ssl: boolean;
   connectionString?: string;
 }
 
@@ -38,7 +38,7 @@ const NewConnectionForm = () => {
   const defaultForm: INewConnectionForm = {
     nickname: '',
     type: DBProvider.PostgreSQL,
-    remember: false,
+    ssl: false,
   };
 
   const [form, setForm] = useState<INewConnectionForm>(defaultForm);
@@ -140,6 +140,7 @@ const NewConnectionForm = () => {
         port: form.port!,
         username: form.username!,
         password: form.password!,
+        ssl: form.ssl!,
       };
     }
 
@@ -294,10 +295,9 @@ const NewConnectionForm = () => {
           )}
           <Form.Group className="mb-2" controlId="formBasicCheckbox">
             <Form.Check
-              checked={form.remember}
-              onChange={(e) => setField('remember', e.target.value)}
+              onChange={() => setField('ssl', !form.ssl)}
               type="checkbox"
-              label="Remember this connection"
+              label="SSL"
             />
           </Form.Group>
           <Row>

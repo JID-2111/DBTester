@@ -42,6 +42,9 @@ class ConnectionEntity {
   @Column({ nullable: true })
   password: string;
 
+  @Column({ nullable: true })
+  ssl: boolean;
+
   @Column({
     type: 'simple-enum',
     enum: DBProvider,
@@ -83,7 +86,7 @@ class ConnectionEntity {
   constructor(model?: ConnectionInputType) {
     if (model === undefined) return;
     if (model.connectionConfig.config === 'manual') {
-      const { username, password, address, port, defaultDatabase } =
+      const { username, password, address, port, defaultDatabase, ssl } =
         model.connectionConfig;
       Object.assign(this, {
         config: 'manual',
@@ -92,6 +95,7 @@ class ConnectionEntity {
         password,
         address,
         port,
+        ssl,
       });
     } else {
       const fields = parseConnectionString(

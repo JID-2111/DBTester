@@ -42,7 +42,7 @@ export default class PgClient implements ServerInterface {
       password: model.password,
       user: model.username,
       database: database ?? 'React',
-      ssl: true,
+      ssl: model.ssl,
     });
   }
 
