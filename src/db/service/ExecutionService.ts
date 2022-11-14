@@ -37,7 +37,6 @@ export default class ExecutionService {
       });
       return rule;
     });
-    console.log(execution.rules);
     return execution;
   }
 
