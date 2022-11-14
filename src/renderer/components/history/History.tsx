@@ -56,7 +56,7 @@ const History = () => {
             database: rule.database,
             connection: ex.connection?.nickname,
             dbType: ex.connection?.type,
-            response: test.result,
+            response: test.result ?? false,
             execution: ex,
             parameters: rule.parameters,
           };
