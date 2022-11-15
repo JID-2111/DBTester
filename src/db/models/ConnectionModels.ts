@@ -13,6 +13,8 @@ export type ManualConnectionConfig = {
   username: string;
 
   password: string;
+
+  ssl: boolean;
 };
 
 export type ConnectionString = {
@@ -49,6 +51,8 @@ export type ConnectionModelType = ConnectionInfo & {
   username: string;
 
   password: string;
+
+  ssl: boolean;
 
   executions?: ExecutionModelType[];
 };

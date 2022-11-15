@@ -17,11 +17,11 @@ export interface UnitTestType {
 
   name: string;
 
-  expectedRecordMatches: RecordMatches;
+  expectedRecordMatches?: RecordMatches;
 
-  total: boolean;
+  total?: boolean;
 
-  expectedNumRecords: number;
+  expectedNumRecords?: number;
 
   table: string; // table to run test on
 
@@ -36,11 +36,11 @@ export interface UnitTestType {
     | RowNumberOperations
     | RowIDOperations;
 
-  result: boolean; // Pass or Fail
+  result?: boolean; // Pass or Fail
 
-  format: OutputFormat; // Format for output field
+  format?: OutputFormat; // Format for output field
 
-  output: string; // Debug information
+  output?: string; // Debug information
 
   rule: RuleModelType;
 }

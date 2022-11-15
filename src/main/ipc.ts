@@ -29,6 +29,10 @@ ipcMain.handle('procedures:getColumns', async (_event, ...args) => {
   return new Procedures().fetchColumns(args[0]);
 });
 
+ipcMain.handle('procedures:createTestData', async (_event, ...args) => {
+  return new Procedures().createTestData(args[0], args[1]);
+});
+
 ipcMain.handle('procedures:getTables', () => {
   return new Procedures().fetchTables();
 });
@@ -63,6 +67,14 @@ ipcMain.handle('connections:switch', (_event, ...args) => {
 
 ipcMain.handle('connections:verify', (_event) => {
   return new ConnectionService().verify();
+});
+
+ipcMain.handle('executions:fetchAll', (_event) => {
+  return new ExecutionService().fetch();
+});
+
+ipcMain.handle('executions:fetchMostRecent', (_event) => {
+  return new ExecutionService().getMostRecent();
 });
 
 ipcMain.handle('executions:checkPassFail', (_event, ...args) => {

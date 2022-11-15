@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -30,9 +30,6 @@ class RuleEntity {
   @Column()
   name: string;
 
-  @Column()
-  ruleId: number;
-
   /**
    * The database to run the unit tests on
    */
@@ -44,6 +41,22 @@ class RuleEntity {
    */
   @Column()
   testData: string;
+
+  @Column({ nullable: true })
+  @Exclude({ toPlainOnly: true })
+  cleanupTableList: string;
+
+  cleanupTables: string[];
+
+  @BeforeInsert()
+  parseTables() {
+    this.cleanupTableList = JSON.stringify(this.cleanupTables);
+  }
+
+  @AfterLoad()
+  loadTables() {
+    this.cleanupTables = JSON.parse(this.cleanupTableList);
+  }
 
   /**
    * The name of the procedure to trigger
@@ -57,6 +70,7 @@ class RuleEntity {
    * JSON string with list of parameters for the procedure.
    */
   @Column()
+  @Exclude({ toPlainOnly: true })
   parameterList: string;
 
   @BeforeInsert()
@@ -77,6 +91,7 @@ class RuleEntity {
 
   @OneToMany((_type) => UnitTestEntity, (unitTest) => unitTest.rule, {
     cascade: true,
+    eager: true,
   })
   @Type(() => UnitTestEntity, {
     discriminator: {
@@ -106,7 +121,37 @@ class RuleEntity {
     },
     keepDiscriminatorProperty: true,
   })
-  unitTests: UnitTestEntity[];
+  unitTests: (
+    | TableTestEntity
+    | RowStringEntity
+    | RowIDEntity
+    | RowNumberEntity
+    | RowBooleanEntity
+  )[];
+
+  @AfterLoad()
+  castUnitTests() {
+    if (!this.unitTests) {
+      return;
+    }
+    this.unitTests = this.unitTests.map((unitTest) => {
+      switch (unitTest.level) {
+        case UnitTestOperations.TableGenericOperations:
+          return new TableTestEntity(unitTest);
+        case UnitTestOperations.RowStringOperations:
+          return new RowStringEntity(unitTest);
+        case UnitTestOperations.RowIDOperations:
+          return new RowIDEntity(unitTest);
+        case UnitTestOperations.RowNumberOperations:
+          return new RowNumberEntity(unitTest);
+        case UnitTestOperations.RowBooleanOperations:
+          return new RowBooleanEntity(unitTest);
+        default:
+          console.log('unit test not yet filled out');
+          return unitTest;
+      }
+    });
+  }
 }
 
 export default RuleEntity;

@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { plainToInstance } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import log from 'electron-log';
 import { ExecutionModelType } from '../models/ExecutionModel';
 import AppDataSource from '../../data-source';
@@ -26,6 +26,39 @@ export default class ExecutionService {
 
   constructor() {
     this.repository = AppDataSource.getRepository(ExecutionEntity);
+  }
+
+  private entityToModel(entity: ExecutionEntity): ExecutionModelType {
+    const execution = instanceToPlain(entity) as unknown as ExecutionModelType;
+    execution.rules = execution.rules.map((rule) => {
+      rule.unitTests = rule.unitTests.map((unitTest) => {
+        unitTest.rule = rule;
+        return unitTest;
+      });
+      return rule;
+    });
+    return execution;
+  }
+
+  public async fetch(): Promise<ExecutionModelType[]> {
+    const entities = await this.repository.find({
+      order: {
+        timestamp: 'DESC',
+      },
+    });
+    return entities.map((entity) => {
+      return this.entityToModel(entity);
+    });
+  }
+
+  public async getMostRecent(): Promise<ExecutionModelType> {
+    const entity = await this.repository.find({
+      order: {
+        timestamp: 'DESC',
+      },
+      take: 1,
+    });
+    return this.entityToModel(entity[0]);
   }
 
   private getClient(database: string) {
@@ -151,11 +184,23 @@ export default class ExecutionService {
         );
       })
     );
+    // Cleanup
+    await Promise.all(
+      test.rules.map(async (rule: RuleModelType) => {
+        if (rule.cleanupTables !== undefined) {
+          return this.getClient(rule.database)?.deleteFromTablesQuery(
+            rule.testData,
+            rule.cleanupTables
+          );
+        }
+        return null;
+      })
+    );
     try {
       const res = plainToInstance(ExecutionEntity, test, {
         enableCircularCheck: true,
       });
-      this.repository.save(res);
+      await this.repository.save(res);
       return test;
     } catch (e) {
       log.error(e);

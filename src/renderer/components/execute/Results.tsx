@@ -1,19 +1,21 @@
-import { Table, Button } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Accordion, Table } from 'react-bootstrap';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
-import AllPass from './AllPass';
-import Displaytests from './Displaytests';
+import {
+  CheckCircle,
+  CheckCircleFill,
+  XCircle,
+  XCircleFill,
+} from 'react-bootstrap-icons';
 import '../../scss/results.scss';
+import AccordionItem from 'react-bootstrap/esm/AccordionItem';
+import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
+import AccordionBody from 'react-bootstrap/esm/AccordionBody';
 
-interface ILocationState {
+interface IResultsProps {
   results: ExecutionModelType;
 }
-const Results = () => {
-  const location = useLocation();
-  const state = location.state as ILocationState;
-  const { results } = state;
-
+const Results = ({ results }: IResultsProps) => {
   const passFail = (Rule: RuleModelType): boolean => {
     let pass = true;
     Rule.unitTests.forEach((test) => {
@@ -30,36 +32,52 @@ const Results = () => {
         <div>
           <h1>Execution Results</h1>
         </div>
-        <Table className="table">
-          <thead>
-            <tr key={results.id}>
-              <th>Name</th>
-              <th>ID</th>
-              <th>Database</th>
-              <th>Type</th>
-              <th>Result</th>
-              <th> Message </th>
-            </tr>
-          </thead>
-          <tbody>
-            {results.rules.map((value) => {
-              return (
-                <>
-                  {passFail(value) ? (
-                    <AllPass Rule={value} />
-                  ) : (
-                    <Displaytests Rule={value} />
-                  )}
-                </>
-              );
-            })}
-          </tbody>
-        </Table>
-      </div>
-      <div className="homeButton">
-        <Link to="/">
-          <Button type="button">Home</Button>
-        </Link>
+        {results.rules.map((rule) => {
+          return (
+            <Accordion className="accordionClass">
+              <AccordionItem eventKey="0">
+                <AccordionHeader id="header">
+                  <>
+                    {passFail(rule) ? (
+                      <CheckCircleFill className="Check" color="green" />
+                    ) : (
+                      <XCircleFill className="X" color="red" />
+                    )}
+                    {rule.name}
+                  </>
+                </AccordionHeader>
+                <AccordionBody>
+                  <Table className="Results-Table">
+                    {rule.unitTests.map((Test) => {
+                      return (
+                        <tbody>
+                          <tr key={Test.id}>
+                            <td>{Test.name}</td>
+                            {Test.result ? (
+                              <td> Test Passed </td>
+                            ) : (
+                              <td> Test Failed</td>
+                            )}
+                            {Test.result ? (
+                              <td>
+                                <CheckCircle className="Check" />
+                              </td>
+                            ) : (
+                              <td>
+                                <XCircle className="X" />
+                              </td>
+                            )}
+                            <td> {Test.output}</td>
+                          </tr>
+                        </tbody>
+                      );
+                    })}
+                  </Table>
+                </AccordionBody>
+              </AccordionItem>
+            </Accordion>
+          );
+        })}
       </div>
     </div>
   );

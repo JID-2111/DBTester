@@ -1,9 +1,12 @@
 import { Pool } from 'pg';
+import fs from 'fs';
 import log from 'electron-log';
 import { ConnectionModelType } from '../models/ConnectionModels';
 import ServerInterface from './ServerInterface';
 import { ProcedureParameter, Direction } from '../Procedures';
 import { RowNumberOperations } from '../entity/enum';
+
+const copyFrom = require('pg-copy-streams').from;
 
 type DBQuery = {
   datname: string;
@@ -24,10 +27,9 @@ export type DBColumn = {
 };
 
 export type DBParameter = {
-  pronamespace: string;
-  proname: string;
-  args_def: string;
-  arg: string;
+  parameter_mode: string;
+  parameter_name: string;
+  data_type: string;
 };
 
 export default class PgClient implements ServerInterface {
@@ -39,6 +41,7 @@ export default class PgClient implements ServerInterface {
       password: model.password,
       user: model.username,
       database: database ?? 'React',
+      ssl: model.ssl,
     });
   }
 
@@ -56,6 +59,28 @@ export default class PgClient implements ServerInterface {
     }
     client.release();
     return true;
+  }
+
+  public async importTestDataTable(file: string, table: string): Promise<void> {
+    const client = await this.pool.connect();
+    const stream = client.query(
+      copyFrom(`COPY ${table} FROM STDIN DELIMITER ',' CSV HEADER;`)
+    );
+    const fileStream = fs.createReadStream(file);
+    log.error(fileStream);
+    fileStream.on('error', (e) => {
+      client.release();
+      log.error(`FileStream error ${e}`);
+    });
+    stream.on('error', (e: unknown) => {
+      client.release();
+      log.error(`Stream error ${e}`);
+    });
+    stream.on('finish', () => {
+      client.release();
+      log.error('FileStream finished');
+    });
+    fileStream.pipe(stream);
   }
 
   public async getDatabasesQuery(): Promise<unknown> {
@@ -85,7 +110,7 @@ export default class PgClient implements ServerInterface {
     );
   }
 
-  public async fetchContentQuery(procedure: string): Promise<string[]> {
+  public async fetchContentQuery(procedure: string): Promise<string> {
     const client = await this.pool.connect();
     const result = await client.query(
       `SELECT prosrc FROM pg_proc WHERE proname = '${procedure}'`
@@ -99,15 +124,30 @@ export default class PgClient implements ServerInterface {
   ): Promise<ProcedureParameter[]> {
     const client = await this.pool.connect();
     const result = await client.query(
-      `SELECT pronamespace::regnamespace, proname, pg_get_function_arguments(oid) AS args_def, UNNEST(string_to_array(pg_get_function_identity_arguments(oid), ',' )) AS arg FROM pg_proc where proname='${procedure}'`
+      `SELECT proc.specific_schema as procedure_schema,
+       proc.specific_name,
+       proc.routine_name as procedure_name,
+       args.parameter_name,
+       args.parameter_mode,
+       args.data_type
+       from information_schema.routines proc
+       left join information_schema.parameters args
+          on proc.specific_schema = args.specific_schema
+          and proc.specific_name = args.specific_name
+        where proc.routine_schema not in ('pg_catalog', 'information_schema')
+        and proc.routine_type = 'PROCEDURE'
+        and proc.routine_name='${procedure}'
+        order by procedure_schema,
+         specific_name,
+         procedure_name,
+         args.ordinal_position`
     );
     client.release();
     return result.rows.map((row: DBParameter) => {
-      const parts = row.arg.trim().split(' ');
       return {
-        direction: <Direction>parts[0],
-        name: parts[1],
-        type: parts[2],
+        direction: <Direction>row.parameter_mode,
+        name: row.parameter_name,
+        type: row.data_type,
       };
     });
   }
@@ -255,5 +295,37 @@ export default class PgClient implements ServerInterface {
     return result.rows.map((row: DBTablename) => {
       return row.tablename;
     });
+  }
+
+  private async getTablePrimaryKey(table: string) {
+    const client = await this.pool.connect();
+    const result = await client.query(
+      `select C.COLUMN_NAME FROM
+      INFORMATION_SCHEMA.TABLE_CONSTRAINTS T
+      JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE C
+      ON C.CONSTRAINT_NAME=T.CONSTRAINT_NAME
+      WHERE
+      C.TABLE_NAME='${table.toLowerCase()}'
+      and T.CONSTRAINT_TYPE='PRIMARY KEY'`
+    );
+    client.release();
+    return result.rows[0].column_name;
+  }
+
+  private async deleteFromTableQuery(idTable: string, target: string) {
+    const client = await this.pool.connect();
+    const idTablePrimaryKey = await this.getTablePrimaryKey(idTable);
+    const targetTablePrimaryKey = await this.getTablePrimaryKey(target);
+    await client.query(
+      `DELETE FROM ${target} WHERE ${targetTablePrimaryKey} IN (SELECT ${idTablePrimaryKey} FROM ${idTable})`
+    );
+    client.release();
+  }
+
+  public async deleteFromTablesQuery(idTable: string, targets: string[]) {
+    const promises = targets.map((target) => {
+      return this.deleteFromTableQuery(idTable, target);
+    });
+    await Promise.all(promises);
   }
 }

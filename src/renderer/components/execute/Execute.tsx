@@ -1,22 +1,30 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Button, Col, Row, Modal } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Button, Col, Row, Modal, Container, Tabs, Tab } from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ProcedureParameter } from 'db/Procedures';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
-import { RuleModelType } from 'db/models/RuleModel';
-import { UnitTestType } from 'db/models/UnitTestModels';
-import { OutputFormat, RecordMatches } from 'db/entity/enum';
+import { ConnectionModelType } from 'db/models/ConnectionModels';
 import ProcedureDropdown from './ProcedureDropdown';
 
 import '../../scss/Execute.scss';
+import '../../scss/Home.scss';
 import DBDropdown from './DBDropdown';
-import ConditionContainer from './conditions/ConditionContainer';
-import ParameterContainer, { Parameter } from './ParameterContainer';
+import { formatConnectionString } from '../utils/helpers';
+import UnitTestTab from './conditions/UnitTestTab';
+import Results from './Results';
+import ExecuteCell from './ExecuteCell';
+import RuleGroupTab from './rules/RuleGroupTab';
 
 const Execute = () => {
+  const defaultExecutionModel: ExecutionModelType = {
+    name: '',
+    timestamp: new Date(),
+    rules: [],
+  };
+
   const [code, setCode] = useState<string>('');
   const [alert, setAlert] = useState<boolean>(false);
   const [activeDb, setActiveDb] = useState<string>('React');
@@ -24,12 +32,27 @@ const Execute = () => {
   const [activeParameters, setActiveParameters] = useState<
     ProcedureParameter[]
   >([]);
-  const [parameterValues, setParameterValues] = useState<Parameter>({});
-  const [conditionList, setConditionList] = useState<Partial<UnitTestType>[]>(
-    []
+  const [connection, setConnection] = useState<ConnectionModelType | undefined>(
+    undefined
   );
+  const [execution, setExecution] = useState<ExecutionModelType>(
+    defaultExecutionModel
+  );
+  const [key, setKey] = useState<string>('rule-groups');
 
   const navigate = useNavigate();
+  const data =
+    (useLocation().state as ExecutionModelType) ?? defaultExecutionModel;
+
+  useEffect(() => {
+    const getConnection = async () => {
+      const conn = await window.connections.ipcRenderer.fetch();
+      setConnection(conn[0]);
+    };
+    getConnection();
+    setExecution(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const updateDb = (database: string) => {
     setActiveDb(database);
@@ -39,67 +62,17 @@ const Execute = () => {
 
   const handleClick = async () => {
     await window.connections.ipcRenderer.disconnect();
-  };
-
-  const handleInput = (inputValue: string, attribute: string) => {
-    const p = parameterValues;
-    p[attribute] = inputValue;
-    setParameterValues(p);
-  };
-
-  const formatUnitTests = (rule: RuleModelType) => {
-    const unitTests: UnitTestType[] = conditionList.map(
-      (condition: Partial<UnitTestType>) => {
-        const unitTest: UnitTestType = {
-          level: condition.level!,
-          name: 'test',
-          expectedRecordMatches: RecordMatches.GREATER_THAN,
-          total: condition.total || false,
-          expectedNumRecords: condition.expectedNumRecords || 0,
-          table: condition.table!,
-          column: condition.column! || 'column',
-          value: condition.value! || 'value',
-          operation: condition.operation!,
-          result: false,
-          format: OutputFormat.JSON,
-          output: '',
-          rule,
-        };
-        return unitTest;
-      }
-    );
-    return unitTests;
+    navigate('/');
   };
 
   const handleExecute = async () => {
-    const execution: ExecutionModelType = {
-      timestamp: new Date(),
-      rules: [],
-    };
-
-    const rule: RuleModelType = {
-      name: 'name',
-      ruleId: 1,
-      database: activeDb,
-      testData: 'testdata',
-      unitTests: [],
-      execution,
-      procedure: activeProcedure,
-      parameters: Object.values(parameterValues),
-    };
-
-    const unitTests = formatUnitTests(rule);
-
-    rule.unitTests = unitTests;
-    execution.rules = [rule];
-
     const results = await window.executions.ipcRenderer.checkPassFail(
       execution
     );
 
-    // display results here or route to other screen
-    navigate('/Results', { state: { results } });
-    return results;
+    // set tab to results
+    setKey('results');
+    setExecution(results);
   };
 
   const showAlert = () => {
@@ -120,67 +93,86 @@ const Execute = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center">
-      <div className="execute-wrapper">
-        <h1>Execute Stored Procedures</h1>
-        <Row>
-          <Col md="4">
-            <Row>
-              <h6>Selected Database</h6>
-              <DBDropdown activeDb={activeDb} updateDb={updateDb} />
-            </Row>
-            <Row>
-              <h6>Selected Procedure</h6>
-              <ProcedureDropdown
-                activeDb={activeDb}
-                activeProcedure={activeProcedure}
-                setParameterValues={setParameterValues}
-                setActiveProcedure={setActiveProcedure}
-                setActiveParameters={setActiveParameters}
-                setCode={setCode}
-              />
-              {code !== '' && (
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="code-button"
-                  onClick={() => setAlert(!!code)}
-                >
-                  code
-                </Button>
-              )}
-            </Row>
-            <Row>
-              {activeProcedure && (
-                <ParameterContainer
-                  activeParameters={activeParameters}
-                  handleInput={handleInput}
-                />
-              )}
-            </Row>
-          </Col>
-          <Col>
-            <ConditionContainer
-              conditionList={conditionList}
-              setConditionList={setConditionList}
-            />
-          </Col>
+    <Container fluid className="execute-wrapper">
+      <Col className="sidebar">
+        <Row className="recent-item">
+          {connection && (
+            <>
+              <span>{connection.nickname}</span>
+              <span className="recent-item-info">
+                {formatConnectionString(connection)}
+              </span>
+            </>
+          )}
         </Row>
-        <div className="home-btn-footer">
-          {activeProcedure && (
-            <Button onClick={() => handleExecute()} className="home-btn">
-              Execute Tests
+        <hr />
+        <Row className="justify-content-center">
+          <p>Databases</p>
+          <div className="d-flex">
+            <p className="side-label">Selected: </p>
+            <DBDropdown activeDb={activeDb} updateDb={updateDb} />
+          </div>
+          <Button onClick={() => handleClick()} className="disconnect-btn">
+            Disconnect
+          </Button>
+        </Row>
+        <hr />
+        <Row>
+          <p>Stored Procedures</p>
+          <div className="d-flex">
+            <p className="side-label">Selected: </p>
+            <ProcedureDropdown
+              activeDb={activeDb}
+              activeProcedure={activeProcedure}
+              setActiveProcedure={setActiveProcedure}
+              setActiveParameters={setActiveParameters}
+              setCode={setCode}
+            />
+          </div>
+          {code !== '' && (
+            <Button
+              variant="link"
+              size="sm"
+              className="code-button"
+              onClick={() => setAlert(!!code)}
+            >
+              code
             </Button>
           )}
-          <Link to="/">
-            <Button onClick={() => handleClick()} className="home-btn">
-              Disconnect
-            </Button>
-          </Link>
-        </div>
-        {alert && showAlert()}
-      </div>
-    </div>
+        </Row>
+        <hr />
+        {activeProcedure && (
+          <ExecuteCell
+            handleExecute={handleExecute}
+            execution={execution}
+            setExecution={setExecution}
+          />
+        )}
+      </Col>
+      <Col className="content-area">
+        <Tabs
+          defaultActiveKey="rule-groups"
+          activeKey={key}
+          onSelect={(k) => setKey(k!)}
+        >
+          <Tab eventKey="rule-groups" title="Rule Groups">
+            <RuleGroupTab
+              activeParameters={activeParameters}
+              activeProcedure={activeProcedure}
+              execution={execution}
+              setExecution={setExecution}
+            />
+          </Tab>
+          <Tab eventKey="unit-tests" title="Unit Tests">
+            <UnitTestTab execution={execution} setExecution={setExecution} />
+          </Tab>
+          <Tab eventKey="results" title="Results">
+            <Results results={execution} />
+          </Tab>
+        </Tabs>
+      </Col>
+      {alert && showAlert()}
+    </Container>
   );
 };
 

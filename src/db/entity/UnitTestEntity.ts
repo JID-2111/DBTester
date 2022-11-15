@@ -37,14 +37,19 @@ export abstract class UnitTestEntity {
   @Column({
     enum: RecordMatches,
     type: 'simple-enum',
+    nullable: true,
   })
-  expectedRecordMatches: RecordMatches;
+  expectedRecordMatches?: RecordMatches;
 
-  @Column()
-  total: boolean;
+  @Column({
+    nullable: true,
+  })
+  total?: boolean;
 
-  @Column()
-  expectedNumRecords: number;
+  @Column({
+    nullable: true,
+  })
+  expectedNumRecords?: number;
 
   @Column()
   table: string; // table to run test on
@@ -62,23 +67,32 @@ export abstract class UnitTestEntity {
   @Column()
   abstract operation: string;
 
-  @Column()
-  result: boolean; // Pass or Fail
+  @Column({
+    nullable: true,
+  })
+  result?: boolean; // Pass or Fail
 
   @Column({
     type: 'simple-enum',
     enum: OutputFormat,
+    nullable: true,
   })
-  format: OutputFormat; // Format for output field
+  format?: OutputFormat; // Format for output field
 
-  @Column()
-  output: string; // Debug information
+  @Column({
+    nullable: true,
+  })
+  output?: string; // Debug information
 
   @ManyToOne((_type) => RuleEntity, (rule) => rule.unitTests, {
     onDelete: 'CASCADE',
   })
   @Type(() => RuleEntity)
   rule: RuleEntity;
+
+  constructor(entity: UnitTestEntity) {
+    Object.assign(this, entity);
+  }
 }
 
 @ChildEntity()

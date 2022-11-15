@@ -4,7 +4,6 @@ import { useState, useEffect, MouseEvent } from 'react';
 import { ConnectionModelType } from '../../../db/models/ConnectionModels';
 import ReadRow from './ReadRow';
 import EditRow from './EditRow';
-
 import '../../scss/RecentConnections.scss';
 
 const RecentConnections = () => {
@@ -56,7 +55,7 @@ const RecentConnections = () => {
         <h1>Recent Connections</h1>
         <div className="d-flex justify-content-center">
           <Form>
-            <Table className="table">
+            <Table id="Recents-table">
               <thead>
                 <tr>
                   <th>Nick Name</th>
