@@ -9,6 +9,33 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Release Notes
 
+## Version 0.4.0
+
+> [GitHub Release](https://github.com/JID-2111/JID-2111/releases/tag/v0.4.0)
+
+### New Features
+
+- Revamped UI of entire Execute page to model modern database interface application
+- Introduced Rule Groups to the UI, which can contain multiple Unit Tests
+- Moved Results table to separate tab on Execute page
+- Redesigned Results page to reflect Rule Groups
+- User can select tables containing test data
+- User can select tables that should be cleaned up after a test
+- Built history page to view previous Executions
+- Can search and filter by connection/status in the history table
+- Previous executions can be re-loaded into the Execute workspace
+- Added ability to toggle SSL in Connection Form order to connect to Azure databases
+
+### Known Issues
+
+- Cannot connect to Azure database via connection string (SSL does not work)
+- Azure stored procedures are not populating as expected
+- Sidebar styling on Home page does not match Execute page
+
+### Bug Fixes
+
+- Fixed form validation in Rule and Unit Test forms
+
 ## Version 0.3.0
 
 > [GitHub Release](https://github.com/JID-2111/JID-2111/releases/tag/v0.3.0)
