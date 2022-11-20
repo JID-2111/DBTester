@@ -242,7 +242,7 @@ const NewConnectionForm = () => {
                   value={form.database}
                   onChange={(e) => setField('database', e.target.value)}
                   type="text"
-                  placeholder="Ex: React"
+                  placeholder="Ex: postgres"
                   isInvalid={!!errors.database}
                 />
                 <Form.Control.Feedback type="invalid">
