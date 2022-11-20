@@ -38,13 +38,13 @@
           background-color: inherit;
           color: colors.$snow;
           border: none;
-          width: 100%;
           padding: 5px 0px;
 
           .recent-item-info {
             font-size: 12px;
             color: colors.$sand;
             overflow: hidden;
+            overflow-wrap: anywhere;
           }
           & span {
             display: block;
