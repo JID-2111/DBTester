@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { Trash, PencilSquare } from 'react-bootstrap-icons';
 import { MouseEvent } from 'react';
 import { ConnectionModelType } from '../../../db/models/ConnectionModels';
@@ -18,15 +17,13 @@ const ReadRow = ({
   return (
     <tr key={value.id}>
       <td>
-        <Link to="/Execute">
-          <button
-            className="buttonSelect"
-            type="button"
-            onClick={() => handleSelect(value.id)}
-          >
-            {value.nickname}
-          </button>
-        </Link>
+        <button
+          className="buttonSelect"
+          type="button"
+          onClick={() => handleSelect(value.id)}
+        >
+          {value.nickname}
+        </button>
       </td>
       <td>{value.type}</td>
       <td>{value.address}</td>

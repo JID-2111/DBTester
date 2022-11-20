@@ -53,9 +53,11 @@ export default class PgClient implements ServerInterface {
     let client;
     try {
       client = await this.pool.connect();
-    } catch {
-      log.warn('Error connecting to database');
-      return false;
+
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    } catch (e: any) {
+      log.warn(e.message);
+      throw new Error(e.message);
     }
     client.release();
     return true;

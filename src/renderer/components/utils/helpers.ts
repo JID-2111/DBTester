@@ -47,3 +47,7 @@ export function formatCleanupTables(rule: RuleModelType) {
   }
   return string;
 }
+
+export function parseErrorMessage(msg: string) {
+  return msg.slice(msg.slice(1, msg.length).search('Error: ') + 1, msg.length);
+}
