@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { ConnectionModelType } from '../../../db/models/ConnectionModels';
 import ServerConnectionErrorModal from '../modals/ServerConnectionErrorModal';
@@ -31,20 +30,24 @@ const RecentList = () => {
 
   return (
     <>
-      {recent?.map((connection: ConnectionModelType) => {
-        const connectionString = formatConnectionString(connection);
-        return (
-          <>
-            <Row className="recent-item">
-              <button type="button" onClick={() => handleClick(connection.id)}>
+      <div className="recent-list">
+        {recent?.map((connection: ConnectionModelType) => {
+          const connectionString = formatConnectionString(connection);
+          return (
+            <>
+              <button
+                className="recent-item"
+                type="button"
+                onClick={() => handleClick(connection.id)}
+              >
                 <span>{connection.nickname}</span>
                 <span className="recent-item-info">{connectionString}</span>
               </button>
-            </Row>
-            <hr />
-          </>
-        );
-      })}
+              <hr />
+            </>
+          );
+        })}
+      </div>
       {alert && (
         <ServerConnectionErrorModal
           show={alert}
