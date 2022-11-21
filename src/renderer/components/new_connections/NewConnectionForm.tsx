@@ -277,6 +277,13 @@ const NewConnectionForm = () => {
                   {errors.password}
                 </Form.Control.Feedback>
               </Form.Group>
+              <Form.Group className="mb-2" controlId="formBasicCheckbox">
+                <Form.Check
+                  onChange={() => setField('ssl', !form.ssl)}
+                  type="checkbox"
+                  label="SSL"
+                />
+              </Form.Group>
             </>
           )}
           {connectionStringActive && (
@@ -287,7 +294,7 @@ const NewConnectionForm = () => {
                 value={form.connectionString}
                 onChange={(e) => setField('connectionString', e.target.value)}
                 type="text"
-                placeholder="Ex: postgresql://username:password@address:port/db"
+                placeholder="Ex: postgresql://<username>:<password>@<address>:<port>/<database>?ssl=true"
                 isInvalid={!!errors.connectionString}
                 as="textarea"
                 rows={3}
@@ -297,13 +304,6 @@ const NewConnectionForm = () => {
               </Form.Control.Feedback>
             </Form.Group>
           )}
-          <Form.Group className="mb-2" controlId="formBasicCheckbox">
-            <Form.Check
-              onChange={() => setField('ssl', !form.ssl)}
-              type="checkbox"
-              label="SSL"
-            />
-          </Form.Group>
           <Row>
             <Col>
               <Button variant="primary" type="submit" disabled={isConnecting}>
