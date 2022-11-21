@@ -102,7 +102,7 @@ class ConnectionEntity {
         model.type,
         model.connectionConfig.connectionString
       );
-      const { username, password, endpoint } = fields;
+      const { username, password, endpoint, options } = fields;
       if (fields.hosts.length > 0) {
         Object.assign(this, {
           config: 'manual',
@@ -111,6 +111,7 @@ class ConnectionEntity {
           password,
           address: fields.hosts[0].host,
           port: fields.hosts[0].port,
+          ssl: options && options.ssl ? options.ssl === 'true' : false,
         });
       }
     }

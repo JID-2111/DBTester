@@ -1,14 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Table, Form } from 'react-bootstrap';
 import { useState, useEffect, MouseEvent } from 'react';
 import { ConnectionModelType } from '../../../db/models/ConnectionModels';
 import ReadRow from './ReadRow';
 import EditRow from './EditRow';
 import '../../scss/RecentConnections.scss';
+import ServerConnectionErrorModal from '../modals/ServerConnectionErrorModal';
+import { parseErrorMessage } from '../utils/helpers';
 
 const RecentConnections = () => {
   const [connect, setConnect] = useState<ConnectionModelType[]>([]);
   const [edit, setEdit] = useState<unknown>();
+  const [alert, setAlert] = useState<boolean>(false);
+  const [alertMsg, setAlertMsg] = useState<string>('');
+
+  const navigate = useNavigate();
 
   const getConnections = async () => {
     const connections = await window.connections.ipcRenderer.fetch();
@@ -24,7 +30,17 @@ const RecentConnections = () => {
     setConnect(connections);
   };
   const handleSelect = async (ConnectionID: number) => {
-    await window.connections.ipcRenderer.select(ConnectionID);
+    try {
+      await window.connections.ipcRenderer.select(ConnectionID);
+
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    } catch (e: any) {
+      const error = parseErrorMessage(e.message);
+      setAlertMsg(error);
+      setAlert(true);
+      return;
+    }
+    navigate('/execute');
   };
 
   // changes the state to know which row is being edited
@@ -97,6 +113,13 @@ const RecentConnections = () => {
           </Link>
         </div>
       </div>
+      {alert && (
+        <ServerConnectionErrorModal
+          show={alert}
+          alertMsg={alertMsg}
+          handleClose={() => setAlert(false)}
+        />
+      )}
     </div>
   );
 };

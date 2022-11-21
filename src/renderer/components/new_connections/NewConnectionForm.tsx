@@ -10,6 +10,7 @@ import {
 } from '../../../db/models/ConnectionModels';
 import { DBProvider } from '../../../db/entity/enum';
 import ServerConnectionErrorModal from '../modals/ServerConnectionErrorModal';
+import { parseErrorMessage } from '../utils/helpers';
 
 interface INewConnectionForm {
   nickname: string;
@@ -44,8 +45,10 @@ const NewConnectionForm = () => {
   const [form, setForm] = useState<INewConnectionForm>(defaultForm);
   const [errors, setErrors] = useState<INewConnectionErrors>({});
   const [alert, setAlert] = useState<boolean>(false);
+  const [alertMsg, setAlertMsg] = useState<string>('');
   const [connectionStringActive, setConnectionStringActive] =
     useState<boolean>(false);
+  const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -99,7 +102,7 @@ const NewConnectionForm = () => {
         newErrors.type = 'Please select a database type.';
       }
       if (!database) {
-        newErrors.type = 'Please type a database';
+        newErrors.database = 'Please type a database';
       }
       if (!address) {
         newErrors.address = 'Please type an address.';
@@ -151,22 +154,23 @@ const NewConnectionForm = () => {
     };
 
     try {
+      setIsConnecting(true);
+
       // creates the server connection in sqlite and connects to it
       await window.connections.ipcRenderer.create(connection);
 
-      // verify if server connection was established
-      const verified = await window.connections.ipcRenderer.verify();
-      if (!verified) {
-        setAlert(true);
-        return;
-      }
-      // show alert modal if unexpected error
-    } catch (e) {
+      // show alert modal if error on create
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    } catch (e: any) {
+      const error = parseErrorMessage(e.message);
+      setAlertMsg(error);
       setAlert(true);
+      setIsConnecting(false);
       return;
     }
 
     clearForm();
+    setIsConnecting(false);
     navigate('/execute');
   };
   return (
@@ -238,7 +242,7 @@ const NewConnectionForm = () => {
                   value={form.database}
                   onChange={(e) => setField('database', e.target.value)}
                   type="text"
-                  placeholder="Ex: React"
+                  placeholder="Ex: postgres"
                   isInvalid={!!errors.database}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -273,6 +277,13 @@ const NewConnectionForm = () => {
                   {errors.password}
                 </Form.Control.Feedback>
               </Form.Group>
+              <Form.Group className="mb-2" controlId="formBasicCheckbox">
+                <Form.Check
+                  onChange={() => setField('ssl', !form.ssl)}
+                  type="checkbox"
+                  label="SSL"
+                />
+              </Form.Group>
             </>
           )}
           {connectionStringActive && (
@@ -283,7 +294,7 @@ const NewConnectionForm = () => {
                 value={form.connectionString}
                 onChange={(e) => setField('connectionString', e.target.value)}
                 type="text"
-                placeholder="Ex: postgresql://username:password@address:port/db"
+                placeholder="Ex: postgresql://<username>:<password>@<address>:<port>/<database>?ssl=true"
                 isInvalid={!!errors.connectionString}
                 as="textarea"
                 rows={3}
@@ -293,17 +304,10 @@ const NewConnectionForm = () => {
               </Form.Control.Feedback>
             </Form.Group>
           )}
-          <Form.Group className="mb-2" controlId="formBasicCheckbox">
-            <Form.Check
-              onChange={() => setField('ssl', !form.ssl)}
-              type="checkbox"
-              label="SSL"
-            />
-          </Form.Group>
           <Row>
             <Col>
-              <Button variant="primary" type="submit">
-                Connect
+              <Button variant="primary" type="submit" disabled={isConnecting}>
+                {isConnecting ? 'Connecting...' : 'Connect'}
               </Button>
             </Col>
             <Col>
@@ -321,6 +325,7 @@ const NewConnectionForm = () => {
       {alert && (
         <ServerConnectionErrorModal
           show={alert}
+          alertMsg={alertMsg}
           handleClose={() => setAlert(false)}
         />
       )}

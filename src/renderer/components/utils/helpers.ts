@@ -5,9 +5,11 @@ import { UnitTestType } from 'db/models/UnitTestModels';
 
 export function formatConnectionString(connection: ConnectionModelType) {
   const connectionString =
-    `${connection.type}://${connection.username}:` +
+    `${connection.type.toLowerCase()}://${connection.username}:` +
     `****` +
-    `@${connection.address}:${connection.port}`;
+    `@${connection.address}:${connection.port}/${connection.defaultDatabase}${
+      connection.ssl === true ? `?ssl=${connection.ssl}` : ''
+    }`;
 
   return connectionString;
 }
@@ -46,4 +48,8 @@ export function formatCleanupTables(rule: RuleModelType) {
     });
   }
   return string;
+}
+
+export function parseErrorMessage(msg: string) {
+  return msg.slice(msg.slice(1, msg.length).search('Error: ') + 1, msg.length);
 }
