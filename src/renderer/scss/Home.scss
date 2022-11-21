@@ -1,107 +1,67 @@
 @use './utils/colors.scss';
 
-.home {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.home-wrapper {
   background-color: colors.$persian-green;
   color: colors.$snow;
+  padding: 0;
+  display: flex;
+  height: 100vh;
 
-  .menu-wrapper {
+  .home-content {
+    width: calc(100vw - 300px);
+  }
+
+  .launch-wrapper {
     display: flex;
-    flex-direction: row;
-    align-items: center;
     justify-content: center;
-    width: 100vw;
+    align-items: center;
+    flex-direction: column;
+    align-items: center;
+    width: 60vw;
 
-    .recent-wrapper {
-      flex-direction: column;
-      width: 40vw;
-      height: 100vh;
-      background-color: colors.$jet;
-
-      .recent-list {
-        display: flex;
-        flex-direction: column;
-        padding: 10px 30px;
-        overflow: hidden;
-
-        hr {
-          color: colors.$snow;
-        }
-        .recent-item {
-          cursor: pointer;
-          transition: none;
-          stroke: none;
-          text-align: left;
-          background-color: inherit;
-          color: colors.$snow;
-          border: none;
-          width: 100%;
-          padding: 5px 0px;
-
-          .recent-item-info {
-            font-size: 12px;
-            color: colors.$sand;
-            overflow: hidden;
-          }
-          & span {
-            display: block;
-          }
-        }
-      }
-
-      hr {
-        margin: 5px 0px;
-      }
+    .edit-icon {
+      position: relative;
+      align-items: right;
+      vertical-align: right;
     }
-    .launch-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 60vw;
 
-      .edit-icon {
-        position: relative;
-        align-items: right;
-        vertical-align: right;
-      }
+    h1 {
+      padding-bottom: 10vh;
+    }
 
-      h1 {
-        padding-bottom: 10vh;
-      }
+    .launch-button {
+      margin: 5px;
+      transition: none;
+      stroke: none;
+      color: colors.$snow;
+      background-color: #00000000;
+      width: calc(50vw - 10px);
+      box-shadow: none;
+    }
+
+    .launch-button:hover {
+      transform: none;
+      color: colors.$jet;
     }
   }
-}
 
-h4 {
-  display: inline-block;
-  vertical-align: middle;
-  margin-bottom: 0;
-  font-weight: 400;
-}
+  .row {
+    margin: 4px 10px;
+  }
 
-.icon {
-  margin: 5px;
-  vertical-align: middle;
-}
+  h4 {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0;
+    font-weight: 400;
+  }
 
-.logo {
-  margin-bottom: 20px;
-}
+  .icon {
+    margin: 5px;
+    vertical-align: middle;
+  }
 
-.launch-button {
-  margin: 5px;
-  transition: none;
-  stroke: none;
-  color: colors.$snow;
-  background-color: #00000000;
-  width: calc(50vw - 10px);
-  box-shadow: none;
-}
-
-.launch-button:hover {
-  transform: none;
-  color: colors.$jet;
+  .logo {
+    margin-bottom: 20px;
+  }
 }
