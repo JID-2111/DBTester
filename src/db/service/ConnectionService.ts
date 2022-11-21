@@ -53,12 +53,15 @@ export default class ConnectionService {
     const parsedEntity = new ConnectionEntity(model);
     const entity = await this.repository.save(parsedEntity);
     console.log(this.entityToModel(entity));
+
     try {
       return await this.select(entity.id);
-    } catch (e) {
+
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    } catch (e: any) {
       log.error(e);
-      this.delete(entity.id);
-      throw new Error('Connection is not valid');
+      await this.delete(entity.id);
+      throw new Error(e.message);
     }
   }
 
@@ -67,10 +70,15 @@ export default class ConnectionService {
     if (entity !== null) {
       entity.lastUsed = new Date();
       store.dispatch(change(this.entityToModel(entity)));
-      if (!(await this.verify())) {
+
+      try {
+        await this.verify();
+
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+      } catch (e: any) {
         store.dispatch(clear());
-        log.error('Connection is not valid');
-        throw new Error('Connection is not valid');
+        log.error(e.message);
+        throw new Error(e.message);
       }
       return this.repository.save(entity);
     }
@@ -113,6 +121,14 @@ export default class ConnectionService {
     if (connection === undefined) {
       return false;
     }
-    return connection.verify();
+
+    try {
+      return await connection.verify();
+
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    } catch (e: any) {
+      log.error(e);
+      throw new Error(e.message);
+    }
   }
 }
