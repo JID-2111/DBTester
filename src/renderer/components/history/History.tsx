@@ -7,6 +7,7 @@ import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
 
+import { Trash, Upload } from 'react-bootstrap-icons';
 import StatusDropdown from './StatusDropdown';
 import ConnectionDropdown from './ConnectionDropdown';
 
@@ -31,13 +32,12 @@ const History = () => {
   const [showRows, setShowRows] = useState<Flattened[]>([]);
 
   const navigate = useNavigate();
-
+  const fetchExecutions = async () => {
+    const execution: ExecutionModelType[] =
+      await window.executions.ipcRenderer.fetchAll();
+    setExecutions(execution);
+  };
   useEffect(() => {
-    const fetchExecutions = async () => {
-      const execution: ExecutionModelType[] =
-        await window.executions.ipcRenderer.fetchAll();
-      setExecutions(execution);
-    };
     fetchExecutions();
   }, []); // Update procedure history based on filter
 
@@ -109,6 +109,11 @@ const History = () => {
     }
   };
 
+  const handleDeleteClick = async (ex: ExecutionModelType) => {
+    if (ex.id) await window.executions.ipcRenderer.delete(ex.id);
+    fetchExecutions();
+  };
+
   return (
     <div className="d-flex justify-content-center align-items-center">
       <div className="history-wrapper">
@@ -176,7 +181,10 @@ const History = () => {
                       className="rerun-button"
                       onClick={() => handleLoadClick(row.execution)}
                     >
-                      load
+                      <Upload />
+                    </Button>
+                    <Button onClick={() => handleDeleteClick(row.execution)}>
+                      <Trash />
                     </Button>
                   </tr>
                 );
