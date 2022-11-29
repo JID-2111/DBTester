@@ -167,27 +167,27 @@ const History = () => {
                   const time = d.toLocaleTimeString('en-US');
 
                   return (
-                  <tr>
-                    <td>{date}</td>
-                    <td>{time}</td>
-                    <td>{row.procedure}</td>
-                    <td>{row.connection}</td>
-                    <td>{row.dbType}</td>
-                    <td>{row.response ? 'Success' : 'Fail'}</td>
-                    <td>{Math.floor(Math.random() * 10)} ms</td>
-                    <Button
-                      size="sm"
-                      type="button"
-                      className="rerun-button"
-                      onClick={() => handleLoadClick(row.execution)}
-                    >
-                      <Upload />
-                    </Button>
-                    <Button onClick={() => handleDeleteClick(row.execution)}>
-                      <Trash />
-                    </Button>
-                  </tr>
-                );
+                    <tr>
+                      <td>{date}</td>
+                      <td>{time}</td>
+                      <td>{row.procedure}</td>
+                      <td>{row.connection}</td>
+                      <td>{row.dbType}</td>
+                      <td>{row.response ? 'Success' : 'Fail'}</td>
+                      <td>{Math.floor(Math.random() * 10)} ms</td>
+                      <Button
+                        size="sm"
+                        type="button"
+                        className="rerun-button"
+                        onClick={() => handleLoadClick(row.execution)}
+                      >
+                        <Upload />
+                      </Button>
+                      <Button onClick={() => handleDeleteClick(row.execution)}>
+                        <Trash />
+                      </Button>
+                    </tr>
+                  );
                 })}
               </tbody>
             </Table>
