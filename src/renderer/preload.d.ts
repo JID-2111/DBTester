@@ -61,6 +61,7 @@ declare global {
         checkPassFail(test: ExecutionModelType): Promise<ExecutionModelType>;
         fetchAll(): Promise<ExecutionModelType[]>;
         fetchMostRecent(): Promise<ExecutionModelType>;
+        delete(id: number): Promise<void>;
       };
     };
   }

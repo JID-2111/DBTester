@@ -40,6 +40,10 @@ export default class ExecutionService {
     return execution;
   }
 
+  public async delete(id: number) {
+    return this.repository.delete(id);
+  }
+
   public async fetch(): Promise<ExecutionModelType[]> {
     const entities = await this.repository.find({
       order: {
