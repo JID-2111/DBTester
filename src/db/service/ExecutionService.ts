@@ -164,7 +164,7 @@ export default class ExecutionService {
                           unitTest.format = OutputFormat.PLAIN;
                         } else {
                           unitTest.output = `${JSON.stringify(
-                            rows?.slice(expectedNumRecords - 1, -1)
+                            rows?.slice(expectedNumRecords)
                           )}`;
                           unitTest.format = OutputFormat.JSON;
                         }
