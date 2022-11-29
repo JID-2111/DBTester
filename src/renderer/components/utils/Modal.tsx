@@ -9,7 +9,7 @@ interface IModalProps {
   title: string;
   modalBody: any;
   submit?: () => void;
-  fullscreen: boolean;
+  fullscreen?: boolean;
 }
 
 const Modal = ({
