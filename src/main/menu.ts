@@ -5,6 +5,7 @@ import {
   BrowserWindow,
   MenuItemConstructorOptions,
 } from 'electron';
+import ConnectionService from '../db/service/ConnectionService';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -83,12 +84,57 @@ export default class MenuBuilder {
       ],
     };
     const subMenuFile: DarwinMenuItemConstructorOptions = {
-      label: 'File',
+      label: 'Connect',
       submenu: [
-        { label: 'New Connection', accelerator: 'Command+N', selector: '' },
-        { label: 'New Local DB', accelerator: 'Command+L', selector: '' },
+        {
+          label: 'New Connection',
+          accelerator: 'Command+N',
+          selector: '',
+          click: () => {
+            const service = new ConnectionService();
+            service.disconnect();
+            this.mainWindow.webContents.executeJavaScript(
+              "location.assign('#/newconnection');"
+            );
+          },
+        },
+        {
+          label: 'Recent Connections',
+          accelerator: 'Command+P',
+          selector: '',
+          click: () => {
+            const service = new ConnectionService();
+            service.disconnect();
+            this.mainWindow.webContents.executeJavaScript(
+              "location.assign('#/recentconnection');"
+            );
+          },
+        },
+        {
+          label: 'Disconnect',
+          accelerator: 'Command+D',
+          selector: '',
+          click: () => {
+            const service = new ConnectionService();
+            service.disconnect();
+            this.mainWindow.webContents.executeJavaScript(
+              "location.assign('#/');"
+            );
+          },
+        },
         { type: 'separator' },
-        { label: 'View History', accelerator: 'Command+H', selector: '' },
+        {
+          label: 'View History',
+          accelerator: 'Command+H',
+          selector: '',
+          click: () => {
+            const service = new ConnectionService();
+            service.disconnect();
+            this.mainWindow.webContents.executeJavaScript(
+              "location.assign('#/history');"
+            );
+          },
+        },
       ],
     };
     const subMenuEdit: DarwinMenuItemConstructorOptions = {
@@ -162,29 +208,26 @@ export default class MenuBuilder {
       label: 'Help',
       submenu: [
         {
-          label: 'Learn More',
-          click() {
-            shell.openExternal('https://electronjs.org');
-          },
-        },
-        {
-          label: 'Documentation',
+          label: 'Read Me',
+          accelerator: 'F1',
           click() {
             shell.openExternal(
-              'https://github.com/electron/electron/tree/main/docs#readme'
+              'https://github.com/JID-2111/JID-2111#stored-procedure-unit-tester'
             );
           },
         },
         {
-          label: 'Community Discussions',
+          label: 'Documentation',
+          accelerator: 'F2',
           click() {
-            shell.openExternal('https://www.electronjs.org/community');
+            // TODO - link to documentation
           },
         },
         {
           label: 'Search Issues',
+          accelerator: 'F3',
           click() {
-            shell.openExternal('https://github.com/electron/electron/issues');
+            shell.openExternal('https://github.com/JID-2111/JID-2111/issues');
           },
         },
       ],
@@ -209,17 +252,50 @@ export default class MenuBuilder {
   buildDefaultTemplate() {
     const templateDefault = [
       {
-        label: '&File',
+        label: '&Connect',
         submenu: [
           {
-            label: '&Open',
-            accelerator: 'Ctrl+O',
+            label: 'New Connection',
+            accelerator: 'Ctrl+N',
+            click: () => {
+              const service = new ConnectionService();
+              service.disconnect();
+              this.mainWindow.webContents.executeJavaScript(
+                "location.assign('#/newconnection');"
+              );
+            },
           },
           {
-            label: '&Close',
-            accelerator: 'Ctrl+W',
+            label: 'Recent Connections',
+            accelerator: 'Ctrl+P',
             click: () => {
-              this.mainWindow.close();
+              const service = new ConnectionService();
+              service.disconnect();
+              this.mainWindow.webContents.executeJavaScript(
+                "location.assign('#/recentconnection');"
+              );
+            },
+          },
+          {
+            label: 'Disconnect',
+            accelerator: 'Ctrl+D',
+            click: () => {
+              const service = new ConnectionService();
+              service.disconnect();
+              this.mainWindow.webContents.executeJavaScript(
+                "location.assign('#/');"
+              );
+            },
+          },
+          {
+            label: 'View History',
+            accelerator: 'Ctrl+H',
+            click: () => {
+              const service = new ConnectionService();
+              service.disconnect();
+              this.mainWindow.webContents.executeJavaScript(
+                "location.assign('#/history');"
+              );
             },
           },
         ],
@@ -272,27 +348,21 @@ export default class MenuBuilder {
           {
             label: 'Learn More',
             click() {
-              shell.openExternal('https://electronjs.org');
+              shell.openExternal(
+                'https://github.com/JID-2111/JID-2111#stored-procedure-unit-tester'
+              );
             },
           },
           {
             label: 'Documentation',
             click() {
-              shell.openExternal(
-                'https://github.com/electron/electron/tree/main/docs#readme'
-              );
-            },
-          },
-          {
-            label: 'Community Discussions',
-            click() {
-              shell.openExternal('https://www.electronjs.org/community');
+              // TODO - link to documentation
             },
           },
           {
             label: 'Search Issues',
             click() {
-              shell.openExternal('https://github.com/electron/electron/issues');
+              shell.openExternal('https://github.com/JID-2111/JID-2111/issues');
             },
           },
         ],
