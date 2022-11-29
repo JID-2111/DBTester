@@ -9,6 +9,7 @@ interface IModalProps {
   title: string;
   modalBody: any;
   submit?: () => void;
+  fullscreen: boolean;
 }
 
 const Modal = ({
@@ -17,9 +18,14 @@ const Modal = ({
   title,
   modalBody,
   submit,
+  fullscreen,
 }: IModalProps) => {
   return (
-    <BModal show={show} onHide={handleClose}>
+    <BModal
+      show={show}
+      onHide={handleClose}
+      fullscreen={fullscreen || undefined}
+    >
       <BModal.Header closeButton>
         <BModal.Title>{title}</BModal.Title>
       </BModal.Header>

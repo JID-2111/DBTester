@@ -1,16 +1,12 @@
 import { Accordion, Table } from 'react-bootstrap';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
-import {
-  CheckCircle,
-  CheckCircleFill,
-  XCircle,
-  XCircleFill,
-} from 'react-bootstrap-icons';
+import { CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
 import '../../scss/results.scss';
 import AccordionItem from 'react-bootstrap/esm/AccordionItem';
 import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
 import AccordionBody from 'react-bootstrap/esm/AccordionBody';
+import ResultsRow from './ResultsRow';
 
 interface IResultsProps {
   results: ExecutionModelType;
@@ -48,30 +44,11 @@ const Results = ({ results }: IResultsProps) => {
                 </AccordionHeader>
                 <AccordionBody>
                   <Table className="Results-Table">
-                    {rule.unitTests.map((Test) => {
-                      return (
-                        <tbody>
-                          <tr key={Test.id}>
-                            <td>{Test.name}</td>
-                            {Test.result ? (
-                              <td> Test Passed </td>
-                            ) : (
-                              <td> Test Failed</td>
-                            )}
-                            {Test.result ? (
-                              <td>
-                                <CheckCircle className="Check" />
-                              </td>
-                            ) : (
-                              <td>
-                                <XCircle className="X" />
-                              </td>
-                            )}
-                            <td> {Test.output}</td>
-                          </tr>
-                        </tbody>
-                      );
-                    })}
+                    <tbody>
+                      {rule.unitTests.map((Test) => {
+                        return <ResultsRow result={Test} />;
+                      })}
+                    </tbody>
                   </Table>
                 </AccordionBody>
               </AccordionItem>
