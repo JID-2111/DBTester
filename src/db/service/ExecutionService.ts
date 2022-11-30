@@ -94,6 +94,7 @@ export default class ExecutionService {
                 if (unitTest.operation === TableGenericOperations.EXISTS) {
                   unitTest.result = Boolean(res);
                   unitTest.output = `${unitTest.table} table exists is ${unitTest.result}`;
+                  unitTest.format = OutputFormat.PLAIN;
                 } else {
                   switch (expectedRecordMatches) {
                     case RecordMatches.ZERO:
@@ -101,12 +102,14 @@ export default class ExecutionService {
                       unitTest.output = `${unitTest.table} had ${Number(
                         res
                       )} rows and expected 0 rows`;
+                      unitTest.format = OutputFormat.PLAIN;
                       break;
                     case RecordMatches.GREATER_THAN:
                       unitTest.result = Number(res) > 0;
                       unitTest.output = `${unitTest.table} had ${Number(
                         res
                       )} rows and expected more than 0 rows`;
+                      unitTest.format = OutputFormat.PLAIN;
                       break;
                     case RecordMatches.TABLE_ROWS:
                       if (total) {
@@ -114,12 +117,14 @@ export default class ExecutionService {
                         unitTest.output = `${unitTest.table} had ${Number(
                           res
                         )} rows and expected ${expectedNumRecords} rows`;
+                        unitTest.format = OutputFormat.PLAIN;
                       } else {
                         unitTest.result =
                           Number(res) - tableRows[table] === expectedNumRecords;
                         unitTest.output = `${unitTest.table} had ${
                           Number(res) - tableRows[table]
                         } new rows and expected ${expectedNumRecords} new rows`;
+                        unitTest.format = OutputFormat.PLAIN;
                       }
                       break;
                     default:
@@ -139,38 +144,58 @@ export default class ExecutionService {
                 switch (expectedRecordMatches) {
                   case RecordMatches.ZERO:
                     unitTest.result = Number(rows?.length) === 0;
-                    unitTest.output = `${unitTest.table} had ${Number(
-                      rows?.length
-                    )} and expected 0 rows. ${
-                      Number(rows?.length) < 10 ? 'All rows' : 'First 10 rows'
-                    } matching constraints: ${JSON.stringify(
-                      rows?.slice(0, 10)
-                    )}`;
+                    if (Number(rows?.length) > 0) {
+                      unitTest.output = `${JSON.stringify(rows)}`;
+                    }
+                    unitTest.format = OutputFormat.JSON;
                     break;
                   case RecordMatches.GREATER_THAN:
                     unitTest.result = Number(rows?.length) > 0;
                     unitTest.output = `${unitTest.table} had ${Number(
                       rows?.length
-                    )} and expected more than 0 rows. ${
-                      Number(rows?.length) < 10 ? 'All rows' : 'First 10 rows'
-                    } matching constraints: ${JSON.stringify(
-                      rows?.slice(0, 10)
-                    )}`;
+                    )} and expected more than 0 rows.`;
+                    unitTest.format = OutputFormat.PLAIN;
                     break;
                   case RecordMatches.TABLE_ROWS:
                     if (total) {
                       unitTest.result =
                         Number(rows?.length) === expectedNumRecords;
-                      unitTest.output = `${unitTest.table} had ${Number(
-                        rows?.length
-                      )} rows and expected ${expectedNumRecords} rows`;
+                      if (expectedNumRecords !== undefined) {
+                        if (Number(rows?.length) <= expectedNumRecords) {
+                          unitTest.output = `${unitTest.table} had ${Number(
+                            rows?.length
+                          )} rows and expected ${expectedNumRecords} rows`;
+                          unitTest.format = OutputFormat.PLAIN;
+                        } else {
+                          unitTest.output = `${JSON.stringify(
+                            rows?.slice(expectedNumRecords - 1, -1)
+                          )}`;
+                          unitTest.format = OutputFormat.JSON;
+                        }
+                      }
                     } else {
                       unitTest.result =
                         Number(rows?.length) - tableRows[table] ===
                         expectedNumRecords;
-                      unitTest.output = `${unitTest.table} had ${
-                        Number(rows?.length) - tableRows[table]
-                      } new rows and expected ${expectedNumRecords} new rows`;
+                      if (expectedNumRecords !== undefined) {
+                        if (
+                          Number(rows?.length) - tableRows[table] <=
+                          expectedNumRecords
+                        ) {
+                          unitTest.output = `${unitTest.table} had ${Number(
+                            rows?.length
+                          )} rows and expected ${expectedNumRecords} rows`;
+                          unitTest.format = OutputFormat.PLAIN;
+                        } else {
+                          unitTest.output = `${JSON.stringify(
+                            rows?.slice(
+                              tableRows[table] + expectedNumRecords - 1,
+                              -1
+                            )
+                          )}`;
+                          unitTest.format = OutputFormat.JSON;
+                        }
+                      }
                     }
                     break;
                   default:
@@ -183,7 +208,6 @@ export default class ExecutionService {
                 break;
               }
             }
-            unitTest.format = OutputFormat.PLAIN;
           })
         );
       })
