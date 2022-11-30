@@ -75,13 +75,13 @@ export default class ExecutionService {
       rule.unitTests.forEach(async (unitTest: UnitTestType) => {
         const { table } = unitTest;
         tableRows[table] = Number(
-          await this.getClient(unitTest.rule.database)?.numRecordsInTable(table)
+          await this.getClient(test.database)?.numRecordsInTable(table)
         );
       });
     });
     await Promise.all(
       test.rules.map(async (rule: RuleModelType) => {
-        new Procedures().triggerProcedure(rule.procedure, rule.parameters);
+        new Procedures().triggerProcedure(test.procedure, rule.parameters);
         return Promise.all(
           rule.unitTests.map(async (unitTest: UnitTestType) => {
             const { expectedRecordMatches, total, expectedNumRecords, table } =
@@ -192,7 +192,7 @@ export default class ExecutionService {
     await Promise.all(
       test.rules.map(async (rule: RuleModelType) => {
         if (rule.cleanupTables !== undefined) {
-          return this.getClient(rule.database)?.deleteFromTablesQuery(
+          return this.getClient(test.database)?.deleteFromTablesQuery(
             rule.testData,
             rule.cleanupTables
           );
@@ -204,8 +204,8 @@ export default class ExecutionService {
       const res = plainToInstance(ExecutionEntity, test, {
         enableCircularCheck: true,
       });
-      await this.repository.save(res);
-      return test;
+      const created = await this.repository.save(res);
+      return this.entityToModel(created);
     } catch (e) {
       log.error(e);
     }

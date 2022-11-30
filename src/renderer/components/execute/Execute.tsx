@@ -12,7 +12,10 @@ import ProcedureDropdown from './ProcedureDropdown';
 import '../../scss/Execute.scss';
 import '../../scss/Home.scss';
 import DBDropdown from './DBDropdown';
-import { formatConnectionString } from '../utils/helpers';
+import {
+  checkExecutionHasResults,
+  formatConnectionString,
+} from '../utils/helpers';
 import UnitTestTab from './conditions/UnitTestTab';
 import Results from './Results';
 import ExecuteCell from './ExecuteCell';
@@ -23,11 +26,13 @@ const Execute = () => {
     name: '',
     timestamp: new Date(),
     rules: [],
+    database: '',
+    procedure: '',
   };
 
   const [code, setCode] = useState<string>('');
   const [alert, setAlert] = useState<boolean>(false);
-  const [activeDb, setActiveDb] = useState<string>('React');
+  const [activeDb, setActiveDb] = useState<string>('');
   const [activeProcedure, setActiveProcedure] = useState<string>('');
   const [activeParameters, setActiveParameters] = useState<
     ProcedureParameter[]
@@ -35,10 +40,12 @@ const Execute = () => {
   const [connection, setConnection] = useState<ConnectionModelType | undefined>(
     undefined
   );
+  const [loaded, setLoaded] = useState<boolean>(false);
   const [execution, setExecution] = useState<ExecutionModelType>(
     defaultExecutionModel
   );
   const [key, setKey] = useState<string>('rule-groups');
+  const [showResults, setShowResults] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const data =
@@ -48,11 +55,34 @@ const Execute = () => {
     const getConnection = async () => {
       const conn = await window.connections.ipcRenderer.fetch();
       setConnection(conn[0]);
+      setActiveDb(conn[0].defaultDatabase);
     };
     getConnection();
     setExecution(data);
+    setActiveDb(data.database);
+    setActiveProcedure(data.procedure);
+    setLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Check if execution has results
+  useEffect(() => {
+    setShowResults(checkExecutionHasResults(execution));
+  }, [execution]);
+
+  useEffect(() => {
+    console.log(activeProcedure);
+    console.log(activeDb);
+    if (loaded) {
+      console.log(execution);
+      setExecution({
+        ...execution,
+        procedure: activeProcedure,
+        database: activeDb,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeProcedure, activeDb, loaded]);
 
   const updateDb = (database: string) => {
     setActiveDb(database);
@@ -166,7 +196,7 @@ const Execute = () => {
           <Tab eventKey="unit-tests" title="Unit Tests">
             <UnitTestTab execution={execution} setExecution={setExecution} />
           </Tab>
-          <Tab eventKey="results" title="Results">
+          <Tab eventKey="results" title="Results" disabled={!showResults}>
             <Results results={execution} />
           </Tab>
         </Tabs>

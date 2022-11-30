@@ -106,15 +106,11 @@ const AddRuleGroupModal = ({
       return;
     }
 
-    const conn = await window.connections.ipcRenderer.fetch();
-
     const rule: RuleModelType = {
       name: form.name || 'default',
-      database: conn[0].defaultDatabase,
       testData: form.testData || '',
       unitTests: [],
       execution,
-      procedure: activeProcedure,
       parameters: form.parameters || [],
       cleanupTables: form.cleanupTables,
     };

@@ -267,6 +267,23 @@ const AddUnitTestModal = ({
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="form-group">
+            <Form.Label variant="primary">Rule Group</Form.Label>
+            <Form.Select
+              onChange={(e) => handleRuleSelect(e.target.value)}
+              isInvalid={!!errors.rule}
+            >
+              {!form.rule && <option aria-label="empty-option" />}
+              {execution.rules.map((rule) => {
+                const ruleName = rule.name;
+                const ruleKey = rule.id;
+                return <option key={ruleKey}>{ruleName}</option>;
+              })}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              {errors.rule}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group className="form-group">
             <Form.Label variant="primary">Table</Form.Label>
             <Form.Select
               onChange={(e) => setCurrTable(e.target.value)}
@@ -287,24 +304,6 @@ const AddUnitTestModal = ({
               {errors.table}
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group className="form-group">
-            <Form.Label variant="primary">Rule Group</Form.Label>
-            <Form.Select
-              onChange={(e) => handleRuleSelect(e.target.value)}
-              isInvalid={!!errors.rule}
-            >
-              {!form.rule && <option aria-label="empty-option" />}
-              {execution.rules.map((rule) => {
-                const ruleName = rule.name;
-                const ruleKey = rule.id;
-                return <option key={ruleKey}>{ruleName}</option>;
-              })}
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
-              {errors.rule}
-            </Form.Control.Feedback>
-          </Form.Group>
-
           <hr />
 
           {form.table && (

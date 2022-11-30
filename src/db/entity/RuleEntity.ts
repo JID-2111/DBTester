@@ -31,12 +31,6 @@ class RuleEntity {
   name: string;
 
   /**
-   * The database to run the unit tests on
-   */
-  @Column()
-  database: string;
-
-  /**
    * The name of the table with test data
    */
   @Column()
@@ -50,7 +44,7 @@ class RuleEntity {
 
   @BeforeInsert()
   parseTables() {
-    this.cleanupTableList = JSON.stringify(this.cleanupTables);
+    this.cleanupTableList = JSON.stringify(this.cleanupTables) ?? '[]';
   }
 
   @AfterLoad()
@@ -58,11 +52,11 @@ class RuleEntity {
     this.cleanupTables = JSON.parse(this.cleanupTableList);
   }
 
-  /**
-   * The name of the procedure to trigger
-   */
-  @Column()
-  procedure: string;
+  // /**
+  //  * The name of the procedure to trigger
+  //  */
+  // @Column()
+  // procedure: string;
 
   parameters: string[];
 

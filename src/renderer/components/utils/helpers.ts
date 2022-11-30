@@ -2,6 +2,7 @@
 import { ConnectionModelType } from 'db/models/ConnectionModels';
 import { RuleModelType } from 'db/models/RuleModel';
 import { UnitTestType } from 'db/models/UnitTestModels';
+import { ExecutionModelType } from '../../../db/models/ExecutionModel';
 
 export function formatConnectionString(connection: ConnectionModelType) {
   const connectionString =
@@ -12,6 +13,12 @@ export function formatConnectionString(connection: ConnectionModelType) {
     }`;
 
   return connectionString;
+}
+
+export function checkExecutionHasResults(execution: ExecutionModelType) {
+  return execution.rules.some((rule: RuleModelType) =>
+    rule.unitTests.some((unitTest) => unitTest.result !== null)
+  );
 }
 
 export function getUnitTestDescription(test: UnitTestType) {

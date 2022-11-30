@@ -9,10 +9,14 @@ class TableTestService {
 
   public check(test: TableTestType) {
     if (test.operation === TableGenericOperations.COUNT) {
-      return this.getClient(test.rule.database)?.numRecordsInTable(test.table);
+      return this.getClient(test.rule.execution.database)?.numRecordsInTable(
+        test.table
+      );
     }
     if (test.operation === TableGenericOperations.EXISTS) {
-      return this.getClient(test.rule.database)?.checkTableExists(test.table);
+      return this.getClient(test.rule.execution.database)?.checkTableExists(
+        test.table
+      );
     }
     return null;
   }
