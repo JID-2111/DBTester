@@ -187,7 +187,10 @@ const History = () => {
                       >
                         <Upload />
                       </Button>
-                      <Button onClick={() => handleDeleteClick(row.execution)}>
+                      <Button
+                        onClick={() => handleDeleteClick(row.execution)}
+                        className="deleteButton"
+                      >
                         <Trash />
                       </Button>
                     </tr>

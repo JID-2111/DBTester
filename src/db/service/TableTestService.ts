@@ -1,4 +1,5 @@
 import { TableGenericOperations } from '../entity/enum';
+import { ExecutionModelType } from '../models/ExecutionModel';
 import { TableTestType } from '../models/UnitTestModels';
 import { store } from '../redux/store';
 
@@ -7,16 +8,12 @@ class TableTestService {
     return store.getState().connection.database.get(database);
   }
 
-  public check(test: TableTestType) {
+  public check(test: TableTestType, execution: ExecutionModelType) {
     if (test.operation === TableGenericOperations.COUNT) {
-      return this.getClient(test.rule.execution.database)?.numRecordsInTable(
-        test.table
-      );
+      return this.getClient(execution.database)?.numRecordsInTable(test.table);
     }
     if (test.operation === TableGenericOperations.EXISTS) {
-      return this.getClient(test.rule.execution.database)?.checkTableExists(
-        test.table
-      );
+      return this.getClient(execution.database)?.checkTableExists(test.table);
     }
     return null;
   }

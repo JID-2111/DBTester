@@ -5,6 +5,7 @@ import {
   UnitTestOperations,
 } from '../entity/enum';
 import { store } from '../redux/store';
+import { ExecutionModelType } from '../models/ExecutionModel';
 
 class RowTestService {
   public create(fields: unknown) {
@@ -15,17 +16,17 @@ class RowTestService {
     return store.getState().connection.database.get(database);
   }
 
-  public check(test: RowTestType) {
+  public check(test: RowTestType, execution: ExecutionModelType) {
     if (test.level === UnitTestOperations.RowStringOperations) {
       switch (test.operation) {
         case RowStringOperations.EXACTLY:
-          return this.getClient(test.rule.execution.database)?.checkExact(
+          return this.getClient(execution.database)?.checkExact(
             test.table,
             test.column ?? '',
             test.value as string
           );
         case RowStringOperations.CONTAINS:
-          return this.getClient(test.rule.execution.database)?.checkContains(
+          return this.getClient(execution.database)?.checkContains(
             test.table,
             test.column ?? '',
             test.value as string

@@ -61,6 +61,13 @@ const Execute = () => {
     setExecution(data);
     setActiveDb(data.database);
     setActiveProcedure(data.procedure);
+    const fetchParameters = async () => {
+      const params = await window.procedures.ipcRenderer.getProcedureParameters(
+        data.procedure
+      );
+      setActiveParameters(params);
+    };
+    fetchParameters();
     setLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -71,10 +78,7 @@ const Execute = () => {
   }, [execution]);
 
   useEffect(() => {
-    console.log(activeProcedure);
-    console.log(activeDb);
     if (loaded) {
-      console.log(execution);
       setExecution({
         ...execution,
         procedure: activeProcedure,

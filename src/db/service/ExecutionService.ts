@@ -89,7 +89,8 @@ export default class ExecutionService {
             switch (unitTest.level) {
               case UnitTestOperations.TableGenericOperations: {
                 const res = await new TableTestService().check(
-                  unitTest as TableTestType
+                  unitTest as TableTestType,
+                  test
                 );
                 if (unitTest.operation === TableGenericOperations.EXISTS) {
                   unitTest.result = Boolean(res);
@@ -134,7 +135,8 @@ export default class ExecutionService {
               case UnitTestOperations.RowNumberOperations:
               case UnitTestOperations.RowStringOperations: {
                 const rows = await new RowTestService().check(
-                  unitTest as RowTestType
+                  unitTest as RowTestType,
+                  test
                 );
                 switch (expectedRecordMatches) {
                   case RecordMatches.ZERO:
