@@ -168,7 +168,9 @@ const History = () => {
                     <tr>
                       <td>{date}</td>
                       <td>{time}</td>
-                      <td>{row.nickname}</td>
+                      <td>
+                        <strong>{row.nickname}</strong>
+                      </td>
                       <td>{row.connection}</td>
                       <td>{row.dbType}</td>
                       <td>

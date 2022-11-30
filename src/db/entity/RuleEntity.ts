@@ -52,12 +52,6 @@ class RuleEntity {
     this.cleanupTables = JSON.parse(this.cleanupTableList);
   }
 
-  // /**
-  //  * The name of the procedure to trigger
-  //  */
-  // @Column()
-  // procedure: string;
-
   parameters: string[];
 
   /**
