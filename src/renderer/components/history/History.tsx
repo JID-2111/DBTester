@@ -147,51 +147,58 @@ const History = () => {
             </div>
           </div>
         </div>
-        <div className="table-container">
-          <Table responsive>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Procedure</th>
-                <th>Connection</th>
-                <th>Type</th>
-                <th>Response</th>
-                <th>Duration</th>
-              </tr>
-            </thead>
-            <tbody>
-              {showRows.map((row: Flattened) => {
-                const d = new Date(row.timestamp);
-                const date = d.toLocaleDateString();
-                const time = d.toLocaleTimeString('en-US');
+        {executions.length > 0 ? (
+          <div className="table-container">
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Procedure</th>
+                  <th>Connection</th>
+                  <th>Type</th>
+                  <th>Response</th>
+                </tr>
+              </thead>
+              <tbody>
+                {showRows.map((row: Flattened) => {
+                  const d = new Date(row.timestamp);
+                  const date = d.toLocaleDateString();
+                  const time = d.toLocaleTimeString('en-US');
 
-                return (
-                  <tr>
-                    <td>{date}</td>
-                    <td>{time}</td>
-                    <td>{row.procedure}</td>
-                    <td>{row.connection}</td>
-                    <td>{row.dbType}</td>
-                    <td>{row.response ? 'Success' : 'Fail'}</td>
-                    <td>{Math.floor(Math.random() * 10)} ms</td>
-                    <Button
-                      size="sm"
-                      type="button"
-                      className="rerun-button"
-                      onClick={() => handleLoadClick(row.execution)}
-                    >
-                      <Upload />
-                    </Button>
-                    <Button onClick={() => handleDeleteClick(row.execution)}>
-                      <Trash />
-                    </Button>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        </div>
+                  return (
+                    <tr>
+                      <td>{date}</td>
+                      <td>{time}</td>
+                      <td>{row.procedure}</td>
+                      <td>{row.connection}</td>
+                      <td>{row.dbType}</td>
+                      <td>{row.response ? 'Success' : 'Fail'}</td>
+                      <td>{Math.floor(Math.random() * 10)} ms</td>
+                      <Button
+                        size="sm"
+                        type="button"
+                        className="rerun-button"
+                        onClick={() => handleLoadClick(row.execution)}
+                      >
+                        <Upload />
+                      </Button>
+                      <Button onClick={() => handleDeleteClick(row.execution)}>
+                        <Trash />
+                      </Button>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </div>
+        ) : (
+          <div className="history-help-container">
+            <p id="history-help-text">
+              Execute a test case to see history results on this page
+            </p>
+          </div>
+        )}
         <div className="home-button">
           <Link to="/">
             <Button type="button">Home</Button>
