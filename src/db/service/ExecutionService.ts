@@ -83,10 +83,14 @@ export default class ExecutionService {
       test.rules.map(async (rule: RuleModelType) => {
         const editedParams = rule.parameters;
         if (rule.hasTestData) {
-          await this.getClient(rule.database)?.importTestDataTable(
-            rule.testDataFilePath,
-            rule.testData
-          );
+          try {
+            await this.getClient(rule.database)?.importTestDataTable(
+              rule.testDataFilePath,
+              rule.testData
+            );
+          } catch (e) {
+            log.error(e);
+          }
           editedParams[rule.testDataParameterIndex] = rule.testData;
         }
         new Procedures().triggerProcedure(rule.procedure, editedParams);
