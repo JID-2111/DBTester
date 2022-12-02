@@ -203,3 +203,78 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+# Frequenty Asked Questions (FAQ)
+
+## What is DBTester?
+
+DbTester is a desktop web application that allows users to test and debug their database stored procedures.
+It allows for seemless creation of connections to databases and access to prodecures for testing.
+
+## How do I connect to my local or remote database?
+
+The New Connection button on the home screen can be used to create a new connection to a database.
+This directs to a form where local database details are entered. You can also toggle to use connection
+strings instead for remote database connections.
+
+## How do I select the stored procedure I would like to test?
+
+Upon successfull connection to a database, the app redirects to the Execute screen. On the left side of the
+screen, You will see the database you are connected to as well as a dropdown of the stored procedures associated
+with the database. Simply select the procedure you wish to test from the dropdown.
+
+## What is a Rule Group and how do I create one?
+
+A rule group is a overall definition of what you would like to test about your procedure.
+At the top of the Execute screen you will see a tab for Rule group. Clicking the tab then Add Rule Group
+allows you to:
+
+- give your Rule Group a name
+- define parameters to your stored procedure
+- select the table to run your procedure on
+- select table clean up
+
+## What is a Unit Test and how do I create one?
+
+A Unit Test is a condition that defines an expected behavior of a given stored prcedure based on the
+Rule group paremeters and the nature of the stored procedure.
+Upon connecting to a database, You will have the option to create Rule groups and Unit tests.
+At the top of the Execute screen you will see a tab for Unit tests. Clicking the tab then Add Unit tests
+allows you to:
+
+- give your Unit test a name
+- select the table the unit test will assert.
+- input results that are expected after the procedure runs
+- assign the unit test to a rule group
+  The Unit test will look at the state of the affected table and compare to the expected results
+  to return a Boolean true or false value.
+  note: you must define a Rule Group before creating Unit Tests.
+
+## How do I execute and view the results of my Rule groups and Unit Tests.
+
+To the left on the Execute screen there is a field that allows you to create an execution of
+your Rule Groups and Unit tests. Simply give the Ececution a name and click Execute Tests.
+This brings you to the Results Tab where your Rule Groups are and associated Unit tests are
+grouped together in a drop down. You can click on any dropdown to view individual results.
+
+## Do I need to enter my database credientials each time I want to connect to my Database?
+
+No. On the homepage lives a sidebar with your recently connected databases. Clicking on the
+Database connection you would like to open will allow you to open the connection without filling
+out a new connection form.
+Alternatively, The Connect To Existing page is accessable from the home screen. This brings
+up a list of recent connects. Clicking on the name will reopen your database connection.
+
+## Can I edit my Connections once they have been created?
+
+On the Connect To Existing page you will find next to each connection an edit button that allows
+you to change the Nickname you gave your connection. As well as a delete button to delete connections.
+Once a connection has been deleted, you will need to recreate the connection using the New Connection form.
+
+## How can I return to tests I have prevoisly written?
+
+On the Home page you will find the View History Button. This takes you to a table that displays your
+a general overview of previouly run tests including the procedure tested and the result of the test.
+Here you can filter by results or by database.
+You can reopen executions by clicking on the arrow next to each result or you can also delete executions.
+Note: deleting an execution can not be undone.
