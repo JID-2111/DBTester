@@ -74,5 +74,6 @@ contextBridge.exposeInMainWorld('executions', {
       ipcRenderer.invoke('executions:checkPassFail', test),
     fetchAll: () => ipcRenderer.invoke('executions:fetchAll'),
     fetchMostRecent: () => ipcRenderer.invoke('executions:fetchMostRecent'),
+    delete: (id: number) => ipcRenderer.invoke('executions:delete', id),
   },
 });

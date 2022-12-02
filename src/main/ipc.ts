@@ -80,3 +80,7 @@ ipcMain.handle('executions:fetchMostRecent', (_event) => {
 ipcMain.handle('executions:checkPassFail', (_event, ...args) => {
   return new ExecutionService().checkPassFail(args[0]);
 });
+
+ipcMain.handle('executions:delete', (_event, ...args) => {
+  return new ExecutionService().delete(args[0]);
+});
