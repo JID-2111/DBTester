@@ -66,6 +66,10 @@ class RuleEntity {
 
   parameters: string[];
 
+  hasTestData: boolean;
+
+  testDataFilePath: string;
+
   testDataParameterIndex: number;
 
   /**
