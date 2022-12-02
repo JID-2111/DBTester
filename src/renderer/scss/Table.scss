@@ -1,0 +1,19 @@
+@use './utils/colors.scss';
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  padding: 10px;
+  overflow: hidden;
+  background-color: colors.$snow;
+  border-radius: 0.375em;
+
+  h1 {
+    margin: 1vh;
+  }
+}
+.table-container {
+  margin: 2em 0 4em 0;
+  overflow-y: auto;
+}
