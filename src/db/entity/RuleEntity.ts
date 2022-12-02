@@ -66,6 +66,8 @@ class RuleEntity {
 
   parameters: string[];
 
+  testDataParameterIndex: number;
+
   /**
    * JSON string with list of parameters for the procedure.
    */

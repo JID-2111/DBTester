@@ -9,6 +9,7 @@ export type RuleModelType = {
   unitTests: UnitTestType[];
   execution: ExecutionModelType;
   procedure: string;
+  testDataParameterIndex: number;
   parameters: string[];
   cleanupTables?: string[];
 };

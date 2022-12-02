@@ -81,7 +81,9 @@ export default class ExecutionService {
     });
     await Promise.all(
       test.rules.map(async (rule: RuleModelType) => {
-        new Procedures().triggerProcedure(rule.procedure, rule.parameters);
+        const editedParams = rule.parameters;
+        editedParams[rule.testDataParameterIndex] = rule.testData;
+        new Procedures().triggerProcedure(rule.procedure, editedParams);
         return Promise.all(
           rule.unitTests.map(async (unitTest: UnitTestType) => {
             const { expectedRecordMatches, total, expectedNumRecords, table } =
