@@ -90,12 +90,21 @@ const Rule = ({ rule, execution, setExecution }: IRuleProps) => {
           </Accordion.Item>
         </Accordion>
       </Row>
-      <Row>
-        <span>data table: {rule.testData}</span>
-      </Row>
-      <Row>
-        <span>cleanup tables: {formatCleanupTables(rule)}</span>
-      </Row>
+      {rule.hasTestData && (
+        <div>
+          <Row>
+            <span>data table: {rule.testData}</span>
+          </Row>
+          {!!rule.cleanupTables && (
+            <Row>
+              <span>cleanup tables: {formatCleanupTables(rule)}</span>
+            </Row>
+          )}
+          <Row>
+            <span>test data: {rule.testDataFilePath}</span>
+          </Row>
+        </div>
+      )}
     </Container>
   );
 };

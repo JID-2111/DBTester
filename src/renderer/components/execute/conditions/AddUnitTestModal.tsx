@@ -292,7 +292,7 @@ const AddUnitTestModal = ({
               {!currTable && <option aria-label="empty-option" />}
               {tables &&
                 tables.map((table) => {
-                  const tableKey = `table- + ${table}`;
+                  const tableKey = `table-${table}`;
                   return (
                     <option key={tableKey} value={table}>
                       {table}
