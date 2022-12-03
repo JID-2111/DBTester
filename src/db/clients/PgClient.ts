@@ -65,6 +65,7 @@ export default class PgClient implements ServerInterface {
 
   public async importTestDataTable(file: string, table: string): Promise<void> {
     const client = await this.pool.connect();
+    await client.query(`DELETE FROM ${table}`);
     const stream = client.query(
       copyFrom(`COPY ${table} FROM STDIN DELIMITER ',' CSV HEADER;`)
     );
@@ -156,6 +157,14 @@ export default class PgClient implements ServerInterface {
 
   public async callProcedureQuery(procedure: string, parameters: string[]) {
     const client = await this.pool.connect();
+    for (let i = 0; i < parameters.length; i += 1) {
+      if (
+        Number.isNaN(parameters[i]) ||
+        Number.isNaN(parseFloat(parameters[i]))
+      ) {
+        parameters[i] = `'${parameters[i]}'`;
+      }
+    }
     const result = await client.query(
       `CALL ${procedure}(${parameters.join(',')})`
     );
