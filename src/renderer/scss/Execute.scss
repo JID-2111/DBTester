@@ -11,7 +11,9 @@
     margin: 4px 10px;
 
     .code-button {
-      margin-left: 0.75rem;
+      margin: 5px;
+      width: auto;
+      justify-content: center;
     }
   }
 
@@ -23,21 +25,10 @@
     margin: auto 5px auto 0px;
   }
 
-  .code-wrapper {
-    min-height: 40vh;
-    display: flex;
-    justify-content: center;
-    vertical-align: middle;
-  }
-
   .dropdown button {
     margin: 5px;
     margin-left: 0px;
     min-width: 5em;
-  }
-
-  .procedure-code {
-    white-space: break-spaces;
   }
 
   .disconnect-btn {
@@ -119,4 +110,15 @@
     font-size: 0.8em;
     padding: 0.1rem 0.375rem;
   }
+}
+
+.procedure-code {
+  white-space: break-spaces;
+}
+
+.code-wrapper {
+  display: flex;
+  justify-content: center;
+  vertical-align: middle;
+  margin-bottom: 20px;
 }
