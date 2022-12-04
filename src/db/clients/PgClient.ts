@@ -66,7 +66,7 @@ export default class PgClient implements ServerInterface {
   public async importTestDataTable(file: string, table: string): Promise<void> {
     const client = await this.pool.connect();
     await client.query(`DELETE FROM ${table}`);
-    const stream = client.query(
+    const stream = await client.query(
       copyFrom(`COPY ${table} FROM STDIN DELIMITER ',' CSV HEADER;`)
     );
     const fileStream = fs.createReadStream(file);
@@ -74,16 +74,18 @@ export default class PgClient implements ServerInterface {
     fileStream.on('error', (e) => {
       client.release();
       log.error(`FileStream error ${e}`);
+      throw new Error(`FileStream error ${e}`);
     });
     stream.on('error', (e: unknown) => {
       client.release();
       log.error(`Stream error ${e}`);
+      throw new Error(`Stream error ${e}`);
     });
     stream.on('finish', () => {
       client.release();
       log.error('FileStream finished');
     });
-    fileStream.pipe(stream);
+    await fileStream.pipe(stream);
   }
 
   public async getDatabasesQuery(): Promise<unknown> {
