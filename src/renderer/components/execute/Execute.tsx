@@ -114,7 +114,6 @@ const Execute = () => {
       <Modal
         show={alert}
         onHide={() => setAlert(false)}
-        size="xl"
         scrollable
         animation={false}
       >
@@ -151,7 +150,7 @@ const Execute = () => {
           </Button>
         </Row>
         <hr />
-        <Row>
+        <Row className="justify-content-center">
           <p>Stored Procedures</p>
           <div className="d-flex">
             <p className="side-label">Selected: </p>
@@ -164,13 +163,8 @@ const Execute = () => {
             />
           </div>
           {code !== '' && (
-            <Button
-              variant="link"
-              size="sm"
-              className="code-button"
-              onClick={() => setAlert(!!code)}
-            >
-              code
+            <Button className="code-button" onClick={() => setAlert(!!code)}>
+              View Code
             </Button>
           )}
         </Row>

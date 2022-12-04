@@ -169,7 +169,7 @@ const AddUnitTestModal = ({
       name: form.name || 'Default Name',
       expectedRecordMatches: form.expectedRecordMatches,
       total: form.total,
-      expectedNumRecords: Number(form.expectedNumRecords),
+      expectedNumRecords: Number(form.expectedNumRecords) || 0,
       table: form.table || 'Default Table',
       column: form.column,
       value: form.value,
