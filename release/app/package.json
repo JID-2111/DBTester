@@ -1,6 +1,6 @@
 {
   "name": "DBTester",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A unit testing application for databases",
   "license": "Apache 2.0",
   "author": {

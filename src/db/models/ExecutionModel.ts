@@ -6,6 +6,10 @@ export type ExecutionModelType = {
 
   name: string;
 
+  database: string;
+
+  procedure: string;
+
   timestamp: Date;
 
   rules: RuleModelType[];

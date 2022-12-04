@@ -27,7 +27,9 @@ const ProcedureDropdown = ({
 
   useEffect(() => {
     const fetchProcs = async () => {
-      const newProcs = await window.procedures.ipcRenderer.fetchProcedures();
+      const newProcs = await window.procedures.ipcRenderer.fetchProcedures([
+        activeDb,
+      ]);
       setProcedures(newProcs.get(activeDb));
     };
     fetchProcs();

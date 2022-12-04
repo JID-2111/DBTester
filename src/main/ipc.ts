@@ -9,8 +9,8 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
-ipcMain.handle('procedures:listProcedures', () => {
-  return new Procedures().getProceduresForDB(['React']);
+ipcMain.handle('procedures:listProcedures', async (_event, ...args) => {
+  return new Procedures().getProceduresForDB(args[0]);
 });
 
 ipcMain.handle('procedures:listDatabases', () => {

@@ -5,6 +5,7 @@ import {
   UnitTestOperations,
 } from '../entity/enum';
 import { store } from '../redux/store';
+import { ExecutionModelType } from '../models/ExecutionModel';
 
 class RowTestService {
   public create(fields: unknown) {
@@ -15,17 +16,17 @@ class RowTestService {
     return store.getState().connection.database.get(database);
   }
 
-  public check(test: RowTestType) {
+  public check(test: RowTestType, execution: ExecutionModelType) {
     if (test.level === UnitTestOperations.RowStringOperations) {
       switch (test.operation) {
         case RowStringOperations.EXACTLY:
-          return this.getClient(test.rule.database)?.checkExact(
+          return this.getClient(execution.database)?.checkExact(
             test.table,
             test.column ?? '',
             test.value as string
           );
         case RowStringOperations.CONTAINS:
-          return this.getClient(test.rule.database)?.checkContains(
+          return this.getClient(execution.database)?.checkContains(
             test.table,
             test.column ?? '',
             test.value as string
@@ -36,7 +37,7 @@ class RowTestService {
     } else if (test.level === UnitTestOperations.RowIDOperations) {
       switch (test.operation) {
         case RowIDOperations.ID_TEST:
-          return this.getClient(test.rule.database)?.checkID(
+          return this.getClient(execution.database)?.checkID(
             test.rule.testData,
             test.table
           );
@@ -44,14 +45,14 @@ class RowTestService {
           return null;
       }
     } else if (test.level === UnitTestOperations.RowNumberOperations) {
-      return this.getClient(test.rule.database)?.checkNumber(
+      return this.getClient(execution.database)?.checkNumber(
         test.table,
         test.column ?? '',
         Number(test.value),
         test.operation
       );
     } else if (test.level === UnitTestOperations.RowBooleanOperations) {
-      return this.getClient(test.rule.database)?.checkExact(
+      return this.getClient(execution.database)?.checkExact(
         test.table,
         test.column ?? '',
         test.operation

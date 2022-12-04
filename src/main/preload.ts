@@ -38,7 +38,8 @@ contextBridge.exposeInMainWorld('util', {
 
 contextBridge.exposeInMainWorld('procedures', {
   ipcRenderer: {
-    fetchProcedures: () => ipcRenderer.invoke('procedures:listProcedures'),
+    fetchProcedures: (databases: string[]) =>
+      ipcRenderer.invoke('procedures:listProcedures', databases),
     fetchDatabases: () => ipcRenderer.invoke('procedures:listDatabases'),
     fetchTables: () => ipcRenderer.invoke('procedures:getTables'),
     fetchContent: (procedure: string) =>

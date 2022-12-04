@@ -98,7 +98,13 @@
 }
 
 .rerun-button {
+  border: 5px;
+  border-radius: 5px;
   margin: 1em;
+}
+
+.rerun-button:hover {
+  background-color: lightgreen;
 }
 
 #history-help-text {
@@ -106,4 +112,14 @@
   font-weight: 300;
   color: rgb(45, 45, 45);
   letter-spacing: 0.04em;
+}
+
+.deleteButton {
+  border: 5px;
+  border-radius: 5px;
+  margin: 0;
+}
+
+.deleteButton:hover {
+  background-color: rgb(247, 68, 68);
 }
