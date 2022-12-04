@@ -69,23 +69,26 @@ export default class PgClient implements ServerInterface {
     const stream = await client.query(
       copyFrom(`COPY ${table} FROM STDIN DELIMITER ',' CSV HEADER;`)
     );
-    const fileStream = fs.createReadStream(file);
-    log.error(fileStream);
-    fileStream.on('error', (e) => {
-      client.release();
-      log.error(`FileStream error ${e}`);
-      throw new Error(`FileStream error ${e}`);
+    return new Promise((resolve, reject) => {
+      const fileStream = fs.createReadStream(file);
+      log.error(fileStream);
+      fileStream.on('error', (e) => {
+        client.release();
+        log.error(`FileStream error ${e}`);
+        reject(new Error(`FileStream error ${e}`));
+      });
+      stream.on('error', (e: unknown) => {
+        client.release();
+        log.error(`Stream error ${e}`);
+        reject(new Error(`Stream error ${e}`));
+      });
+      stream.on('finish', () => {
+        client.release();
+        resolve();
+        log.error('FileStream finished');
+      });
+      fileStream.pipe(stream);
     });
-    stream.on('error', (e: unknown) => {
-      client.release();
-      log.error(`Stream error ${e}`);
-      throw new Error(`Stream error ${e}`);
-    });
-    stream.on('finish', () => {
-      client.release();
-      log.error('FileStream finished');
-    });
-    await fileStream.pipe(stream);
   }
 
   public async getDatabasesQuery(): Promise<unknown> {
