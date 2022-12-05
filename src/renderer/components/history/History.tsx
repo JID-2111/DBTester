@@ -180,7 +180,6 @@ const History = () => {
                           <XCircleFill color="red" />
                         )}
                       </td>
-                      <td>{Math.floor(Math.random() * 10)} ms</td>
                       <Button
                         size="sm"
                         type="button"
