@@ -7,6 +7,9 @@ export type RuleModelType = {
   testData: string;
   unitTests: UnitTestType[];
   execution: ExecutionModelType;
+  hasTestData: boolean;
+  testDataParameterIndex: number;
+  testDataFilePath: string;
   parameters: string[];
   cleanupTables?: string[];
 };

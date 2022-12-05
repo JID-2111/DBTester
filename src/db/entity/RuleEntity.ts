@@ -71,6 +71,21 @@ class RuleEntity {
     this.parameters = JSON.parse(this.parameterList);
   }
 
+  @Column({
+    nullable: true,
+  })
+  hasTestData?: boolean;
+
+  @Column({
+    nullable: true,
+  })
+  testDataFilePath?: string;
+
+  @Column({
+    nullable: true,
+  })
+  testDataParameterIndex?: number;
+
   @ManyToOne((_type) => ExecutionEntity, {
     onDelete: 'CASCADE',
   })
