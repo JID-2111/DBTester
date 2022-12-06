@@ -9,6 +9,27 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Release Notes
 
+## Version 0.5.0
+
+### New Features
+
+- Reworked the history page to show one row per execution rather than one row per unit test
+- Generate output messages for the results of running a unit test
+- New DB tester logo on Windows and Mac
+- Default text to the history page in the event no executions have ran
+- Toolbar shortcuts for Mac
+- User can delete executions on the history page
+- User can upload test data in from a .csv file
+
+### Known Issues
+
+- Filtering by connection name sometimes does not work
+
+### Bug Fixes
+
+- Execute button works as intended if user repeatedly clicks it
+- Verified executions load on history page and all fields are populated
+
 ## Version 0.4.0
 
 > [GitHub Release](https://github.com/JID-2111/JID-2111/releases/tag/v0.4.0)
