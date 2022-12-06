@@ -9,7 +9,9 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Release Notes
 
-## Version 0.5.0
+## Version 1.0.0
+
+> [GitHub Release](https://github.com/JID-2111/JID-2111/releases/tag/v1.0.0)
 
 ### New Features
 
