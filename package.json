@@ -12,11 +12,11 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/JID-2111/DBTester#readme",
+  "homepage": "https://github.com/JID-2111/JID-2111#readme",
   "bugs": {
-    "url": "https://github.com/JID-2111/DBTester/issues"
+    "url": "https://github.com/JID-2111/JID-2111/issues"
   },
-  "name": "@JID-2111/JID-2111",
+  "name": "@JID-2111/DBTester",
   "version": "1.0.0",
   "repository": {
     "type": "git",
