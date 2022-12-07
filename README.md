@@ -7,13 +7,24 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 [![Build Status][github-actions-status]][github-actions-url]
 [![Github Tag][github-tag-image]][github-tag-url]
 
-## Quick Links:
+## Table of Contents
 
-[Release Notes](#release-notes)
-[Install Guide](#install-guide)
-[Developing](#developing)
-[FAQs](#frequently-asked-questions)
-[License](#license)
+- [DBTester](#dbtester)
+- [Install Guide](#install-guide)
+  - [Prerequisites](#prerequisites)
+  - [Download Instructions](#download-instructions)
+    - [File Naming](#file-naming)
+  - [Build Instructions](#build-instructions)
+  - [Troubleshooting](#troubleshooting)
+- [🚀 Developing](#-developing)
+  - [Prerequisites](#prerequisites-1)
+  - [Starting Development](#starting-development)
+  - [Packaging for Production](#packaging-for-production)
+  - [Linting](#linting)
+  - [IPC Renderer](#ipc-renderer)
+  - [Color Palette](#color-palette)
+- [Frequently Asked Questions](#frequently-asked-questions)
+- [License](#license)
 
 # Release Notes
 
