@@ -7,6 +7,7 @@ import { IRuleGroupErrors } from './rules/AddRuleGroupModal';
 interface IParameterContainerProps {
   activeParameters: ProcedureParameter[];
   setField: (field: string, value: any) => void;
+  showData: boolean;
   errors: Partial<IRuleGroupErrors>;
 }
 
@@ -17,6 +18,7 @@ export type Parameter = {
 const ParameterContainer = ({
   activeParameters,
   setField,
+  showData,
   errors,
 }: IParameterContainerProps) => {
   const [parameterValues, setParameterValues] = useState<Parameter>({});
@@ -53,21 +55,37 @@ const ParameterContainer = ({
           activeParameters.map(
             (item, idx) =>
               item.direction === 'IN' && (
-                <InputGroup className="mb-2" key={`${item.name}`}>
-                  <InputGroup.Text>
-                    {`${item.name} (${item.type})`}
-                  </InputGroup.Text>
-                  <Form.Control
-                    onChange={(event) =>
-                      handleChange(event.target.value, item.name)
-                    }
-                    aria-label="value"
-                    isInvalid={errors.parameters && !!errors.parameters[idx]}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.parameters && errors.parameters[idx]}
-                  </Form.Control.Feedback>
-                </InputGroup>
+                <div>
+                  <InputGroup key={`${item.name}`}>
+                    <InputGroup.Text>
+                      {`${item.name} (${item.type})`}
+                    </InputGroup.Text>
+                    <Form.Control
+                      onChange={(event) =>
+                        handleChange(event.target.value, item.name)
+                      }
+                      aria-label="value"
+                      isInvalid={errors.parameters && !!errors.parameters[idx]}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.parameters && errors.parameters[idx]}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                  {showData && (
+                    <Form.Group controlId="data-parameter">
+                      <Form.Check
+                        name="data-select"
+                        type="radio"
+                        id="custom-switch"
+                        isInvalid={!!errors.testDataParameterIndex}
+                        onChange={(_event) => {
+                          console.log('test data parameter index', idx);
+                          setField('testDataParameterIndex', Number(idx));
+                        }}
+                      />
+                    </Form.Group>
+                  )}
+                </div>
               )
           )}
       </div>

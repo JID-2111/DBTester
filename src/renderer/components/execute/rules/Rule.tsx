@@ -21,12 +21,12 @@ const Rule = ({ rule, execution, setExecution }: IRuleProps) => {
   useEffect(() => {
     const fetchParams = async () => {
       const params = await window.procedures.ipcRenderer.getProcedureParameters(
-        rule.procedure
+        execution.procedure
       );
       setProcParameters(params);
     };
     fetchParams();
-  }, [rule]);
+  }, [execution]);
 
   const deleteRule = async (ruleToDelete: RuleModelType) => {
     setExecution({
@@ -69,7 +69,7 @@ const Rule = ({ rule, execution, setExecution }: IRuleProps) => {
         </Accordion>
       </Row>
       <Row>
-        <span>procedure: {rule.procedure}</span>
+        <span>procedure: {execution.procedure}</span>
       </Row>
       <Row>
         <Accordion>
@@ -90,12 +90,21 @@ const Rule = ({ rule, execution, setExecution }: IRuleProps) => {
           </Accordion.Item>
         </Accordion>
       </Row>
-      <Row>
-        <span>data table: {rule.testData}</span>
-      </Row>
-      <Row>
-        <span>cleanup tables: {formatCleanupTables(rule)}</span>
-      </Row>
+      {rule.hasTestData && (
+        <div>
+          <Row>
+            <span>data table: {rule.testData}</span>
+          </Row>
+          {!!rule.cleanupTables && (
+            <Row>
+              <span>cleanup tables: {formatCleanupTables(rule)}</span>
+            </Row>
+          )}
+          <Row>
+            <span>test data: {rule.testDataFilePath}</span>
+          </Row>
+        </div>
+      )}
     </Container>
   );
 };

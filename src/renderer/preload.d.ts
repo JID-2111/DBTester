@@ -32,7 +32,7 @@ declare global {
     };
     procedures: {
       ipcRenderer: {
-        fetchProcedures(): Promise<Map<string, string[]>>;
+        fetchProcedures(databases: string[]): Promise<Map<string, string[]>>;
         fetchDatabases(): Promise<string[]>;
         fetchTables(): Promise<string[]>;
         getProcedureParameters(
@@ -61,6 +61,7 @@ declare global {
         checkPassFail(test: ExecutionModelType): Promise<ExecutionModelType>;
         fetchAll(): Promise<ExecutionModelType[]>;
         fetchMostRecent(): Promise<ExecutionModelType>;
+        delete(id: number): Promise<void>;
       };
     };
   }

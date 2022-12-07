@@ -2,10 +2,12 @@ import Modal from '../utils/Modal';
 
 interface IServerConnectionErrorModalProps {
   show: boolean;
+  alertMsg: string;
   handleClose: () => void;
 }
 const ServerConnectionErrorModal = ({
   show,
+  alertMsg,
   handleClose,
 }: IServerConnectionErrorModalProps) => {
   return (
@@ -13,8 +15,7 @@ const ServerConnectionErrorModal = ({
       show={show}
       handleClose={handleClose}
       title="Error"
-      modalBody="Could not connect to the server. Please check your configuration
-            details."
+      modalBody={alertMsg}
     />
   );
 };

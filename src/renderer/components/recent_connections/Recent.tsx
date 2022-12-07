@@ -3,13 +3,14 @@ import { Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { ConnectionModelType } from '../../../db/models/ConnectionModels';
 import ServerConnectionErrorModal from '../modals/ServerConnectionErrorModal';
-import { formatConnectionString } from '../utils/helpers';
+import { formatConnectionString, parseErrorMessage } from '../utils/helpers';
 
 const RecentList = () => {
   const navigate = useNavigate();
 
   const [recent, setRecent] = useState<ConnectionModelType[]>();
   const [alert, setAlert] = useState<boolean>(false);
+  const [alertMsg, setAlertMsg] = useState<string>('');
 
   useEffect(() => {
     const fetchRecent = async () => {
@@ -22,7 +23,11 @@ const RecentList = () => {
   const handleClick = async (id: number) => {
     try {
       await window.connections.ipcRenderer.select(id);
-    } catch (e) {
+
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    } catch (e: any) {
+      const error = parseErrorMessage(e.message);
+      setAlertMsg(error);
       setAlert(true);
       return;
     }
@@ -48,6 +53,7 @@ const RecentList = () => {
       {alert && (
         <ServerConnectionErrorModal
           show={alert}
+          alertMsg={alertMsg}
           handleClose={() => setAlert(false)}
         />
       )}

@@ -31,7 +31,11 @@ export function parseConnectionString(
     scheme: type.toLowerCase(),
     hosts: [],
   });
-  return connectionStringParser.parse(cs);
+  let parseCs = cs;
+  if (cs.split('@').length - 1 > 1) {
+    parseCs = cs.replace('@', '%40');
+  }
+  return connectionStringParser.parse(parseCs);
 }
 
 export function setLog() {

@@ -5,20 +5,23 @@ import Table from 'react-bootstrap/Table';
 import '../../scss/History.scss';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
-import { UnitTestType } from 'db/models/UnitTestModels';
 
+import {
+  CheckCircleFill,
+  XCircleFill,
+  Trash,
+  Upload,
+} from 'react-bootstrap-icons';
 import StatusDropdown from './StatusDropdown';
 import ConnectionDropdown from './ConnectionDropdown';
 
 export interface Flattened {
   timestamp: Date;
-  procedure: string;
-  database: string;
+  nickname: string;
   connection?: string;
   dbType?: string;
-  response: boolean;
   execution: ExecutionModelType;
-  parameters: string[];
+  valid: boolean;
 }
 
 const History = () => {
@@ -31,13 +34,12 @@ const History = () => {
   const [showRows, setShowRows] = useState<Flattened[]>([]);
 
   const navigate = useNavigate();
-
+  const fetchExecutions = async () => {
+    const execution: ExecutionModelType[] =
+      await window.executions.ipcRenderer.fetchAll();
+    setExecutions(execution);
+  };
   useEffect(() => {
-    const fetchExecutions = async () => {
-      const execution: ExecutionModelType[] =
-        await window.executions.ipcRenderer.fetchAll();
-      setExecutions(execution);
-    };
     fetchExecutions();
   }, []); // Update procedure history based on filter
 
@@ -45,24 +47,20 @@ const History = () => {
     const result: Flattened[] = [];
     const tempConnections: Set<string> = new Set(['All']);
     executions.forEach((ex: ExecutionModelType) => {
-      ex.rules.forEach((rule: RuleModelType) => {
-        rule.unitTests.forEach((test: UnitTestType) => {
-          if (ex.connection) {
-            tempConnections.add(ex.connection?.nickname);
-          }
-          const flat: Flattened = {
-            timestamp: ex.timestamp,
-            procedure: rule.procedure,
-            database: rule.database,
-            connection: ex.connection?.nickname,
-            dbType: ex.connection?.type,
-            response: test.result ?? false,
-            execution: ex,
-            parameters: rule.parameters,
-          };
-          result.push(flat);
-        });
-      });
+      const unitTests = ex.rules.flatMap(
+        (rule: RuleModelType) => rule.unitTests
+      );
+      const valid = unitTests.find((test) => !test.result) === undefined;
+      const flat: Flattened = {
+        timestamp: ex.timestamp,
+        nickname: ex.name,
+        connection: ex.connection?.nickname,
+        dbType: ex.connection?.type,
+        execution: ex,
+        valid,
+      };
+      result.push(flat);
+      tempConnections.add(ex.connection?.nickname ?? '');
     });
     setRows(result);
     setShowRows(result);
@@ -73,7 +71,7 @@ const History = () => {
     let tempRows: Flattened[] = rows;
 
     if (activeQuery) {
-      tempRows = tempRows.filter((row) => row.procedure.includes(activeQuery));
+      tempRows = tempRows.filter((row) => row.nickname.includes(activeQuery));
     }
     if (activeConnection !== 'All') {
       tempRows = tempRows.filter(
@@ -82,9 +80,9 @@ const History = () => {
     }
     if (successFilter !== 'All') {
       if (successFilter === 'Success') {
-        tempRows = tempRows.filter((row) => row.response);
+        tempRows = tempRows.filter((row) => row.valid);
       } else if (successFilter === 'Fail') {
-        tempRows = tempRows.filter((row) => !row.response);
+        tempRows = tempRows.filter((row) => !row.valid);
       }
     }
     setShowRows(tempRows);
@@ -107,6 +105,11 @@ const History = () => {
       await window.connections.ipcRenderer.select(ex.connection.id);
       navigate('/execute', { state: ex });
     }
+  };
+
+  const handleDeleteClick = async (ex: ExecutionModelType) => {
+    if (ex.id) await window.executions.ipcRenderer.delete(ex.id);
+    fetchExecutions();
   };
 
   return (
@@ -142,48 +145,68 @@ const History = () => {
             </div>
           </div>
         </div>
-        <div className="table-container">
-          <Table responsive>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Procedure</th>
-                <th>Connection</th>
-                <th>Type</th>
-                <th>Response</th>
-                <th>Duration</th>
-              </tr>
-            </thead>
-            <tbody>
-              {showRows.map((row: Flattened) => {
-                const d = new Date(row.timestamp);
-                const date = d.toLocaleDateString();
-                const time = d.toLocaleTimeString('en-US');
+        {executions.length > 0 ? (
+          <div className="table-container">
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Name</th>
+                  <th>Connection</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {showRows.map((row: Flattened) => {
+                  const d = new Date(row.timestamp);
+                  const date = d.toLocaleDateString();
+                  const time = d.toLocaleTimeString('en-US');
 
-                return (
-                  <tr>
-                    <td>{date}</td>
-                    <td>{time}</td>
-                    <td>{row.procedure}</td>
-                    <td>{row.connection}</td>
-                    <td>{row.dbType}</td>
-                    <td>{row.response ? 'Success' : 'Fail'}</td>
-                    <td>{Math.floor(Math.random() * 10)} ms</td>
-                    <Button
-                      size="sm"
-                      type="button"
-                      className="rerun-button"
-                      onClick={() => handleLoadClick(row.execution)}
-                    >
-                      load
-                    </Button>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        </div>
+                  return (
+                    <tr>
+                      <td>{date}</td>
+                      <td>{time}</td>
+                      <td>
+                        <strong>{row.nickname}</strong>
+                      </td>
+                      <td>{row.connection}</td>
+                      <td>{row.dbType}</td>
+                      <td>
+                        {row.valid ? (
+                          <CheckCircleFill color="green" />
+                        ) : (
+                          <XCircleFill color="red" />
+                        )}
+                      </td>
+                      <Button
+                        size="sm"
+                        type="button"
+                        className="rerun-button"
+                        onClick={() => handleLoadClick(row.execution)}
+                      >
+                        <Upload />
+                      </Button>
+                      <Button
+                        onClick={() => handleDeleteClick(row.execution)}
+                        className="deleteButton"
+                      >
+                        <Trash />
+                      </Button>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </div>
+        ) : (
+          <div className="history-help-container">
+            <p id="history-help-text">
+              Execute a test case to see history results on this page
+            </p>
+          </div>
+        )}
         <div className="home-button">
           <Link to="/">
             <Button type="button">Home</Button>

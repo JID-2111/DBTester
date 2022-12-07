@@ -1,9 +1,10 @@
 import { Button, Col, Container } from 'react-bootstrap';
-import { Archive, BarChartFill, Link45deg, Plus } from 'react-bootstrap-icons';
+import { Archive, Link45deg, Plus } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import RecentList from './recent_connections/Recent';
 
 import '../scss/Home.scss';
+import logo from '../img/icon.svg';
 
 const Home = () => {
   return (
@@ -12,7 +13,7 @@ const Home = () => {
         <RecentList />
       </Col>
       <Col className="launch-wrapper">
-        <BarChartFill className="logo" height="5em" width="5em" />
+        <img src={logo} className="logo" height="100px" alt="App logo" />
         <h1>Welcome to DB Tester</h1>
         <Link to="/newconnection">
           <Button variant="link" className="launch-button">

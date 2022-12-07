@@ -38,7 +38,8 @@ contextBridge.exposeInMainWorld('util', {
 
 contextBridge.exposeInMainWorld('procedures', {
   ipcRenderer: {
-    fetchProcedures: () => ipcRenderer.invoke('procedures:listProcedures'),
+    fetchProcedures: (databases: string[]) =>
+      ipcRenderer.invoke('procedures:listProcedures', databases),
     fetchDatabases: () => ipcRenderer.invoke('procedures:listDatabases'),
     fetchTables: () => ipcRenderer.invoke('procedures:getTables'),
     fetchContent: (procedure: string) =>
@@ -74,5 +75,6 @@ contextBridge.exposeInMainWorld('executions', {
       ipcRenderer.invoke('executions:checkPassFail', test),
     fetchAll: () => ipcRenderer.invoke('executions:fetchAll'),
     fetchMostRecent: () => ipcRenderer.invoke('executions:fetchMostRecent'),
+    delete: (id: number) => ipcRenderer.invoke('executions:delete', id),
   },
 });
