@@ -138,7 +138,7 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Install Guide
 
-## Pre-requisites
+## Prerequisites
 
 Since DBTester is a local application, all that is required is a computer running Windows or MacOS!
 
@@ -146,18 +146,19 @@ Since DBTester is a local application, all that is required is a computer runnin
 
 ## Download Instructions
 
-1. Navigate to Releases in DBTester repository: (https://github.com/JID-2111/JID-2111/releases/latest)[https://github.com/JID-2111/JID-2111/releases/latest]
+1. Navigate to Releases in DBTester repository: [https://github.com/JID-2111/JID-2111/releases/latest](https://github.com/JID-2111/JID-2111/releases/latest)
 2. Each version will have a list of assets attached.
 3. Download version corresponding to your OS (see [File Naming](#file-naming))
 
 ### File Naming
 
-| **OS**      | **Name**           |
-| ----------- | ------------------ |
-| Mac-_Intel_ | DBTester-mac.dmg   |
-| Mac-_Arm_   | DBTester.dmg       |
-| Linux       | DBTester.AppImage  |
-| Windows     | DBTester-Setup.exe |
+| **OS**              | **Name**           |
+| ------------------- | ------------------ |
+| Mac-_Intel_         | DBTester-mac.dmg   |
+| Mac-_Arm_           | DBTester.dmg       |
+| Linux               | DBTester.AppImage  |
+| Windows-_Portable_  | DBTester.exe       |
+| Windows-_Installer_ | DBTester-Setup.exe |
 
 ## Build Instructions
 
@@ -176,18 +177,18 @@ If GitHub releases is not working, manual packaging can also be performed.
 
 After installing the app, you may also need to approve the app to run since it does not have a developer certificate:
 
-1. Mac
-   a. Find the application in your `Applications` folder
-   b. Hold Ctrl while clicking the app
-   c. Choose “Open” from the resulting popup.
+1. Mac:
+   - Find the application in your `Applications` folder
+   - Hold Ctrl while clicking the app
+   - Choose “Open” from the resulting popup.
 2. Windows:
-   a. A popup will show saying “Windows protected your PC”
-   b. Click “More Info”
-   c. Click “Run anyway”
+   - A popup will show saying “Windows protected your PC”
+   - Click “More Info”
+   - Click “Run anyway”
 
 # 🚀 Developing
 
-## Pre-requisites
+## Prerequisites
 
 - Node.JS: [Bundled](https://nodejs.org/en/download/), [Homebrew](https://formulae.brew.sh/formula/node)
 
