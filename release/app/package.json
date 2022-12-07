@@ -1,5 +1,5 @@
 {
-  "name": "DBTester",
+  "name": "dbtester",
   "version": "1.0.0",
   "description": "A unit testing application for databases",
   "license": "Apache 2.0",
