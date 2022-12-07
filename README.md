@@ -9,14 +9,13 @@ Licenses under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Table of Contents
 
-- [DBTester](#dbtester)
+- [Release Notes](#release-notes)
 - [Install Guide](#install-guide)
   - [Prerequisites](#prerequisites)
   - [Download Instructions](#download-instructions)
-    - [File Naming](#file-naming)
   - [Build Instructions](#build-instructions)
   - [Troubleshooting](#troubleshooting)
-- [🚀 Developing](#-developing)
+- [Developing](#developing)
   - [Prerequisites](#prerequisites-1)
   - [Starting Development](#starting-development)
   - [Packaging for Production](#packaging-for-production)
@@ -197,7 +196,7 @@ After installing the app, you may also need to approve the app to run since it d
    - Click “More Info”
    - Click “Run anyway”
 
-# 🚀 Developing
+# Developing
 
 ## Prerequisites
 
