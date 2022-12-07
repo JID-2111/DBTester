@@ -5,21 +5,23 @@ import Table from 'react-bootstrap/Table';
 import '../../scss/History.scss';
 import { ExecutionModelType } from 'db/models/ExecutionModel';
 import { RuleModelType } from 'db/models/RuleModel';
-import { UnitTestType } from 'db/models/UnitTestModels';
 
-import { Trash, Upload } from 'react-bootstrap-icons';
+import {
+  CheckCircleFill,
+  XCircleFill,
+  Trash,
+  Upload,
+} from 'react-bootstrap-icons';
 import StatusDropdown from './StatusDropdown';
 import ConnectionDropdown from './ConnectionDropdown';
 
 export interface Flattened {
   timestamp: Date;
-  procedure: string;
-  database: string;
+  nickname: string;
   connection?: string;
   dbType?: string;
-  response: boolean;
   execution: ExecutionModelType;
-  parameters: string[];
+  valid: boolean;
 }
 
 const History = () => {
@@ -45,24 +47,20 @@ const History = () => {
     const result: Flattened[] = [];
     const tempConnections: Set<string> = new Set(['All']);
     executions.forEach((ex: ExecutionModelType) => {
-      ex.rules.forEach((rule: RuleModelType) => {
-        rule.unitTests.forEach((test: UnitTestType) => {
-          if (ex.connection) {
-            tempConnections.add(ex.connection?.nickname);
-          }
-          const flat: Flattened = {
-            timestamp: ex.timestamp,
-            procedure: rule.procedure,
-            database: rule.database,
-            connection: ex.connection?.nickname,
-            dbType: ex.connection?.type,
-            response: test.result ?? false,
-            execution: ex,
-            parameters: rule.parameters,
-          };
-          result.push(flat);
-        });
-      });
+      const unitTests = ex.rules.flatMap(
+        (rule: RuleModelType) => rule.unitTests
+      );
+      const valid = unitTests.find((test) => !test.result) === undefined;
+      const flat: Flattened = {
+        timestamp: ex.timestamp,
+        nickname: ex.name,
+        connection: ex.connection?.nickname,
+        dbType: ex.connection?.type,
+        execution: ex,
+        valid,
+      };
+      result.push(flat);
+      tempConnections.add(ex.connection?.nickname ?? '');
     });
     setRows(result);
     setShowRows(result);
@@ -73,7 +71,7 @@ const History = () => {
     let tempRows: Flattened[] = rows;
 
     if (activeQuery) {
-      tempRows = tempRows.filter((row) => row.procedure.includes(activeQuery));
+      tempRows = tempRows.filter((row) => row.nickname.includes(activeQuery));
     }
     if (activeConnection !== 'All') {
       tempRows = tempRows.filter(
@@ -82,9 +80,9 @@ const History = () => {
     }
     if (successFilter !== 'All') {
       if (successFilter === 'Success') {
-        tempRows = tempRows.filter((row) => row.response);
+        tempRows = tempRows.filter((row) => row.valid);
       } else if (successFilter === 'Fail') {
-        tempRows = tempRows.filter((row) => !row.response);
+        tempRows = tempRows.filter((row) => !row.valid);
       }
     }
     setShowRows(tempRows);
@@ -154,10 +152,10 @@ const History = () => {
                 <tr>
                   <th>Date</th>
                   <th>Time</th>
-                  <th>Procedure</th>
+                  <th>Name</th>
                   <th>Connection</th>
                   <th>Type</th>
-                  <th>Response</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -170,11 +168,18 @@ const History = () => {
                     <tr>
                       <td>{date}</td>
                       <td>{time}</td>
-                      <td>{row.procedure}</td>
+                      <td>
+                        <strong>{row.nickname}</strong>
+                      </td>
                       <td>{row.connection}</td>
                       <td>{row.dbType}</td>
-                      <td>{row.response ? 'Success' : 'Fail'}</td>
-                      <td>{Math.floor(Math.random() * 10)} ms</td>
+                      <td>
+                        {row.valid ? (
+                          <CheckCircleFill color="green" />
+                        ) : (
+                          <XCircleFill color="red" />
+                        )}
+                      </td>
                       <Button
                         size="sm"
                         type="button"
@@ -183,7 +188,10 @@ const History = () => {
                       >
                         <Upload />
                       </Button>
-                      <Button onClick={() => handleDeleteClick(row.execution)}>
+                      <Button
+                        onClick={() => handleDeleteClick(row.execution)}
+                        className="deleteButton"
+                      >
                         <Trash />
                       </Button>
                     </tr>

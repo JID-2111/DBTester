@@ -86,6 +86,7 @@ export abstract class UnitTestEntity {
 
   @ManyToOne((_type) => RuleEntity, (rule) => rule.unitTests, {
     onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
   })
   @Type(() => RuleEntity)
   rule: RuleEntity;

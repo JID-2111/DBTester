@@ -23,6 +23,15 @@ class ExecutionEntity {
   @Column()
   timestamp: Date;
 
+  @Column()
+  name: string;
+
+  @Column()
+  procedure: string;
+
+  @Column()
+  database: string;
+
   /**
    * A list of the rules being tested
    */
