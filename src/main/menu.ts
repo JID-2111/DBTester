@@ -211,16 +211,7 @@ export default class MenuBuilder {
           label: 'Read Me',
           accelerator: 'F1',
           click() {
-            shell.openExternal(
-              'https://github.com/JID-2111/JID-2111#stored-procedure-unit-tester'
-            );
-          },
-        },
-        {
-          label: 'Documentation',
-          accelerator: 'F2',
-          click() {
-            // TODO - link to documentation
+            shell.openExternal('https://github.com/JID-2111/JID-2111#DBTester');
           },
         },
         {
@@ -351,12 +342,6 @@ export default class MenuBuilder {
               shell.openExternal(
                 'https://github.com/JID-2111/JID-2111#stored-procedure-unit-tester'
               );
-            },
-          },
-          {
-            label: 'Documentation',
-            click() {
-              // TODO - link to documentation
             },
           },
           {

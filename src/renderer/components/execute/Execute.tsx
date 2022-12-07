@@ -100,8 +100,16 @@ const Execute = () => {
   };
 
   const handleExecute = async () => {
+    const time = new Date();
+
+    const newExecution = {
+      ...execution,
+      timestamp: time,
+    };
+    setExecution(newExecution);
+
     const results = await window.executions.ipcRenderer.checkPassFail(
-      execution
+      newExecution
     );
 
     // set tab to results
