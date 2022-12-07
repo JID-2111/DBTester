@@ -15,9 +15,13 @@
   "bugs": {
     "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
   },
+  "name": "@JID2111/DBTester",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+    "url": "git+https://github.com/JID-2111/JID-2111.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/JID2111"
   },
   "license": "Apache-2.0",
   "author": {
